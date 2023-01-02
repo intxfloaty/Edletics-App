@@ -1,0 +1,47 @@
+{
+    "project_info": {
+      "project_number": "556811073081",
+      "project_id": "edletics-app",
+      "storage_bucket": "edletics-app.appspot.com"
+    },
+    "client": [
+      {
+        "client_info": {
+          "mobilesdk_app_id": "1:556811073081:android:0f841f6593b37dd5b3bfe8",
+          "android_client_info": {
+            "package_name": "com.edletics"
+          }
+        },
+        "oauth_client": [
+          {
+            "client_id": "556811073081-aejrnvaacr1oerb9jvnafu52qverfk1m.apps.googleusercontent.com",
+            "client_type": 1,
+            "android_info": {
+              "package_name": "com.edletics",
+              "certificate_hash": "5e8f16062ea3cd2c4a0d547876baa6f38cabf625"
+            }
+          },
+          {
+            "client_id": "556811073081-pdq5mf5nu1qla0ok70t47dmvv5pqkror.apps.googleusercontent.com",
+            "client_type": 3
+          }
+        ],
+        "api_key": [
+          {
+            "current_key": "AIzaSyB9gYwewuEUaQDnpVgwYIagJ45ba106ml8"
+          }
+        ],
+        "services": {
+          "appinvite_service": {
+            "other_platform_oauth_client": [
+              {
+                "client_id": "556811073081-pdq5mf5nu1qla0ok70t47dmvv5pqkror.apps.googleusercontent.com",
+                "client_type": 3
+              }
+            ]
+          }
+        }
+      }
+    ],
+    "configuration_version": "1"
+  }
