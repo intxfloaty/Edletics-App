@@ -5,7 +5,7 @@ import SignInScreen from "./src/screens/SignInScreen";
 
 const YourApp = () => {
   return (
-    <View style = {styles.root}>
+    <View style={styles.root}>
       <SignInScreen />
     </View>
   )

@@ -3,7 +3,7 @@ import React from 'react'
 
 const CustomInput = () => {
   return (
-    <View style = {styles.container}>
+    <View style={styles.container}>
       <TextInput>
 
       </TextInput>
@@ -14,12 +14,12 @@ const CustomInput = () => {
 export default CustomInput
 
 const styles = StyleSheet.create({
-    container: {
-        backgroundColor: "#101112",
-        width: "100%",
-        borderColor: "white",
-        borderWidth: 1,
-        borderRadius: 5,
-        marginVertical: 10, 
-    }
+  container: {
+    backgroundColor: "#101112",
+    width: "100%",
+    borderColor: "white",
+    borderWidth: 1,
+    borderRadius: 5,
+    marginVertical: 10,
+  }
 })
