@@ -1,11 +1,20 @@
 import React from "react";
-import { Text } from "react-native";
+import { Text, View, StyleSheet } from "react-native";
+import SignInScreen from "./src/screens/SignInScreen";
 
 
 const YourApp = () => {
   return (
-    <Text>Hello Players! Are you ready to unleash yourselves?</Text>
+    <View style = {styles.root}>
+      <SignInScreen />
+    </View>
   )
 }
 
 export default YourApp;
+
+const styles = StyleSheet.create({
+  root: {
+    flex: 1
+  }
+})
