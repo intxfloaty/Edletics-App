@@ -21,6 +21,7 @@ buildscript {
     }
     dependencies {
         // Add the dependency for the Google services Gradle plugin
+        classpath 'com.google.android.play:integrity:1.1.0'
         classpath 'com.google.gms:google-services:4.3.13'
         classpath("com.android.tools.build:gradle:7.2.1")
         classpath("com.facebook.react:react-native-gradle-plugin")
