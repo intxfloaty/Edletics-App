@@ -20,6 +20,14 @@ const SignInScreen = () => {
     console.log(confirm, "code")
   }
 
+  async function confirmCode() {
+    try {
+      await confirm.confirm(code);
+    } catch (error) {
+      console.log('Invalid code.');
+    }
+  }
+
   if (!confirm) {
     return (
       <ScrollView contentContainerStyle={styles.parent} showsVerticalScrollIndicator={false}>
@@ -37,7 +45,9 @@ const SignInScreen = () => {
 
   return (
     <>
-      <OTPScreen />
+      <OTPScreen
+        setCode={setCode}
+        confirmCode={() => confirmCode()} />
     </>
   )
 }

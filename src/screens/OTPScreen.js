@@ -1,16 +1,30 @@
-import React, { useState } from 'react';
-import { View,Image, Text, TextInput, StyleSheet } from 'react-native';
+import React, { useState, useRef, useEffect } from 'react';
+import { View, Image, Text, TextInput, StyleSheet } from 'react-native';
 import Logo from "../../assets/images/edlogo.png"
 import CustomButton from '../components/CustomButton';
 
-const OTPScreen = () => {
-  const [otp, setOtp] = useState(['', '', '', '','']);
+const OTPScreen = ({ setCode, confirmCode }) => {
+  const [otp, setOtp] = useState(['', '', '', '', '', '']);
+  const inputRefs = useRef([null, null, null, null, null, null]).current;
+
+  useEffect(() => {
+    inputRefs[0].focus();
+  }, []);
 
   const handleChange = (index, text) => {
-    const newOtp = [...otp];
-    newOtp[index] = text;
-    setOtp(newOtp);
+    if (text.length > 0) {
+      const newOtp = [...otp];
+      newOtp[index] = text;
+      setOtp(newOtp);
+      const otpString = newOtp.join("")
+      setCode(otpString)
+
+      if (index < 5) {
+        inputRefs[index + 1].focus();
+      }
+    }
   };
+
 
   return (
     <View style={styles.container}>
@@ -25,10 +39,13 @@ const OTPScreen = () => {
             maxLength={1}
             value={value}
             onChangeText={(text) => handleChange(index, text)}
+            ref={(ref) => (inputRefs[index] = ref)}
           />
         ))}
       </View>
-      <CustomButton text="Submit"/>
+      <CustomButton
+        text="Submit"
+        onPress={confirmCode} />
     </View>
   );
 };
@@ -39,7 +56,7 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    padding:20,
+    padding: 20,
   },
   logo: {
     width: "70%",
@@ -63,7 +80,7 @@ const styles = StyleSheet.create({
     padding: 10,
     fontSize: 18,
     textAlign: 'center',
-    color:"white"
+    color: "white"
   },
 });
 
