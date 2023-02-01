@@ -10,7 +10,7 @@ const SignInScreen = () => {
     <ScrollView contentContainerStyle={styles.parent} showsVerticalScrollIndicator={false}>
       <Image source={Logo} style={styles.logo} resizeMode="contain" />
       <CustomInput placeholder="Enter mobile number" value={phoneNumber} setValue={setPhoneNumber} />
-      <CustomButton text="Send OTP" onPress={() => signInWithPhoneNumber} />
+      <CustomButton text="Send OTP" onPress={() => signInWithPhoneNumber()} />
     </ScrollView>
   )
 }
