@@ -1,7 +1,7 @@
 import { StyleSheet, Text, Pressable } from 'react-native'
 import React from 'react'
 
-const CustomButton = ({ text, onPress }) => {
+const CustomButton = ({ text, onPress, isDisabled }) => {
   return (
     <Pressable
       onPress={onPress}
@@ -10,7 +10,8 @@ const CustomButton = ({ text, onPress }) => {
           backgroundColor: pressed ? 'rgb(0, 0, 0)' : '#0A99FF',
         },
         styles.buttonContainer,
-      ]}>
+      ]}
+      disabled={isDisabled}>
       <Text style={styles.buttonText}>{text}</Text>
     </Pressable>
   )
