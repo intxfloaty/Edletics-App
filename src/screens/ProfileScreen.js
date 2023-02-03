@@ -2,13 +2,34 @@ import { StyleSheet, Text, View, ScrollView, Pressable } from 'react-native'
 import React, { useState } from 'react'
 import CustomInput from '../components/CustomInput'
 import CustomButton from '../components/CustomButton'
+import { DateTimePickerAndroid } from '@react-native-community/datetimepicker';
 
 const ProfileScreen = () => {
-  const [fullName, setFullName]= useState("")
+  const [fullName, setFullName] = useState("")
+  const [date, setDate] = useState(new Date(1598051730000));
   const [emailAddress, setEmailAddress] = useState("")
   const [location, setLocation] = useState("")
+
+
+  const showDatepicker = () => {
+    console.log(date.toLocaleString().replace(", 4:45:30 AM", " "), "date")
+    const onChange = (event, selectedDate) => {
+      const currentDate = selectedDate;
+      setDate(currentDate);
+    };
+    const showMode = (currentMode) => {
+      DateTimePickerAndroid.open({
+        value: date,
+        onChange,
+        mode: currentMode,
+        is24Hour: true,
+      });
+    };
+
+    showMode('date');
+  };
+
   return (
-    <View>
       <ScrollView contentContainerStyle={styles.parent} showsVerticalScrollIndicator={false}>
         <Pressable style={styles.profileImageContainer}></Pressable>
         <View style={styles.profileInfoContainer} >
@@ -19,9 +40,9 @@ const ProfileScreen = () => {
           />
           <Text style={styles.inputText}>DATE OF BIRTH</Text>
           <CustomInput
-            // onPressIn={showDatepicker}
+            onPressIn={showDatepicker}
             showSoftInputOnFocus={false}
-            // value={date.toLocaleString().replace("04:45:30 ", "")}
+            value={date.toLocaleString().replace(", 4:45:30 AM", " ")}
           />
           <Text style={styles.inputText}>EMAIL ADDRESS</Text>
           <CustomInput
@@ -38,12 +59,10 @@ const ProfileScreen = () => {
           />
           <CustomButton
             text="SUBMIT"
-            // onPress={onSubmitPressed} 
-            />
+          // onPress={onSubmitPressed} 
+          />
         </View>
       </ScrollView >
-
-    </View >
   )
 }
 
