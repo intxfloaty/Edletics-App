@@ -12,9 +12,11 @@ const ProfileScreen = () => {
   const [gender, setGender] = useState("")
   const [emailAddress, setEmailAddress] = useState("")
   const [location, setLocation] = useState("")
-  const [isMalePressed, setIsMalePressed] = useState(false);
-  const [isFemalePressed, setIsFemalePressed] = useState(false);
-  const [isOtherPressed, setIsOtherPressed] = useState(false);
+  const [genderPressed, setGenderPressed] = useState({
+    male: false,
+    female: false,
+    other: false,
+  })
 
 
   const choseFromLibrary = () => {
@@ -47,6 +49,21 @@ const ProfileScreen = () => {
     showMode('date');
   };
 
+  const isMaleGenderPressed = () => {
+    setGenderPressed({ ...genderPressed, male: true })
+    setGender("Male")
+  }
+
+  const isFemaleGenderPressed = () => {
+    setGenderPressed({ ...genderPressed, female: true })
+    setGender("Female")
+  }
+
+  const isOtherGenderPressed = () => {
+    setGenderPressed({ ...genderPressed, other: true })
+    setGender("Other")
+  }
+
   return (
     <ScrollView contentContainerStyle={styles.parent} showsVerticalScrollIndicator={false}>
       <Pressable
@@ -70,33 +87,21 @@ const ProfileScreen = () => {
         />
         <Text style={styles.inputText}>GENDER</Text>
         <View style={styles.genderButton}>
-          <Pressable style={isMalePressed ? styles.btnPress : styles.btnNormal} onPress={() => {
-            console.log("male");
-            setIsMalePressed(true)
-            setIsFemalePressed(false)
-            setIsOtherPressed(false)
-            setGender("Male")
-          }}>
+          <Pressable
+            style={gender === "Male" ? styles.btnPress : styles.btnNormal}
+            onPress={isMaleGenderPressed}>
             <Text style={styles.btnText}>Male</Text>
           </Pressable>
 
-          <Pressable style={isFemalePressed ? styles.btnPress : styles.btnNormal} onPress={() => {
-            console.log("female");
-            setIsMalePressed(false)
-            setIsFemalePressed(true)
-            setIsOtherPressed(false)
-            setGender("Female")
-          }}>
+          <Pressable
+            style={gender === "Female" ? styles.btnPress : styles.btnNormal}
+            onPress={isFemaleGenderPressed}>
             <Text style={styles.btnText}>Female</Text>
           </Pressable>
 
-          <Pressable style={isOtherPressed ? styles.btnPress : styles.btnNormal} onPress={() => {
-            console.log("other");
-            setIsMalePressed(false)
-            setIsFemalePressed(false)
-            setIsOtherPressed(true)
-            setGender("Other")
-          }}>
+          <Pressable
+            style={gender === "Other" ? styles.btnPress : styles.btnNormal}
+            onPress={isOtherGenderPressed}>
             <Text style={styles.btnText}>Other</Text>
           </Pressable>
         </View>
