@@ -9,8 +9,12 @@ const ProfileScreen = () => {
   const [image, setImage] = useState(null);
   const [fullName, setFullName] = useState("")
   const [date, setDate] = useState(new Date(1598051730000));
+  const [gender, setGender] = useState("")
   const [emailAddress, setEmailAddress] = useState("")
   const [location, setLocation] = useState("")
+  const [isMalePressed, setIsMalePressed] = useState(false);
+  const [isFemalePressed, setIsFemalePressed] = useState(false);
+  const [isOtherPressed, setIsOtherPressed] = useState(false);
 
 
   const choseFromLibrary = () => {
@@ -64,6 +68,39 @@ const ProfileScreen = () => {
           showSoftInputOnFocus={false}
           value={date.toLocaleString().replace(", 4:45:30 AM", " ")}
         />
+        <Text style={styles.inputText}>GENDER</Text>
+        <View style={styles.genderButton}>
+          <Pressable style={isMalePressed ? styles.btnPress : styles.btnNormal} onPress={() => {
+            console.log("male");
+            setIsMalePressed(true)
+            setIsFemalePressed(false)
+            setIsOtherPressed(false)
+            setGender("Male")
+          }}>
+            <Text style={styles.btnText}>Male</Text>
+          </Pressable>
+
+          <Pressable style={isFemalePressed ? styles.btnPress : styles.btnNormal} onPress={() => {
+            console.log("female");
+            setIsMalePressed(false)
+            setIsFemalePressed(true)
+            setIsOtherPressed(false)
+            setGender("Female")
+          }}>
+            <Text style={styles.btnText}>Female</Text>
+          </Pressable>
+
+          <Pressable style={isOtherPressed ? styles.btnPress : styles.btnNormal} onPress={() => {
+            console.log("other");
+            setIsMalePressed(false)
+            setIsFemalePressed(false)
+            setIsOtherPressed(true)
+            setGender("Other")
+          }}>
+            <Text style={styles.btnText}>Other</Text>
+          </Pressable>
+        </View>
+
         <Text style={styles.inputText}>EMAIL ADDRESS</Text>
         <CustomInput
           keyboardType="email-address"
@@ -116,5 +153,36 @@ const styles = StyleSheet.create({
     marginTop: 10,
     color: "white"
   },
+  genderButton: {
+    flexDirection: "row",
+  },
+  btnNormal: {
+    width: "30%",
+    height: 50,
+    backgroundColor: "#101112",
+    marginRight: 10,
+    marginTop: 10,
+    borderWidth: 1,
+    borderRadius: 5,
+    borderColor: "white",
+    alignItems: "center",
+    justifyContent: "center"
+  },
+  btnPress: {
+    width: "30%",
+    height: 50,
+    backgroundColor: "#0A99FF",
+    marginRight: 10,
+    marginTop: 10,
+    borderWidth: 1,
+    borderRadius: 5,
+    borderColor: "white",
+    alignItems: "center",
+    justifyContent: "center"
+  },
+  btnText: {
+    color: "white",
+    fontWeight: "500",
+  }
 
 })
