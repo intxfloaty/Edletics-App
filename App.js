@@ -4,6 +4,7 @@ import OTPScreen from "./src/screens/OTPScreen";
 import SignInScreen from "./src/screens/SignInScreen";
 import auth from '@react-native-firebase/auth';
 import CustomButton from './src/components/CustomButton';
+import ProfileScreen from './src/screens/ProfileScreen';
 
 const YourApp = () => {
   // Set an initializing state whilst Firebase connects
@@ -22,9 +23,9 @@ const YourApp = () => {
   }, []);
 
   if (initializing) return null;
-  
 
-  if(!user){
+
+  if (!user) {
     return (
       <View style={styles.root}>
         <SignInScreen />
@@ -33,12 +34,13 @@ const YourApp = () => {
   }
 
   return (
-    <View>
-      <Text>Welcome Player</Text>
-      <CustomButton text="sign out" onPress={()=> {
+    <View style={styles.root}>
+      <ProfileScreen />
+
+      {/* <CustomButton text="sign out" onPress={()=> {
         auth()
         .signOut()
-        .then(() => console.log("user logged out"))}}/>
+        .then(() => console.log("user logged out"))}}/> */}
     </View>
   );
 

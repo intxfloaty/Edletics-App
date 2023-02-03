@@ -12,17 +12,19 @@ const OTPScreen = ({ setCode, confirmCode }) => {
   }, []);
 
   const handleChange = (index, text) => {
+    const newOtp = [...otp];
     if (text.length > 0) {
-      const newOtp = [...otp];
       newOtp[index] = text;
-      setOtp(newOtp);
-      const otpString = newOtp.join("")
-      setCode(otpString)
-
       if (index < 5) {
         inputRefs[index + 1].focus();
       }
+    } else if (text.length === 0) {
+      newOtp[index] = ""
     }
+    setOtp(newOtp);
+    const otpString = newOtp.join("")
+    setCode(otpString)
+
   };
 
 

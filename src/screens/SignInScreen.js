@@ -1,5 +1,5 @@
 import { ScrollView, StyleSheet, Text, View, Image } from 'react-native'
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import Logo from "../../assets/images/edlogo.png"
 import CustomInput from '../components/CustomInput'
 import CustomButton from '../components/CustomButton'
@@ -9,16 +9,24 @@ import OTPScreen from './OTPScreen'
 
 const SignInScreen = () => {
   const [phoneNumber, setPhoneNumber] = useState("+91")
+  const [phoneNumberError, setPhoneNumberError] = useState("")
+  const [isDisabled, setIsDisabled] = useState(false);
+
   //if null, no sms has been sent
   const [confirm, setConfirm] = useState(null)
   const [code, setCode] = useState('')
 
   //handle the button press
   const signInWithPhoneNumber = async (phoneNumber) => {
-    const confirmation = await auth().signInWithPhoneNumber(phoneNumber)
-    setConfirm(confirmation)
-    console.log(confirm, "code")
-  }
+    const errors = validate(phoneNumber)
+    if(errors.length === 0){
+      const confirmation = await auth().signInWithPhoneNumber(phoneNumber)
+      setConfirm(confirmation)
+    } else {
+      setPhoneNumberError(errors)
+      setIsDisabled(true)
+    }
+    }
 
   async function confirmCode() {
     try {
@@ -28,17 +36,34 @@ const SignInScreen = () => {
     }
   }
 
+  const validate = (phoneNumber) => {
+    let error = ""
+    if (phoneNumber.length !== 13) {
+      error = "Please enter a valid 10 digit mobile number"
+    }
+    return error
+  }
+
+  useEffect(()=>{
+    const errors = validate(phoneNumber)
+    if(errors.length === 0){
+      setIsDisabled(false)
+      setPhoneNumberError("")
+    }
+  },[phoneNumber])
+
   if (!confirm) {
     return (
       <ScrollView contentContainerStyle={styles.parent} showsVerticalScrollIndicator={false}>
         <Image source={Logo} style={styles.logo} resizeMode="contain" />
         <CustomInput placeholder="Enter mobile number" value={phoneNumber} setValue={setPhoneNumber} />
+        {phoneNumberError !== "" && <Text style={styles.errorText}>{phoneNumberError}</Text>}
         <CustomButton
           text="Send OTP"
           onPress={() => {
-            console.log("OTP RECEIVED")
             signInWithPhoneNumber(phoneNumber)
-          }} />
+          }}
+          isDisabled={isDisabled} />
       </ScrollView>
     )
   }
@@ -67,4 +92,7 @@ const styles = StyleSheet.create({
     height: 100,
     marginBottom: 50,
   },
+  errorText: {
+    color: "red",
+  }
 })
