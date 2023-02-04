@@ -23,12 +23,12 @@ const YourApp = () => {
   return (
     <View style={styles.root}>
       <ProfileScreen />
-
+{/* 
       <CustomButton text="sign out" onPress={() => {
         auth()
           .signOut()
           .then(() => console.log("user logged out"))
-      }} />
+      }} /> */}
     </View>
   );
 

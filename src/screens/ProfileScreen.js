@@ -4,6 +4,9 @@ import CustomInput from '../components/CustomInput'
 import CustomButton from '../components/CustomButton'
 import { DateTimePickerAndroid } from '@react-native-community/datetimepicker';
 import ImagePicker from 'react-native-image-crop-picker';
+import { userAuthState } from '../firebase/firebase';
+import firestore from '@react-native-firebase/firestore';
+
 
 const ProfileScreen = () => {
   const [image, setImage] = useState(null);
@@ -18,7 +21,10 @@ const ProfileScreen = () => {
     other: false,
   })
   const [fieldErrors, setFieldErrors] = useState({})
-  console.log(fieldErrors, "error")
+
+  const { user } = userAuthState()
+
+  const uid = user.uid;
 
 
 
@@ -97,7 +103,25 @@ const ProfileScreen = () => {
   }, [fullName, date, gender, emailAddress, location])
 
   const onSubmitPressed = () => {
+    console.log(uid, "id")
     setFieldErrors(validate())
+    if (Object.keys(fieldErrors).length === 0) {
+      firestore()
+        .collection("Player_profile")
+        .doc(`${uid}`)
+        .set({
+          fullName: fullName,
+          dateOfBirth: date,
+          gender: gender,
+          emailAddress: emailAddress,
+          location: location,
+          userId: uid,
+        })
+        .then(() => {
+          console.log("Player Profile added!")
+        })
+        .catch((error) => console.log(error, "error message"))
+    }
   }
 
   return (
