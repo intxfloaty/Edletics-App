@@ -54,8 +54,8 @@ const SignInScreen = () => {
 
   if (!confirm) {
     return (
-      <ScrollView showsVerticalScrollIndicator={false}>
-        <View style={styles.parent}>
+      <ScrollView contentContainerStyle={styles.parent} showsVerticalScrollIndicator={false}>
+        <View style={styles.child}>
           <Image source={Logo} style={styles.logo} resizeMode="contain" />
           <CustomInput placeholder="Enter mobile number" value={phoneNumber} setValue={setPhoneNumber} />
           {phoneNumberError !== "" && <Text style={styles.errorText}>{phoneNumberError}</Text>}
@@ -85,6 +85,9 @@ const styles = StyleSheet.create({
   parent: {
     height: "100%",
     backgroundColor: "#101112",
+  },
+  child: {
+    height: "100%",
     alignItems: "center",
     justifyContent: "center",
     padding: 20,
