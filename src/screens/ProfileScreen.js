@@ -4,6 +4,9 @@ import CustomInput from '../components/CustomInput'
 import CustomButton from '../components/CustomButton'
 import { DateTimePickerAndroid } from '@react-native-community/datetimepicker';
 import ImagePicker from 'react-native-image-crop-picker';
+import { userAuthState } from '../firebase/firebase';
+import firestore from '@react-native-firebase/firestore';
+
 
 const ProfileScreen = () => {
   const [image, setImage] = useState(null);
@@ -18,7 +21,10 @@ const ProfileScreen = () => {
     other: false,
   })
   const [fieldErrors, setFieldErrors] = useState({})
-  console.log(fieldErrors, "error")
+
+  const { user } = userAuthState()
+
+  const uid = user.uid;
 
 
 
@@ -91,85 +97,105 @@ const ProfileScreen = () => {
   }
 
   useEffect(() => {
-    if(Object.keys(fieldErrors).length !== 0){
+    if (Object.keys(fieldErrors).length !== 0) {
       setFieldErrors(validate())
     }
   }, [fullName, date, gender, emailAddress, location])
 
   const onSubmitPressed = () => {
+    console.log(uid, "id")
     setFieldErrors(validate())
+    if (Object.keys(fieldErrors).length === 0) {
+      firestore()
+        .collection("Player_profile")
+        .doc(`${uid}`)
+        .set({
+          fullName: fullName,
+          dateOfBirth: date,
+          gender: gender,
+          emailAddress: emailAddress,
+          location: location,
+          userId: uid,
+        })
+        .then(() => {
+          console.log("Player Profile added!")
+        })
+        .catch((error) => console.log(error, "error message"))
+    }
   }
 
   return (
-    <ScrollView contentContainerStyle={styles.parent} showsVerticalScrollIndicator={false}>
-      <Pressable
-        style={styles.profileImageContainer}
-        onPress={choseFromLibrary}>
-        <Image source={{
-          uri: image,
-        }} style={styles.profileImage} />
-      </Pressable>
+    <ScrollView showsVerticalScrollIndicator={false} >
+      <View style={styles.parent}>
+        <Pressable
+          style={styles.profileImageContainer}
+          onPress={choseFromLibrary}>
+          <Image source={{
+            uri: image,
+          }} style={styles.profileImage} />
+        </Pressable>
 
-      <View style={styles.profileInfoContainer} >
-        <Text style={styles.inputText}>FULL NAME</Text>
-        <CustomInput
-          value={fullName}
-          setValue={(text) => setFullName(text)}
-        />
-        {fieldErrors.fullName !== "" && <Text style={styles.errorInfo}>{fieldErrors.fullName}</Text>}
+        <View style={styles.profileInfoContainer} >
+          <Text style={styles.inputText}>FULL NAME</Text>
+          <CustomInput
+            value={fullName}
+            setValue={(text) => setFullName(text)}
+          />
+          {fieldErrors.fullName !== "" && <Text style={styles.errorInfo}>{fieldErrors.fullName}</Text>}
 
-        <Text style={styles.inputText}>DATE OF BIRTH</Text>
-        <CustomInput
-          onPressIn={showDatepicker}
-          showSoftInputOnFocus={false}
-          value={date}
-        />
-        {fieldErrors.date !== "" && <Text style={styles.errorInfo}>{fieldErrors.date}</Text>}
+          <Text style={styles.inputText}>DATE OF BIRTH</Text>
+          <CustomInput
+            onPressIn={showDatepicker}
+            showSoftInputOnFocus={false}
+            value={date}
+          />
+          {fieldErrors.date !== "" && <Text style={styles.errorInfo}>{fieldErrors.date}</Text>}
 
-        <Text style={styles.inputText}>GENDER</Text>
-        <View style={styles.genderButton}>
-          <Pressable
-            style={gender === "Male" ? styles.btnPress : styles.btnNormal}
-            onPress={isMaleGenderPressed}>
-            <Text style={styles.btnText}>Male</Text>
-          </Pressable>
+          <Text style={styles.inputText}>GENDER</Text>
+          <View style={styles.genderButton}>
+            <Pressable
+              style={gender === "Male" ? styles.btnPress : styles.btnNormal}
+              onPress={isMaleGenderPressed}>
+              <Text style={styles.btnText}>Male</Text>
+            </Pressable>
 
-          <Pressable
-            style={gender === "Female" ? styles.btnPress : styles.btnNormal}
-            onPress={isFemaleGenderPressed}>
-            <Text style={styles.btnText}>Female</Text>
-          </Pressable>
+            <Pressable
+              style={gender === "Female" ? styles.btnPress : styles.btnNormal}
+              onPress={isFemaleGenderPressed}>
+              <Text style={styles.btnText}>Female</Text>
+            </Pressable>
 
-          <Pressable
-            style={gender === "Other" ? styles.btnPress : styles.btnNormal}
-            onPress={isOtherGenderPressed}>
-            <Text style={styles.btnText}>Other</Text>
-          </Pressable>
+            <Pressable
+              style={gender === "Other" ? styles.btnPress : styles.btnNormal}
+              onPress={isOtherGenderPressed}>
+              <Text style={styles.btnText}>Other</Text>
+            </Pressable>
+          </View>
+          {fieldErrors.gender !== "" && <Text style={styles.errorInfo}>{fieldErrors.gender}</Text>}
+
+
+          <Text style={styles.inputText}>EMAIL ADDRESS</Text>
+          <CustomInput
+            keyboardType="email-address"
+            value={emailAddress}
+            inputName="emailAddress"
+            setValue={(text) => setEmailAddress(text)}
+          />
+          {fieldErrors.emailAddress !== "" && <Text style={styles.errorInfo}>{fieldErrors.emailAddress}</Text>}
+
+          <Text style={styles.inputText}>LOCATION</Text>
+          <CustomInput
+            value={location}
+            inputName="location"
+            setValue={(text) => setLocation(text)}
+          />
+          {fieldErrors.location !== "" && <Text style={styles.errorInfo}>{fieldErrors.location}</Text>}
+
+          <CustomButton
+            text="SUBMIT"
+            onPress={onSubmitPressed}
+          />
         </View>
-        {fieldErrors.gender !== "" && <Text style={styles.errorInfo}>{fieldErrors.gender}</Text>}
-
-
-        <Text style={styles.inputText}>EMAIL ADDRESS</Text>
-        <CustomInput
-          keyboardType="email-address"
-          value={emailAddress}
-          inputName="emailAddress"
-          setValue={(text) => setEmailAddress(text)}
-        />
-        {fieldErrors.emailAddress !== "" && <Text style={styles.errorInfo}>{fieldErrors.emailAddress}</Text>}
-
-        <Text style={styles.inputText}>LOCATION</Text>
-        <CustomInput
-          value={location}
-          inputName="location"
-          setValue={(text) => setLocation(text)}
-        />
-        {fieldErrors.location !== "" && <Text style={styles.errorInfo}>{fieldErrors.location}</Text>}
-
-        <CustomButton
-          text="SUBMIT"
-          onPress={onSubmitPressed}
-        />
       </View>
     </ScrollView >
   )
@@ -180,10 +206,10 @@ export default ProfileScreen
 const styles = StyleSheet.create({
   parent: {
     height: "100%",
-    backgroundColor: "#101112",
     alignItems: "center",
     justifyContent: "center",
     padding: 20,
+    backgroundColor: "#101112",
   },
   profileImageContainer: {
     backgroundColor: "white",
