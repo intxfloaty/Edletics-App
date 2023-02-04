@@ -19,14 +19,14 @@ const SignInScreen = () => {
   //handle the button press
   const signInWithPhoneNumber = async (phoneNumber) => {
     const errors = validate(phoneNumber)
-    if(errors.length === 0){
+    if (errors.length === 0) {
       const confirmation = await auth().signInWithPhoneNumber(phoneNumber)
       setConfirm(confirmation)
     } else {
       setPhoneNumberError(errors)
       setIsDisabled(true)
     }
-    }
+  }
 
   async function confirmCode() {
     try {
@@ -44,26 +44,28 @@ const SignInScreen = () => {
     return error
   }
 
-  useEffect(()=>{
+  useEffect(() => {
     const errors = validate(phoneNumber)
-    if(errors.length === 0){
+    if (errors.length === 0) {
       setIsDisabled(false)
       setPhoneNumberError("")
     }
-  },[phoneNumber])
+  }, [phoneNumber])
 
   if (!confirm) {
     return (
-      <ScrollView contentContainerStyle={styles.parent} showsVerticalScrollIndicator={false}>
-        <Image source={Logo} style={styles.logo} resizeMode="contain" />
-        <CustomInput placeholder="Enter mobile number" value={phoneNumber} setValue={setPhoneNumber} />
-        {phoneNumberError !== "" && <Text style={styles.errorText}>{phoneNumberError}</Text>}
-        <CustomButton
-          text="Send OTP"
-          onPress={() => {
-            signInWithPhoneNumber(phoneNumber)
-          }}
-          isDisabled={isDisabled} />
+      <ScrollView showsVerticalScrollIndicator={false}>
+        <View style={styles.parent}>
+          <Image source={Logo} style={styles.logo} resizeMode="contain" />
+          <CustomInput placeholder="Enter mobile number" value={phoneNumber} setValue={setPhoneNumber} />
+          {phoneNumberError !== "" && <Text style={styles.errorText}>{phoneNumberError}</Text>}
+          <CustomButton
+            text="Send OTP"
+            onPress={() => {
+              signInWithPhoneNumber(phoneNumber)
+            }}
+            isDisabled={isDisabled} />
+        </View>
       </ScrollView>
     )
   }
