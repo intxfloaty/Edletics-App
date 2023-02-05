@@ -6,6 +6,8 @@ import { DateTimePickerAndroid } from '@react-native-community/datetimepicker';
 import ImagePicker from 'react-native-image-crop-picker';
 import { userAuthState } from '../firebase/firebase';
 import firestore from '@react-native-firebase/firestore';
+import { useNavigation } from "@react-navigation/native"
+
 
 
 const ProfileScreen = () => {
@@ -21,12 +23,32 @@ const ProfileScreen = () => {
     other: false,
   })
   const [fieldErrors, setFieldErrors] = useState({})
+  const [uid, setUid] = useState()
 
   const { user } = userAuthState()
+  const navigation = useNavigation();
+  console.log(user, "user")
 
-  const uid = user.uid;
-
-
+  // check if player profile already exists
+  useEffect(() => {
+    if (user) {
+      setUid(user.uid)
+      firestore()
+        .collection("Player_profile")
+        .doc(`${uid}`)
+        .get()
+        .then((doc) => {
+          if (doc.exists) {
+            console.log("Profile info already exists for the player")
+            console.log(doc.data(), "player info")
+            navigation.navigate('Home')
+          } else {
+            console.log("Player info does not exist for the player")
+          }
+        })
+        .catch(error => console.log(error))
+    }
+  }, [user])
 
   // function to select profile image
   const choseFromLibrary = () => {
@@ -42,7 +64,6 @@ const ProfileScreen = () => {
 
   // function to select date of birth
   const showDatepicker = () => {
-    // console.log(date.toLocaleString().replace(", 4:45:30 AM", " "), "date")
     const onChange = (event, selectedDate) => {
       const currentDate = selectedDate.toLocaleString().replace(", 4:45:30 AM", " ");
       setDate(currentDate);
@@ -96,16 +117,11 @@ const ProfileScreen = () => {
     return errors
   }
 
-  useEffect(() => {
-    if (Object.keys(fieldErrors).length !== 0) {
-      setFieldErrors(validate())
-    }
-  }, [fullName, date, gender, emailAddress, location])
-
   const onSubmitPressed = () => {
     console.log(uid, "id")
     setFieldErrors(validate())
     if (Object.keys(fieldErrors).length === 0) {
+      setUid(user.uid)
       firestore()
         .collection("Player_profile")
         .doc(`${uid}`)
@@ -123,6 +139,12 @@ const ProfileScreen = () => {
         .catch((error) => console.log(error, "error message"))
     }
   }
+
+  useEffect(() => {
+    if (Object.keys(fieldErrors).length !== 0) {
+      setFieldErrors(validate())
+    }
+  }, [fullName, date, gender, emailAddress, location])
 
   return (
     <ScrollView showsVerticalScrollIndicator={false} >
