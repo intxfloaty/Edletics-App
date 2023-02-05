@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { View, StyleSheet } from "react-native";
 import SignInScreen from "./src/screens/SignInScreen";
-import ProfileScreen from './src/screens/ProfileScreen';
+import PlayerProfileInfoScreen from './src/screens/PlayerProfileInfoScreen';
 import { userAuthState } from './src/firebase/firebase'
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
@@ -28,7 +28,7 @@ const YourApp = () => {
     <NavigationContainer>
       {/* <View style={styles.root}> */}
       <Stack.Navigator screenOptions={{ headerShown: false }}>
-        <Stack.Screen name="Profile" component={ProfileScreen} />
+        <Stack.Screen name="Profile" component={PlayerProfileInfoScreen} />
         <Stack.Screen name="Home" component={HomeScreen} />
       </Stack.Navigator>
       {/* </View> */}

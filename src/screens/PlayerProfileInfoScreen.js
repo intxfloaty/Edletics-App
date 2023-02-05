@@ -10,7 +10,7 @@ import { useNavigation } from "@react-navigation/native"
 
 
 
-const ProfileScreen = () => {
+const PlayerProfileInfoScreen = () => {
   const [image, setImage] = useState(null);
   const [fullName, setFullName] = useState("")
   const [date, setDate] = useState("");
@@ -223,7 +223,7 @@ const ProfileScreen = () => {
   )
 }
 
-export default ProfileScreen
+export default PlayerProfileInfoScreen
 
 const styles = StyleSheet.create({
   parent: {
