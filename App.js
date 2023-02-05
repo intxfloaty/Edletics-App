@@ -1,11 +1,14 @@
 import React, { useState, useEffect } from 'react';
-import { Text, View, StyleSheet } from "react-native";
-import OTPScreen from "./src/screens/OTPScreen";
+import { View, StyleSheet } from "react-native";
 import SignInScreen from "./src/screens/SignInScreen";
-import auth from '@react-native-firebase/auth';
 import ProfileScreen from './src/screens/ProfileScreen';
 import { userAuthState } from './src/firebase/firebase'
-import CustomButton from './src/components/CustomButton';
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import HomeScreen from './src/screens/HomeScreen';
+
+
+const Stack = createNativeStackNavigator();
 
 const YourApp = () => {
   const { user, initializing } = userAuthState();
@@ -21,15 +24,15 @@ const YourApp = () => {
   }
 
   return (
-    <View style={styles.root}>
-      <ProfileScreen />
-{/* 
-      <CustomButton text="sign out" onPress={() => {
-        auth()
-          .signOut()
-          .then(() => console.log("user logged out"))
-      }} /> */}
-    </View>
+
+    <NavigationContainer>
+      {/* <View style={styles.root}> */}
+      <Stack.Navigator screenOptions={{ headerShown: false }}>
+        <Stack.Screen name="Profile" component={ProfileScreen} />
+        <Stack.Screen name="Home" component={HomeScreen} />
+      </Stack.Navigator>
+      {/* </View> */}
+    </NavigationContainer>
   );
 
 }

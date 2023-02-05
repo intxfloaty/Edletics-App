@@ -6,6 +6,8 @@ import { DateTimePickerAndroid } from '@react-native-community/datetimepicker';
 import ImagePicker from 'react-native-image-crop-picker';
 import { userAuthState } from '../firebase/firebase';
 import firestore from '@react-native-firebase/firestore';
+import { useNavigation } from "@react-navigation/native"
+
 
 
 const ProfileScreen = () => {
@@ -24,6 +26,7 @@ const ProfileScreen = () => {
   const [uid, setUid] = useState()
 
   const { user } = userAuthState()
+  const navigation = useNavigation();
   console.log(user, "user")
 
   // check if player profile already exists
@@ -38,6 +41,7 @@ const ProfileScreen = () => {
           if (doc.exists) {
             console.log("Profile info already exists for the player")
             console.log(doc.data(), "player info")
+            navigation.navigate('Home')
           } else {
             console.log("Player info does not exist for the player")
           }
