@@ -1,14 +1,15 @@
 import { ScrollView, StyleSheet, Text, View } from 'react-native'
 import React from 'react'
-import CustomButton from '../components/CustomButton'
 import MainMenuOptions from '../components/MainMenuOptions'
 import Icon from 'react-native-vector-icons/Ionicons';
 import CustomProfileOptions from '../components/CustomProfileOptions';
+import auth from '@react-native-firebase/auth';
+
 
 
 const HomeScreen = () => {
   return (
-      <View style={styles.parent} showsVerticalScrollIndicator={false}>
+    <View style={styles.parent} showsVerticalScrollIndicator={false}>
       <View style={styles.personalInfoContainer}>
         <View style={styles.profileImage}></View>
         <View style={styles.personalInfo}>
@@ -22,8 +23,8 @@ const HomeScreen = () => {
         mainText="My Teams"
         subText="Create your team/ Join a team"
         iconName="people-outline"
-        // onPress={onMyTeamsPressed}
-         />
+      // onPress={onMyTeamsPressed}
+      />
 
       <CustomProfileOptions
         mainText="Leaderboard"
@@ -48,14 +49,15 @@ const HomeScreen = () => {
       <CustomProfileOptions
         mainText="Log Out"
         subText="Check app settings"
-        iconName="settings-outline" 
+        iconName="settings-outline"
         onPress={() => {
           auth()
             .signOut()
-            .then(() => console.log("user logged out"))}}
-        />
+            .then(() => console.log("user logged out"))
+        }}
+      />
       <MainMenuOptions />
-      </View>
+    </View>
   )
 }
 
