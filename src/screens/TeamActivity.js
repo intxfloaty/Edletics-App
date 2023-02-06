@@ -1,5 +1,5 @@
 import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import CustomButton from '../components/CustomButton'
 import NewActivityPractice from '../components/NewActivityPractice'
 import NewActivityGame from '../components/NewActivityGame'
@@ -7,6 +7,7 @@ import NewActivityTournament from '../components/NewActivityTournament'
 import firestore from '@react-native-firebase/firestore';
 
 const TeamActivity = () => {
+  const [isDisabled, setIsDisabled] = useState(false)
   const [typeOfActivityPressed, setTypeOfActivityPressed] = useState({
     Practice: false,
     Game: false,
@@ -54,23 +55,31 @@ const TeamActivity = () => {
     setTypeOfActivity("Tournament")
   }
 
+  // function to check if the value of all keys in an object are not empty.
+  const isObjectNotEmpty = (obj) => {
+    for (const key in obj) {
+      if (!obj[key]) return false;
+    }
+    return true;
+  }
+
+  useEffect(() => {
+    if (isObjectNotEmpty(practice)) {
+      setIsDisabled(true)
+    } else setIsDisabled(false)
+  }, [practice])
+
   const createActivity = () => {
-    firestore()
-      .collection("New_activity")
-      .doc(`${typeOfActivity}`)
-      .set({
-        opponent: typeOfActivity === "Game" ? opponent : "",
-        title: practice.title,
-        location: location,
-        date: date,
-        invitations: invitations,
-        additionalInfo: additionalInfo,
-        privateNotes: privateNotes,
-      })
-      .then(() => {
-        console.log("New Activity added!")
-      })
-      .catch((error) => console.log(error, "error message"))
+    if (isObjectNotEmpty(practice)) {
+      firestore()
+        .collection("New_activity")
+        .doc(`${typeOfActivity}`)
+        .set(practice)
+        .then(() => {
+          console.log("New Activity added!")
+        })
+        .catch((error) => console.log(error, "error message"))
+    }
   }
 
   return (
@@ -80,9 +89,11 @@ const TeamActivity = () => {
           <Text style={styles.headerText}>X</Text>
         </Pressable>
         <Text style={styles.headerText}>New Activity</Text>
-        <Pressable style={styles.createButton} onPress={createActivity}>
-          <Text style={styles.headerText}>Create</Text>
-        </Pressable>
+        <CustomButton
+          text="Create"
+          type={isDisabled ? "active" : "disabled"}
+          onPress={createActivity}
+          isDisabled={isDisabled} />
       </View>
 
       <ScrollView style={styles.activityContainer}>
@@ -107,7 +118,6 @@ const TeamActivity = () => {
             setPractice={setPractice}
           />
         }
-
 
         {typeOfActivity === "Game" &&
           <NewActivityGame

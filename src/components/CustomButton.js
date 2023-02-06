@@ -36,6 +36,22 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     color: "black",
   },
+  container_active: {
+    width: "30%",
+    marginVertical: 5,
+    marginHorizontal: 2,
+    padding: 5,
+    fontSize: 16,
+  },
+  container_disabled: {
+    width: "30%",
+    alignItems: "center",
+    marginVertical: 5,
+    marginHorizontal: 2,
+    padding: 5,
+    fontSize: 16,
+    backgroundColor: "white"
+  },
   container_activity: {
     width: "30%",
     marginVertical: 5,
