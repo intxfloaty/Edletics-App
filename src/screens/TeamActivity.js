@@ -42,9 +42,9 @@ const TeamActivity = () => {
 
       <ScrollView style={styles.activityContainer}>
         <View style={styles.typeOfActivity}>
-          <CustomButton text="Practice" type="activity" onPress={onPracticePressed} />
-          <CustomButton text="Game" type="activity" onPress={onGamePressed} />
-          <CustomButton text="Tournament" type="activity" onPress={onTournamentPressed} />
+          <CustomButton text="Practice" type= {typeOfActivity === "Practice" ? "activityPressed" : "activity"} onPress={onPracticePressed} />
+          <CustomButton text="Game" type={typeOfActivity === "Game" ? "activityPressed" : "activity"} onPress={onGamePressed} />
+          <CustomButton text="Tournament" type={typeOfActivity === "Tournament" ? "activityPressed" : "activity"} onPress={onTournamentPressed} />
         </View>
         {typeOfActivity === "Practice" && <NewActivityPractice />}
         {typeOfActivity === "Game" && <NewActivityGame />}

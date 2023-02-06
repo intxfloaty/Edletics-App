@@ -41,10 +41,18 @@ const styles = StyleSheet.create({
     marginVertical: 5,
     marginHorizontal: 2,
     padding: 5,
-    fontSize: 16
+    fontSize: 16,
   },
   text_activity: {
     fontSize: 16,
     fontWeight: "500",
   },
+  container_activityPressed: {
+    width: "30%",
+    marginVertical: 5,
+    marginHorizontal: 2,
+    padding: 5,
+    fontSize: 16,
+    backgroundColor: "red"
+  }
 })
