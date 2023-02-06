@@ -4,10 +4,20 @@ import MainMenuOptions from '../components/MainMenuOptions'
 import Icon from 'react-native-vector-icons/Ionicons';
 import CustomProfileOptions from '../components/CustomProfileOptions';
 import auth from '@react-native-firebase/auth';
+import { useNavigation } from "@react-navigation/native"
+
 
 
 
 const HomeScreen = () => {
+
+  const navigation = useNavigation();
+
+  const onMyTeamsPressed = () => {
+    console.log("my teams");
+    navigation.navigate('MyTeams')
+  }
+
   return (
     <View style={styles.parent} showsVerticalScrollIndicator={false}>
       <View style={styles.personalInfoContainer}>
@@ -23,7 +33,7 @@ const HomeScreen = () => {
         mainText="My Teams"
         subText="Create your team/ Join a team"
         iconName="people-outline"
-      // onPress={onMyTeamsPressed}
+        onPress={onMyTeamsPressed}
       />
 
       <CustomProfileOptions
