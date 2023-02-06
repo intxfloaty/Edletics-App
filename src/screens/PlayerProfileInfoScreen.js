@@ -9,7 +9,6 @@ import firestore from '@react-native-firebase/firestore';
 import { useNavigation } from "@react-navigation/native"
 
 
-
 const PlayerProfileInfoScreen = () => {
   const [image, setImage] = useState(null);
   const [fullName, setFullName] = useState("")

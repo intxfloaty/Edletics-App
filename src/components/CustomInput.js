@@ -1,9 +1,9 @@
 import { StyleSheet, Text, TextInput, View } from 'react-native'
 import React from 'react'
 
-const CustomInput = ({ placeholder, value, setValue, onPressIn, showSoftInputOnFocus }) => {
+const CustomInput = ({ placeholder, value, setValue, onPressIn, showSoftInputOnFocus, type }) => {
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, styles[`container_${type}`]]}>
       <TextInput
         style={styles.input}
         placeholder={placeholder}
@@ -29,5 +29,8 @@ const styles = StyleSheet.create({
   input: {
     color: "white",
     backgroundColor: "#202224",
-  }
+  },
+  container_activity: {
+
+  },
 })
