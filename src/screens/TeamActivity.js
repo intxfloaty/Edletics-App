@@ -1,5 +1,5 @@
 import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import CustomButton from '../components/CustomButton'
 import NewActivityPractice from '../components/NewActivityPractice'
 import NewActivityGame from '../components/NewActivityGame'
@@ -7,20 +7,38 @@ import NewActivityTournament from '../components/NewActivityTournament'
 import firestore from '@react-native-firebase/firestore';
 
 const TeamActivity = () => {
+  const [isDisabled, setIsDisabled] = useState(false)
   const [typeOfActivityPressed, setTypeOfActivityPressed] = useState({
     Practice: false,
     Game: false,
     Tournament: false,
   })
   const [typeOfActivity, setTypeOfActivity] = useState("Practice")
-  const [opponent, setOpponent] = useState("")
-  const [title, setTitle] = useState("")
-  const [location, setLocation] = useState("")
-  const [date, setDate] = useState("");
-  const [invitations, setInvitations] = useState("")
-  const [additionalInfo, setAdditionalInfo] = useState("")
-  const [privateNotes, setPrivateNotes] = useState("")
-
+  const [practice, setPractice] = useState({
+    title: "",
+    location: "",
+    date: "",
+    invitations: "",
+    additionalInfo: "",
+    privateNotes: ""
+  })
+  const [game, setGame] = useState({
+    opponent: "",
+    title: "",
+    location: "",
+    date: "",
+    invitations: "",
+    additionalInfo: "",
+    privateNotes: ""
+  })
+  const [tournament, setTournament] = useState({
+    title: "",
+    location: "",
+    date: "",
+    invitations: "",
+    additionalInfo: "",
+    privateNotes: ""
+  })
 
   const onPracticePressed = () => {
     setTypeOfActivityPressed({ ...typeOfActivityPressed, Practice: true })
@@ -37,25 +55,32 @@ const TeamActivity = () => {
     setTypeOfActivity("Tournament")
   }
 
-  const createActivity = () => {
-    firestore()
-      .collection("New_activity")
-      .doc(`${typeOfActivity}`)
-      .set({
-        opponent: typeOfActivity === "Game" ? opponent: "",
-        title: title,
-        location: location,
-        date: date,
-        invitations: invitations,
-        additionalInfo: additionalInfo,
-        privateNotes: privateNotes,
-      })
-      .then(() => {
-        console.log("New Activity added!")
-      })
-      .catch((error) => console.log(error, "error message"))
+  // function to check if the value of all keys in an object are not empty.
+  const isObjectNotEmpty = (obj) => {
+    for (const key in obj) {
+      if (!obj[key]) return false;
+    }
+    return true;
   }
 
+  useEffect(() => {
+    if (isObjectNotEmpty(practice)) {
+      setIsDisabled(true)
+    } else setIsDisabled(false)
+  }, [practice])
+
+  const createActivity = () => {
+    if (isObjectNotEmpty(practice)) {
+      firestore()
+        .collection("New_activity")
+        .doc(`${typeOfActivity}`)
+        .set(practice)
+        .then(() => {
+          console.log("New Activity added!")
+        })
+        .catch((error) => console.log(error, "error message"))
+    }
+  }
 
   return (
     <View style={styles.parent}>
@@ -64,9 +89,11 @@ const TeamActivity = () => {
           <Text style={styles.headerText}>X</Text>
         </Pressable>
         <Text style={styles.headerText}>New Activity</Text>
-        <Pressable style={styles.createButton} onPress={createActivity}>
-          <Text style={styles.headerText}>Create</Text>
-        </Pressable>
+        <CustomButton
+          text="Create"
+          type={isDisabled ? "active" : "disabled"}
+          onPress={createActivity}
+          isDisabled={isDisabled} />
       </View>
 
       <ScrollView style={styles.activityContainer}>
@@ -87,53 +114,21 @@ const TeamActivity = () => {
 
         {typeOfActivity === "Practice" &&
           <NewActivityPractice
-            title={title}
-            setTitle={setTitle}
-            location={location}
-            setLocation={setLocation}
-            date={date}
-            setDate={setDate}
-            invitations={invitations}
-            setInvitations={setInvitations}
-            additionalInfo={additionalInfo}
-            setAdditionalInfo={setAdditionalInfo}
-            privateNotes={privateNotes}
-            setPrivateNotes={setPrivateNotes} />
+            practice={practice}
+            setPractice={setPractice}
+          />
         }
-
 
         {typeOfActivity === "Game" &&
           <NewActivityGame
-            opponent={opponent}
-            setOpponent={setOpponent}
-            title={title}
-            setTitle={setTitle}
-            location={location}
-            setLocation={setLocation}
-            date={date}
-            setDate={setDate}
-            invitations={invitations}
-            setInvitations={setInvitations}
-            additionalInfo={additionalInfo}
-            setAdditionalInfo={setAdditionalInfo}
-            privateNotes={privateNotes}
-            setPrivateNotes={setPrivateNotes} />
+            game={game}
+            setGame={setGame} />
         }
 
         {typeOfActivity === "Tournament" &&
           <NewActivityTournament
-            title={title}
-            setTitle={setTitle}
-            location={location}
-            setLocation={setLocation}
-            date={date}
-            setDate={setDate}
-            invitations={invitations}
-            setInvitations={setInvitations}
-            additionalInfo={additionalInfo}
-            setAdditionalInfo={setAdditionalInfo}
-            privateNotes={privateNotes}
-            setPrivateNotes={setPrivateNotes} />
+            tournament={tournament}
+            setTournament={setTournament} />
         }
       </ScrollView>
     </View>
@@ -147,7 +142,7 @@ const styles = StyleSheet.create({
     height: "100%",
     alignItems: "center",
     justifyContent: "center",
-    // backgroundColor: "#101112",
+    backgroundColor: "#101112",
   },
   activityHeader: {
     position: "relative",
@@ -164,8 +159,8 @@ const styles = StyleSheet.create({
   },
   headerText: {
     fontSize: 20,
-    fontWeight: '700',
-    color: "black"
+    fontWeight: '400',
+    color: "white"
   },
   activityContainer: {
     height: "100%"

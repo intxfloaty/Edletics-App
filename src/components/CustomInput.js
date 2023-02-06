@@ -1,7 +1,7 @@
 import { StyleSheet, Text, TextInput, View } from 'react-native'
 import React from 'react'
 
-const CustomInput = ({ placeholder, value, setValue, onPressIn, showSoftInputOnFocus, type }) => {
+const CustomInput = ({ placeholder, value, setValue, onPressIn, showSoftInputOnFocus, type, multiline, numberOfLines }) => {
   return (
     <View style={[styles.container, styles[`container_${type}`]]}>
       <TextInput
@@ -10,7 +10,9 @@ const CustomInput = ({ placeholder, value, setValue, onPressIn, showSoftInputOnF
         value={value}
         onChangeText={setValue}
         onPressIn={onPressIn}
-        showSoftInputOnFocus={showSoftInputOnFocus} />
+        showSoftInputOnFocus={showSoftInputOnFocus}
+        multiline={multiline}
+        numberOfLines={numberOfLines} />
     </View>
   )
 }

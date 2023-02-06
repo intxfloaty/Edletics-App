@@ -3,13 +3,13 @@ import React, { useState } from 'react'
 import CustomInput from './CustomInput'
 import { DateTimePickerAndroid } from '@react-native-community/datetimepicker';
 
-const NewActivityGame = ({ opponent, setOpponent, title, setTitle, location, setLocation, date, setDate, invitations, setInvitations, additionalInfo, setAdditionalInfo, privateNotes, setPrivateNotes }) => {
+const NewActivityGame = ({ game, setGame }) => {
 
   // function to date and time of practice
   const showDatepicker = () => {
     const onChange = (event, selectedDate) => {
       const currentDate = selectedDate.toLocaleString();
-      setDate(currentDate);
+      setGame({ ...game, date: currentDate });
     };
     const showMode = (currentMode) => {
       DateTimePickerAndroid.open({
@@ -28,22 +28,22 @@ const NewActivityGame = ({ opponent, setOpponent, title, setTitle, location, set
       <View style={styles.activityTitle}>
         <Text style={styles.label}>Opponent</Text>
         <CustomInput
-          value={opponent}
-          setValue={setOpponent} />
+          value={game.opponent}
+          setValue={(value) => setGame({ ...game, opponent: value })} />
       </View>
 
       <View style={styles.activityTitle}>
         <Text style={styles.label}>Title</Text>
         <CustomInput
-          value={title}
-          setValue={setTitle} />
+          value={game.title}
+          setValue={(value) => setGame({ ...game, title: value })} />
       </View>
 
       <View style={styles.activityLocation}>
         <Text style={styles.label}>Location</Text>
         <CustomInput
-          value={location}
-          setValue={setLocation} />
+          value={game.location}
+          setValue={(value) => setGame({ ...game, location: value })} />
       </View>
 
       <View style={styles.activityDateAndTime}>
@@ -51,28 +51,32 @@ const NewActivityGame = ({ opponent, setOpponent, title, setTitle, location, set
         <CustomInput
           onPressIn={showDatepicker}
           showSoftInputOnFocus={false}
-          value={date} />
+          value={game.date} />
       </View>
 
       <View style={styles.activityInvitations}>
         <Text style={styles.label}>Invitations</Text>
         <CustomInput
-          value={invitations}
-          setValue={setInvitations} />
+          value={game.invitations}
+          setValue={(value) => setGame({ ...game, invitations: value })} />
       </View>
 
       <View style={styles.activityAdditionalInfo}>
         <Text style={styles.label}>Additional Information</Text>
         <CustomInput
-          value={additionalInfo}
-          setValue={setAdditionalInfo} />
+          value={game.additionalInfo}
+          setValue={(value) => setGame({ ...game, additionalInfo: value })}
+          multiline={true}
+          numberOfLines={4} />
       </View>
 
       <View style={styles.privateNotesForCoaches}>
         <Text style={styles.label}>Private notes for Coaches</Text>
         <CustomInput
-          value={privateNotes}
-          setValue={setPrivateNotes} />
+          value={game.privateNotes}
+          setValue={(value) => setGame({ ...game, privateNotes: value })}
+          multiline={true}
+          numberOfLines={4} />
       </View>
     </View>
   )
@@ -84,8 +88,8 @@ const styles = StyleSheet.create({
   activityTitle: {
   },
   label: {
-    color: "black",
+    color: "white",
     fontSize: 20,
-    fontWeight: '400',
+    fontWeight: '300',
   },
 })
