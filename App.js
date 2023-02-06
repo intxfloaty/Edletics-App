@@ -7,6 +7,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import HomeScreen from './src/screens/HomeScreen';
 import MyTeams from './src/screens/MyTeams';
+import TeamActivity from './src/screens/TeamActivity';
 
 
 const Stack = createNativeStackNavigator();
@@ -32,6 +33,7 @@ const YourApp = () => {
         <Stack.Screen name="Profile" component={PlayerProfileInfoScreen} />
         <Stack.Screen name="Home" component={HomeScreen} />
         <Stack.Screen name="MyTeams" component={MyTeams} />
+        <Stack.Screen name = "TeamActivity" component={TeamActivity} />
       </Stack.Navigator>
       {/* </View> */}
     </NavigationContainer>

@@ -9,24 +9,21 @@ import { useNavigation } from "@react-navigation/native"
 const MyTeams = () => {
   const [createTeamModal, setCreateTeamModal] = useState(false)
   const [joinTeamModal, setJoinTeamModal] = useState(false)
-
   const [teamName, setTeamName] = useState("")
   const [teamCode, setTeamCode] = useState()
   const [joinTeamCode, setJoinTeamCode] = useState()
   const [myTeams, setMyTeams] = useState([])
+  const [shareLinkModal, setShareLinkModal] = useState(false)
+
   console.log(myTeams, "my Team");
 
   const navigation = useNavigation();
-
-  const [shareLinkModal, setShareLinkModal] = useState(false)
 
   const onContinuePressed = () => {
     const min = 10000;
     const max = 99999;
     const code = Math.floor(Math.random() * (max - min + 1)) + min;
     setTeamCode(code)
-
-
     firestore()
       .collection('My_teams_info')
       .add({
@@ -35,11 +32,9 @@ const MyTeams = () => {
       })
       .then(() => {
         console.log('team added!');
-
       });
     setShareLinkModal(true)
   }
-
 
   const onConfirmPressed = () => {
     if (teamCode == joinTeamCode) {
@@ -56,9 +51,7 @@ const MyTeams = () => {
     }
   }
 
-
   useEffect(() => {
-
     firestore()
       .collection('My_teams_info')
       .onSnapshot(querySnapshot => {
@@ -73,7 +66,6 @@ const MyTeams = () => {
           setMyTeams(myTeams.concat(newArr))
         }
       });
-
   }, [])
 
 
@@ -83,7 +75,7 @@ const MyTeams = () => {
         <Text style={styles.modalText}>MY TEAMS</Text>
         {myTeams?.map((myTeam, index) => {
           return (
-            <Pressable style={styles.teamContainer} onPress={() => navigation.navigate('TeamDashboard')} key={index}>
+            <Pressable style={styles.teamContainer} onPress={() => navigation.navigate('TeamActivity')} key={index}>
               <Image style={styles.teamLogo} />
               <Text style={styles.teamName}>{myTeam.teamName}</Text>
               <Text style={styles.teamName}><Icon name="flash-outline" size={18} color="white" />5000</Text>
@@ -113,7 +105,6 @@ const MyTeams = () => {
                 value={teamName}
                 setValue={(text) => setTeamName(text)} />
               <CustomButton text="Continue" onPress={onContinuePressed} />
-
 
               <Modal
                 animationType="slide"
@@ -165,9 +156,7 @@ const MyTeams = () => {
         </Modal>
       </View>
       {/* end of join team modal */}
-
     </View>
-
   )
 }
 
@@ -206,7 +195,8 @@ const styles = StyleSheet.create({
   },
   createTeamContainer: {
     flexDirection: 'row',
-    justifyContent: 'space-evenly'
+    justifyContent: 'space-evenly',
+    padding: 10
   },
 
   centeredView: {
