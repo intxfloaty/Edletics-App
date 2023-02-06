@@ -3,7 +3,8 @@ import React, { useState } from 'react'
 import CustomButton from '../components/CustomButton'
 import NewActivityPractice from '../components/NewActivityPractice'
 import NewActivityGame from '../components/NewActivityGame'
-import NewActivityTournament from './NewActivityTournament'
+import NewActivityTournament from '../components/NewActivityTournament'
+import firestore from '@react-native-firebase/firestore';
 
 const TeamActivity = () => {
   const [typeOfActivityPressed, setTypeOfActivityPressed] = useState({
@@ -12,6 +13,14 @@ const TeamActivity = () => {
     Tournament: false,
   })
   const [typeOfActivity, setTypeOfActivity] = useState("Practice")
+  const [opponent, setOpponent] = useState("")
+  const [title, setTitle] = useState("")
+  const [location, setLocation] = useState("")
+  const [date, setDate] = useState("");
+  const [invitations, setInvitations] = useState("")
+  const [additionalInfo, setAdditionalInfo] = useState("")
+  const [privateNotes, setPrivateNotes] = useState("")
+
 
   const onPracticePressed = () => {
     setTypeOfActivityPressed({ ...typeOfActivityPressed, Practice: true })
@@ -28,6 +37,26 @@ const TeamActivity = () => {
     setTypeOfActivity("Tournament")
   }
 
+  const createActivity = () => {
+    firestore()
+      .collection("New_activity")
+      .doc(`${typeOfActivity}`)
+      .set({
+        opponent: typeOfActivity === "Game" ? opponent: "",
+        title: title,
+        location: location,
+        date: date,
+        invitations: invitations,
+        additionalInfo: additionalInfo,
+        privateNotes: privateNotes,
+      })
+      .then(() => {
+        console.log("New Activity added!")
+      })
+      .catch((error) => console.log(error, "error message"))
+  }
+
+
   return (
     <View style={styles.parent}>
       <View style={styles.activityHeader}>
@@ -35,20 +64,77 @@ const TeamActivity = () => {
           <Text style={styles.headerText}>X</Text>
         </Pressable>
         <Text style={styles.headerText}>New Activity</Text>
-        <Pressable style={styles.createButton}>
+        <Pressable style={styles.createButton} onPress={createActivity}>
           <Text style={styles.headerText}>Create</Text>
         </Pressable>
       </View>
 
       <ScrollView style={styles.activityContainer}>
         <View style={styles.typeOfActivity}>
-          <CustomButton text="Practice" type= {typeOfActivity === "Practice" ? "activityPressed" : "activity"} onPress={onPracticePressed} />
-          <CustomButton text="Game" type={typeOfActivity === "Game" ? "activityPressed" : "activity"} onPress={onGamePressed} />
-          <CustomButton text="Tournament" type={typeOfActivity === "Tournament" ? "activityPressed" : "activity"} onPress={onTournamentPressed} />
+          <CustomButton
+            text="Practice"
+            type={typeOfActivity === "Practice" ? "activityPressed" : "activity"}
+            onPress={onPracticePressed} />
+          <CustomButton
+            text="Game"
+            type={typeOfActivity === "Game" ? "activityPressed" : "activity"}
+            onPress={onGamePressed} />
+          <CustomButton
+            text="Tournament"
+            type={typeOfActivity === "Tournament" ? "activityPressed" : "activity"}
+            onPress={onTournamentPressed} />
         </View>
-        {typeOfActivity === "Practice" && <NewActivityPractice />}
-        {typeOfActivity === "Game" && <NewActivityGame />}
-        {typeOfActivity === "Tournament" && <NewActivityTournament />}
+
+        {typeOfActivity === "Practice" &&
+          <NewActivityPractice
+            title={title}
+            setTitle={setTitle}
+            location={location}
+            setLocation={setLocation}
+            date={date}
+            setDate={setDate}
+            invitations={invitations}
+            setInvitations={setInvitations}
+            additionalInfo={additionalInfo}
+            setAdditionalInfo={setAdditionalInfo}
+            privateNotes={privateNotes}
+            setPrivateNotes={setPrivateNotes} />
+        }
+
+
+        {typeOfActivity === "Game" &&
+          <NewActivityGame
+            opponent={opponent}
+            setOpponent={setOpponent}
+            title={title}
+            setTitle={setTitle}
+            location={location}
+            setLocation={setLocation}
+            date={date}
+            setDate={setDate}
+            invitations={invitations}
+            setInvitations={setInvitations}
+            additionalInfo={additionalInfo}
+            setAdditionalInfo={setAdditionalInfo}
+            privateNotes={privateNotes}
+            setPrivateNotes={setPrivateNotes} />
+        }
+
+        {typeOfActivity === "Tournament" &&
+          <NewActivityTournament
+            title={title}
+            setTitle={setTitle}
+            location={location}
+            setLocation={setLocation}
+            date={date}
+            setDate={setDate}
+            invitations={invitations}
+            setInvitations={setInvitations}
+            additionalInfo={additionalInfo}
+            setAdditionalInfo={setAdditionalInfo}
+            privateNotes={privateNotes}
+            setPrivateNotes={setPrivateNotes} />
+        }
       </ScrollView>
     </View>
   )
