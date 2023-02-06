@@ -13,14 +13,31 @@ const TeamActivity = () => {
     Tournament: false,
   })
   const [typeOfActivity, setTypeOfActivity] = useState("Practice")
-  const [opponent, setOpponent] = useState("")
-  const [title, setTitle] = useState("")
-  const [location, setLocation] = useState("")
-  const [date, setDate] = useState("");
-  const [invitations, setInvitations] = useState("")
-  const [additionalInfo, setAdditionalInfo] = useState("")
-  const [privateNotes, setPrivateNotes] = useState("")
-
+  const [practice, setPractice] = useState({
+    title: "",
+    location: "",
+    date: "",
+    invitations: "",
+    additionalInfo: "",
+    privateNotes: ""
+  })
+  const [game, setGame] = useState({
+    opponent: "",
+    title: "",
+    location: "",
+    date: "",
+    invitations: "",
+    additionalInfo: "",
+    privateNotes: ""
+  })
+  const [tournament, setTournament] = useState({
+    title: "",
+    location: "",
+    date: "",
+    invitations: "",
+    additionalInfo: "",
+    privateNotes: ""
+  })
 
   const onPracticePressed = () => {
     setTypeOfActivityPressed({ ...typeOfActivityPressed, Practice: true })
@@ -43,7 +60,7 @@ const TeamActivity = () => {
       .doc(`${typeOfActivity}`)
       .set({
         opponent: typeOfActivity === "Game" ? opponent : "",
-        title: title,
+        title: practice.title,
         location: location,
         date: date,
         invitations: invitations,
@@ -86,53 +103,22 @@ const TeamActivity = () => {
 
         {typeOfActivity === "Practice" &&
           <NewActivityPractice
-            title={title}
-            setTitle={setTitle}
-            location={location}
-            setLocation={setLocation}
-            date={date}
-            setDate={setDate}
-            invitations={invitations}
-            setInvitations={setInvitations}
-            additionalInfo={additionalInfo}
-            setAdditionalInfo={setAdditionalInfo}
-            privateNotes={privateNotes}
-            setPrivateNotes={setPrivateNotes} />
+            practice={practice}
+            setPractice={setPractice}
+          />
         }
 
 
         {typeOfActivity === "Game" &&
           <NewActivityGame
-            opponent={opponent}
-            setOpponent={setOpponent}
-            title={title}
-            setTitle={setTitle}
-            location={location}
-            setLocation={setLocation}
-            date={date}
-            setDate={setDate}
-            invitations={invitations}
-            setInvitations={setInvitations}
-            additionalInfo={additionalInfo}
-            setAdditionalInfo={setAdditionalInfo}
-            privateNotes={privateNotes}
-            setPrivateNotes={setPrivateNotes} />
+            game={game}
+            setGame={setGame} />
         }
 
         {typeOfActivity === "Tournament" &&
           <NewActivityTournament
-            title={title}
-            setTitle={setTitle}
-            location={location}
-            setLocation={setLocation}
-            date={date}
-            setDate={setDate}
-            invitations={invitations}
-            setInvitations={setInvitations}
-            additionalInfo={additionalInfo}
-            setAdditionalInfo={setAdditionalInfo}
-            privateNotes={privateNotes}
-            setPrivateNotes={setPrivateNotes} />
+            tournament={tournament}
+            setTournament={setTournament} />
         }
       </ScrollView>
     </View>

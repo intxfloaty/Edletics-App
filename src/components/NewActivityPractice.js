@@ -3,13 +3,13 @@ import React, { useState } from 'react'
 import CustomInput from './CustomInput'
 import { DateTimePickerAndroid } from '@react-native-community/datetimepicker';
 
-const NewActivityPractice = ({ title, setTitle, location, setLocation, date, setDate, invitations, setInvitations, additionalInfo, setAdditionalInfo, privateNotes, setPrivateNotes }) => {
+const NewActivityPractice = ({ practice, setPractice }) => {
 
   // function to date and time of practice
   const showDatepicker = () => {
     const onChange = (event, selectedDate) => {
       const currentDate = selectedDate.toLocaleString();
-      setDate(currentDate);
+      setPractice({ ...practice, date: currentDate });
     };
     const showMode = (currentMode) => {
       DateTimePickerAndroid.open({
@@ -28,15 +28,15 @@ const NewActivityPractice = ({ title, setTitle, location, setLocation, date, set
       <View style={styles.activityTitle}>
         <Text style={styles.label}>Title</Text>
         <CustomInput
-          value={title}
-          setValue={setTitle} />
+          value={practice.title}
+          setValue={(value) => setPractice({ ...practice, title: value })} />
       </View>
 
       <View style={styles.activityLocation}>
         <Text style={styles.label}>Location</Text>
         <CustomInput
-          value={location}
-          setValue={setLocation} />
+          value={practice.location}
+          setValue={(value) => setPractice({ ...practice, location: value })} />
       </View>
 
       <View style={styles.activityDateAndTime}>
@@ -44,21 +44,21 @@ const NewActivityPractice = ({ title, setTitle, location, setLocation, date, set
         <CustomInput
           onPressIn={showDatepicker}
           showSoftInputOnFocus={false}
-          value={date} />
+          value={practice.date} />
       </View>
 
       <View style={styles.activityInvitations}>
         <Text style={styles.label}>Invitations</Text>
         <CustomInput
-          value={invitations}
-          setValue={setInvitations} />
+          value={practice.invitations}
+          setValue={(value) => setPractice({ ...practice, invitations: value })} />
       </View>
 
       <View style={styles.activityAdditionalInfo}>
         <Text style={styles.label}>Additional Information</Text>
         <CustomInput
-          value={additionalInfo}
-          setValue={setAdditionalInfo}
+          value={practice.additionalInfo}
+          setValue={(value) => setPractice({ ...practice, additionalInfo: value })}
           multiline={true}
           numberOfLines={4} />
       </View>
@@ -66,8 +66,8 @@ const NewActivityPractice = ({ title, setTitle, location, setLocation, date, set
       <View style={styles.privateNotesForCoaches}>
         <Text style={styles.label}>Private notes for Coaches</Text>
         <CustomInput
-          value={privateNotes}
-          setValue={setPrivateNotes}
+          value={practice.privateNotes}
+          setValue={(value) => setPractice({ ...practice, privateNotes: value })}
           multiline={true}
           numberOfLines={4} />
       </View>
