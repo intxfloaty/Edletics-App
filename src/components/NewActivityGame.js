@@ -65,14 +65,18 @@ const NewActivityGame = ({ opponent, setOpponent, title, setTitle, location, set
         <Text style={styles.label}>Additional Information</Text>
         <CustomInput
           value={additionalInfo}
-          setValue={setAdditionalInfo} />
+          setValue={setAdditionalInfo}
+          multiline={true}
+          numberOfLines={4} />
       </View>
 
       <View style={styles.privateNotesForCoaches}>
         <Text style={styles.label}>Private notes for Coaches</Text>
         <CustomInput
           value={privateNotes}
-          setValue={setPrivateNotes} />
+          setValue={setPrivateNotes}
+          multiline={true}
+          numberOfLines={4} />
       </View>
     </View>
   )
@@ -84,8 +88,8 @@ const styles = StyleSheet.create({
   activityTitle: {
   },
   label: {
-    color: "black",
+    color: "white",
     fontSize: 20,
-    fontWeight: '400',
+    fontWeight: '300',
   },
 })

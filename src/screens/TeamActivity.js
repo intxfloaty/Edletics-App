@@ -42,7 +42,7 @@ const TeamActivity = () => {
       .collection("New_activity")
       .doc(`${typeOfActivity}`)
       .set({
-        opponent: typeOfActivity === "Game" ? opponent: "",
+        opponent: typeOfActivity === "Game" ? opponent : "",
         title: title,
         location: location,
         date: date,
@@ -55,7 +55,6 @@ const TeamActivity = () => {
       })
       .catch((error) => console.log(error, "error message"))
   }
-
 
   return (
     <View style={styles.parent}>
@@ -147,7 +146,7 @@ const styles = StyleSheet.create({
     height: "100%",
     alignItems: "center",
     justifyContent: "center",
-    // backgroundColor: "#101112",
+    backgroundColor: "#101112",
   },
   activityHeader: {
     position: "relative",
@@ -164,8 +163,8 @@ const styles = StyleSheet.create({
   },
   headerText: {
     fontSize: 20,
-    fontWeight: '700',
-    color: "black"
+    fontWeight: '400',
+    color: "white"
   },
   activityContainer: {
     height: "100%"
