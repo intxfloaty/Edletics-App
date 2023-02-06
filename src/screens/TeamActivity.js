@@ -1,9 +1,33 @@
 import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native'
-import React from 'react'
-import CustomInput from '../components/CustomInput'
+import React, { useState } from 'react'
 import CustomButton from '../components/CustomButton'
+import NewActivityPractice from '../components/NewActivityPractice'
+import NewActivityGame from '../components/NewActivityGame'
+import NewActivityTournament from './NewActivityTournament'
 
 const TeamActivity = () => {
+  const [typeOfActivityPressed, setTypeOfActivityPressed] = useState({
+    Practice: false,
+    Game: false,
+    Tournament: false,
+  })
+  const [typeOfActivity, setTypeOfActivity] = useState("Practice")
+
+  const onPracticePressed = () => {
+    setTypeOfActivityPressed({ ...typeOfActivityPressed, Practice: true })
+    setTypeOfActivity("Practice")
+  }
+
+  const onGamePressed = () => {
+    setTypeOfActivityPressed({ ...typeOfActivityPressed, Game: true })
+    setTypeOfActivity("Game")
+  }
+
+  const onTournamentPressed = () => {
+    setTypeOfActivityPressed({ ...typeOfActivityPressed, Tournament: true })
+    setTypeOfActivity("Tournament")
+  }
+
   return (
     <View style={styles.parent}>
       <View style={styles.activityHeader}>
@@ -18,41 +42,13 @@ const TeamActivity = () => {
 
       <ScrollView style={styles.activityContainer}>
         <View style={styles.typeOfActivity}>
-          <CustomButton text="Practice" type="activity" />
-          <CustomButton text="Game" type="activity" />
-          <CustomButton text="Tournament" type="activity" />
+          <CustomButton text="Practice" type="activity" onPress={onPracticePressed} />
+          <CustomButton text="Game" type="activity" onPress={onGamePressed} />
+          <CustomButton text="Tournament" type="activity" onPress={onTournamentPressed} />
         </View>
-
-        <View style={styles.activityTitle}>
-          <Text style={styles.label}>Title</Text>
-          <CustomInput type="activity" />
-        </View>
-
-        <View style={styles.activityLocation}>
-          <Text style={styles.label}>Location</Text>
-          <CustomInput />
-        </View>
-
-        <View style={styles.activityTime}>
-          <Text style={styles.label}>Time</Text>
-          <CustomInput />
-        </View>
-
-        <View style={styles.activityInvitations}>
-          <Text style={styles.label}>Invitations</Text>
-          <CustomInput />
-        </View>
-
-        <View style={styles.activityAdditionalInfo}>
-          <Text style={styles.label}>Additional Information</Text>
-          <CustomInput />
-        </View>
-
-        <View style={styles.privateNotesForCoaches}>
-          <Text style={styles.label}>Private notes for Coaches</Text>
-          <CustomInput />
-        </View>
-
+        {typeOfActivity === "Practice" && <NewActivityPractice />}
+        {typeOfActivity === "Game" && <NewActivityGame />}
+        {typeOfActivity === "Tournament" && <NewActivityTournament />}
       </ScrollView>
     </View>
   )
@@ -92,12 +88,5 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between'
-  },
-  activityTitle: {
-  },
-  label: {
-    color: "black",
-    fontSize: 20,
-    fontWeight: '400',
   },
 })
