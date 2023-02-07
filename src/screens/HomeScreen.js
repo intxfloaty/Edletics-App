@@ -3,16 +3,10 @@ import React, { useState } from 'react'
 import MainMenuOptions from '../components/MainMenuOptions'
 
 const HomeScreen = () => {
-  const [homeScreen, setHomeScreen] = useState(true)
-  const [personOutline, setPersonOutline] = useState(false)
 
   return (
     <View style={styles.parent}>
-      <MainMenuOptions
-        homeScreen={homeScreen}
-        setHomeScreen={setHomeScreen}
-        personOutline={personOutline} 
-        setPersonOutline={setPersonOutline}/>
+      <MainMenuOptions />
     </View>
   )
 }

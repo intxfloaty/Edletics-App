@@ -7,12 +7,12 @@ export const NavProvider = (({ children }) => {
     homeOutline: true,
     footballOutline: false,
     trophyOutline: false,
-    chatOutline: false,
-    personOutline:false
+    chatboxOutline: false,
+    personOutline: false
   })
 
-  return(
-    <NavContext.Provider value={{menuOptions, setMenuOptions}}>
+  return (
+    <NavContext.Provider value={{ menuOptions, setMenuOptions }}>
       {children}
     </NavContext.Provider>
   )

@@ -8,7 +8,6 @@ import { useNavigation } from "@react-navigation/native"
 
 
 const ProfileScreen = () => {
-  const [personOutline, setPersonOutline] = useState(false)
 
   const navigation = useNavigation();
 
@@ -65,9 +64,7 @@ const ProfileScreen = () => {
             .then(() => console.log("user logged out"))
         }}
       />
-    <MainMenuOptions
-    personOutline ={personOutline}
-    setPersonOutline={setPersonOutline} />
+      <MainMenuOptions />
     </View>
   )
 }

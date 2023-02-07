@@ -2,16 +2,73 @@ import { StyleSheet, Text, View, } from 'react-native'
 import React, { useState, useContext } from 'react'
 import Icon from 'react-native-vector-icons/Ionicons'
 import { NavContext } from '../context/NavigationContext'
+import { useNavigation } from "@react-navigation/native"
+
 
 const MainMenuOptions = (props) => {
-  const {menuOptions, setMenuOptions} = useContext(NavContext)
+  const { menuOptions, setMenuOptions } = useContext(NavContext)
+  const navigation = useNavigation();
 
-  const isHomeScreenPressed = () => {
-    setMenuOptions({...menuOptions, homeOutline: true, personOutline:false})
+  const isHomeOutlinePressed = () => {
+    setMenuOptions
+      ({
+        ...menuOptions,
+        homeOutline: true,
+        footballOutline: false,
+        trophyOutline: false,
+        chatboxOutline: false,
+        personOutline: false
+      })
+    navigation.navigate("Home")
   }
 
   const isPersonOutlinePressed = () => {
-    setMenuOptions({...menuOptions, personOutline:true, homeOutline:false})
+    setMenuOptions
+      ({
+        ...menuOptions,
+        homeOutline: false,
+        footballOutline: false,
+        trophyOutline: false,
+        chatboxOutline: false,
+        personOutline: true
+      })
+    navigation.navigate("Profile")
+  }
+
+  const isFootballOutlinePressed = () => {
+    setMenuOptions
+      ({
+        ...menuOptions,
+        homeOutline: false,
+        footballOutline: true,
+        trophyOutline: false,
+        chatboxOutline: false,
+        personOutline: false
+      })
+  }
+
+  const isChatboxOutlinePressed = () => {
+    setMenuOptions
+      ({
+        ...menuOptions,
+        homeOutline: false,
+        footballOutline: false,
+        trophyOutline: false,
+        chatboxOutline: true,
+        personOutline: false
+      })
+  }
+
+  const isTrophyOutlinePressed = () => {
+    setMenuOptions
+      ({
+        ...menuOptions,
+        homeOutline: false,
+        footballOutline: false,
+        trophyOutline: true,
+        chatboxOutline: false,
+        personOutline: false
+      })
   }
 
   return (
@@ -20,12 +77,27 @@ const MainMenuOptions = (props) => {
         name="home-outline"
         size={30}
         color={menuOptions.homeOutline ? "white" : "gray"}
-        onPress={isHomeScreenPressed}
+        onPress={isHomeOutlinePressed}
       />
 
-      <Icon name="football-outline" size={30} color="gray" />
-      <Icon name="trophy-outline" size={30} color="gray" />
-      <Icon name="chatbox-outline" size={30} color="gray" />
+      <Icon
+        name="football-outline"
+        size={30}
+        color={menuOptions.footballOutline ? "white" : "gray"}
+        onPress={isFootballOutlinePressed} />
+
+      <Icon
+        name="trophy-outline"
+        size={30}
+        color={menuOptions.trophyOutline ? "white" : "gray"}
+        onPress={isTrophyOutlinePressed} />
+
+      <Icon
+        name="chatbox-outline"
+        size={30}
+        color={menuOptions.chatboxOutline ? "white" : "gray"}
+        onPress={isChatboxOutlinePressed} />
+
       <Icon
         name="person-outline"
         size={30}
