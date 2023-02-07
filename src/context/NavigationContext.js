@@ -4,8 +4,8 @@ export const NavContext = createContext()
 
 export const NavProvider = (({ children }) => {
   const [menuOptions, setMenuOptions] = useState({
-    homeOutline: true,
-    footballOutline: false,
+    homeOutline: false,
+    footballOutline: true,
     trophyOutline: false,
     chatboxOutline: false,
     personOutline: false

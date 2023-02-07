@@ -5,7 +5,7 @@ import { NavContext } from '../context/NavigationContext'
 import { useNavigation } from "@react-navigation/native"
 
 
-const MainMenuOptions = (props) => {
+const MainMenuOptions = () => {
   const { menuOptions, setMenuOptions } = useContext(NavContext)
   const navigation = useNavigation();
 
@@ -45,6 +45,7 @@ const MainMenuOptions = (props) => {
         chatboxOutline: false,
         personOutline: false
       })
+    navigation.navigate("TeamActivity")
   }
 
   const isChatboxOutlinePressed = () => {
@@ -81,16 +82,16 @@ const MainMenuOptions = (props) => {
       />
 
       <Icon
-        name="football-outline"
-        size={30}
-        color={menuOptions.footballOutline ? "white" : "gray"}
-        onPress={isFootballOutlinePressed} />
-
-      <Icon
         name="trophy-outline"
         size={30}
         color={menuOptions.trophyOutline ? "white" : "gray"}
         onPress={isTrophyOutlinePressed} />
+
+      <Icon
+        name="football-outline"
+        size={30}
+        color={menuOptions.footballOutline ? "white" : "gray"}
+        onPress={isFootballOutlinePressed} />
 
       <Icon
         name="chatbox-outline"

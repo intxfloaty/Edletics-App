@@ -7,7 +7,7 @@ import NewActivityTournament from '../components/NewActivityTournament'
 import firestore from '@react-native-firebase/firestore';
 
 const TeamActivity = () => {
-  const [isDisabled, setIsDisabled] = useState(false)
+  const [isDisabled, setIsDisabled] = useState(true)
   const [typeOfActivityPressed, setTypeOfActivityPressed] = useState({
     Practice: false,
     Game: false,
@@ -64,22 +64,33 @@ const TeamActivity = () => {
   }
 
   useEffect(() => {
-    if (isObjectNotEmpty(practice)) {
-      setIsDisabled(true)
-    } else setIsDisabled(false)
+    let obj = {}
+    if (typeOfActivity === 'Practice') obj = practice
+    if (typeOfActivity === 'Game') obj = game
+    if (typeOfActivity === 'Tournament') obj = tournament
+
+    if (isObjectNotEmpty(obj)) {
+      setIsDisabled(false)
+    } else setIsDisabled(true)
   }, [practice])
 
   const createActivity = () => {
-    if (isObjectNotEmpty(practice)) {
-      firestore()
-        .collection("New_activity")
-        .doc(`${typeOfActivity}`)
-        .set(practice)
-        .then(() => {
-          console.log("New Activity added!")
-        })
-        .catch((error) => console.log(error, "error message"))
-    }
+    let obj = {}
+    if (typeOfActivity === 'Practice') obj = practice
+    if (typeOfActivity === 'Game') obj = game
+    if (typeOfActivity === 'Tournament') obj = tournament
+
+    if (isObjectNotEmpty(obj)) {
+      try {
+        firestore()
+          .collection("New_activity")
+          .doc(`${typeOfActivity}`)
+          .set(obj);
+        console.log("New Activity added!");
+      } catch (error) {
+        console.log(error, "error message");
+      }
+    } else console.log("no activity")
   }
 
   return (
@@ -91,7 +102,7 @@ const TeamActivity = () => {
         <Text style={styles.headerText}>New Activity</Text>
         <CustomButton
           text="Create"
-          type={isDisabled ? "active" : "disabled"}
+          type={isDisabled ? "disabled" : "active"}
           onPress={createActivity}
           isDisabled={isDisabled} />
       </View>
