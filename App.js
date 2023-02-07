@@ -10,6 +10,7 @@ import ProfileScreen from './src/screens/ProfileScreen';
 import MyTeams from './src/screens/MyTeams';
 import TeamActivity from './src/screens/TeamActivity';
 import HomeScreen from './src/screens/HomeScreen';
+import MainMenuOptions from './src/components/MainMenuOptions';
 
 
 const Stack = createNativeStackNavigator();
@@ -28,19 +29,17 @@ const YourApp = () => {
   }
 
   return (
-
     <NavProvider>
-    <NavigationContainer>
-      {/* <View style={styles.root}> */}
-      <Stack.Navigator screenOptions={{ headerShown: false }}>
-        <Stack.Screen name="PlayerProfileInfo" component={PlayerProfileInfoScreen} />
-        <Stack.Screen name='Home' component={HomeScreen} />
-        <Stack.Screen name="Profile" component={ProfileScreen} />
-        <Stack.Screen name="MyTeams" component={MyTeams} />
-        <Stack.Screen name = "TeamActivity" component={TeamActivity} />
-      </Stack.Navigator>
-      {/* </View> */}
-    </NavigationContainer>
+      <NavigationContainer>
+        <Stack.Navigator screenOptions={{ headerShown: false }}>
+          <Stack.Screen name="PlayerProfileInfo" component={PlayerProfileInfoScreen} />
+          <Stack.Screen name='Home' component={HomeScreen} />
+          <Stack.Screen name="Profile" component={ProfileScreen} />
+          <Stack.Screen name="MyTeams" component={MyTeams} />
+          <Stack.Screen name="TeamActivity" component={TeamActivity} />
+        </Stack.Navigator>
+        <MainMenuOptions />
+      </NavigationContainer>
     </NavProvider>
   );
 

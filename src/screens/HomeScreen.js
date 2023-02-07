@@ -6,7 +6,6 @@ const HomeScreen = () => {
 
   return (
     <View style={styles.parent}>
-      <MainMenuOptions />
     </View>
   )
 }

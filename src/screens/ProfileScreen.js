@@ -64,7 +64,6 @@ const ProfileScreen = () => {
             .then(() => console.log("user logged out"))
         }}
       />
-      <MainMenuOptions />
     </View>
   )
 }
