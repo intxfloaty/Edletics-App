@@ -1,15 +1,109 @@
-import { StyleSheet, Text, View } from 'react-native'
-import React from 'react'
-import Icon  from 'react-native-vector-icons/Ionicons'
+import { StyleSheet, Text, View, } from 'react-native'
+import React, { useState, useContext } from 'react'
+import Icon from 'react-native-vector-icons/Ionicons'
+import { NavContext } from '../context/NavigationContext'
+import { useNavigation } from "@react-navigation/native"
+
 
 const MainMenuOptions = () => {
+  const { menuOptions, setMenuOptions } = useContext(NavContext)
+  const navigation = useNavigation();
+
+  const isHomeOutlinePressed = () => {
+    setMenuOptions
+      ({
+        ...menuOptions,
+        homeOutline: true,
+        footballOutline: false,
+        trophyOutline: false,
+        chatboxOutline: false,
+        personOutline: false
+      })
+    navigation.navigate("Home")
+  }
+
+  const isPersonOutlinePressed = () => {
+    setMenuOptions
+      ({
+        ...menuOptions,
+        homeOutline: false,
+        footballOutline: false,
+        trophyOutline: false,
+        chatboxOutline: false,
+        personOutline: true
+      })
+    navigation.navigate("Profile")
+  }
+
+  const isFootballOutlinePressed = () => {
+    setMenuOptions
+      ({
+        ...menuOptions,
+        homeOutline: false,
+        footballOutline: true,
+        trophyOutline: false,
+        chatboxOutline: false,
+        personOutline: false
+      })
+    navigation.navigate("TeamActivity")
+  }
+
+  const isChatboxOutlinePressed = () => {
+    setMenuOptions
+      ({
+        ...menuOptions,
+        homeOutline: false,
+        footballOutline: false,
+        trophyOutline: false,
+        chatboxOutline: true,
+        personOutline: false
+      })
+  }
+
+  const isTrophyOutlinePressed = () => {
+    setMenuOptions
+      ({
+        ...menuOptions,
+        homeOutline: false,
+        footballOutline: false,
+        trophyOutline: true,
+        chatboxOutline: false,
+        personOutline: false
+      })
+  }
+
   return (
     <View style={styles.menuIcons}>
-      <Icon name="home-outline" size={30} color="gray" onPress={() => alert("home")} />
-      <Icon name="football-outline" size={30} color="gray" />
-      <Icon name="trophy-outline" size={30} color="gray" />
-      <Icon name="chatbox-outline" size={30} color="gray" />
-      <Icon name="person-outline" size={30} color="white" />
+      <Icon
+        name="home-outline"
+        size={30}
+        color={menuOptions.homeOutline ? "white" : "gray"}
+        onPress={isHomeOutlinePressed}
+      />
+
+      <Icon
+        name="trophy-outline"
+        size={30}
+        color={menuOptions.trophyOutline ? "white" : "gray"}
+        onPress={isTrophyOutlinePressed} />
+
+      <Icon
+        name="football-outline"
+        size={30}
+        color={menuOptions.footballOutline ? "white" : "gray"}
+        onPress={isFootballOutlinePressed} />
+
+      <Icon
+        name="chatbox-outline"
+        size={30}
+        color={menuOptions.chatboxOutline ? "white" : "gray"}
+        onPress={isChatboxOutlinePressed} />
+
+      <Icon
+        name="person-outline"
+        size={30}
+        color={menuOptions.personOutline ? "white" : "gray"}
+        onPress={isPersonOutlinePressed} />
     </View>
   )
 }
