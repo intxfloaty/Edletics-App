@@ -122,8 +122,8 @@ const PlayerProfileInfoScreen = () => {
     if (Object.keys(fieldErrors).length === 0) {
       setUid(user.uid)
       firestore()
-        .collection("Player_profile")
-        .doc(`${uid}`)
+        .collection("players")
+        .doc(`${emailAddress}`)
         .set({
           fullName: fullName,
           dateOfBirth: date,
