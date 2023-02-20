@@ -11,6 +11,7 @@ import MyTeams from './src/screens/MyTeams';
 import TeamActivity from './src/screens/TeamActivity';
 import HomeScreen from './src/screens/HomeScreen';
 import MainMenuOptions from './src/components/MainMenuOptions';
+import AddPlayers from './src/screens/AddPlayers';
 
 
 const Stack = createNativeStackNavigator();
@@ -36,6 +37,7 @@ const YourApp = () => {
           <Stack.Screen name='Home' component={HomeScreen} />
           <Stack.Screen name="Profile" component={ProfileScreen} />
           <Stack.Screen name="MyTeams" component={MyTeams} />
+          <Stack.Screen name="AddPlayers" component={AddPlayers} />
           <Stack.Screen name="TeamActivity" component={TeamActivity} />
         </Stack.Navigator>
         <MainMenuOptions />

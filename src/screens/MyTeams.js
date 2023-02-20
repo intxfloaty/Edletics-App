@@ -9,8 +9,10 @@ import { useNavigation } from "@react-navigation/native"
 const MyTeams = () => {
   const [createTeamModal, setCreateTeamModal] = useState(false)
   const [joinTeamModal, setJoinTeamModal] = useState(false)
-  const [teamName, setTeamName] = useState("")
-  const [teamCode, setTeamCode] = useState()
+  const [teamInfo, setTeamInfo] = useState({
+    teamName: "",
+    teamLocation: "",
+  })
   const [joinTeamCode, setJoinTeamCode] = useState()
   const [myTeams, setMyTeams] = useState([])
   const [shareLinkModal, setShareLinkModal] = useState(false)
@@ -20,55 +22,22 @@ const MyTeams = () => {
   const navigation = useNavigation();
 
   const onContinuePressed = () => {
-    const min = 10000;
-    const max = 99999;
-    const code = Math.floor(Math.random() * (max - min + 1)) + min;
-    setTeamCode(code)
     firestore()
       .collection('teams')
-      .doc(`${teamName}`)
-      .set({
-        teamName: teamName,
-        teamCode: code
-      })
+      .doc(`${teamInfo.teamName}`)
+      .set(teamInfo)
       .then(() => {
         console.log('team added!');
+        setTeamInfo({
+          teamName: "",
+          teamLocation: "",
+        })
       });
     setShareLinkModal(true)
   }
 
-  const onConfirmPressed = () => {
-    if (teamCode == joinTeamCode) {
-      firestore()
-        .collection('teams').doc()
-        .update({
-          squad: {
-            player_1: "P1"
-          }
-        })
-        .then(() => {
-          console.log('player added!');
-        });
-    }
-  }
-
   useEffect(() => {
-    firestore()
-      .collection('My_teams_info')
-      .onSnapshot(querySnapshot => {
-        console.log('Total teams: ', querySnapshot.size);
-        var newArr = []
-
-        querySnapshot.forEach(documentSnapshot => {
-          console.log('Team ID: ', documentSnapshot.id, documentSnapshot.data());
-          newArr.push(documentSnapshot.data())
-        });
-        if (newArr.length > myTeams.length) {
-          setMyTeams(myTeams.concat(newArr))
-        }
-      });
   }, [])
-
 
   return (
     <View style={styles.parent} >
@@ -76,17 +45,15 @@ const MyTeams = () => {
         <Text style={styles.modalText}>MY TEAMS</Text>
         {myTeams?.map((myTeam, index) => {
           return (
-            <Pressable style={styles.teamContainer} onPress={() => navigation.navigate('TeamActivity')} key={index}>
-              <Image style={styles.teamLogo} />
+            <Pressable style={styles.teamContainer} onPress={() => navigation.navigate('AddPlayers')} key={index}>
+              {/* <Image style={styles.teamLogo} /> */}
               <Text style={styles.teamName}>{myTeam.teamName}</Text>
-              <Text style={styles.teamName}><Icon name="flash-outline" size={18} color="white" />5000</Text>
             </Pressable>
           )
         })
         }
         <View style={styles.createTeamContainer} >
           <CustomButton text="CREATE TEAM" type='SECONDARY' onPress={() => setCreateTeamModal(true)} />
-          <CustomButton text="JOIN TEAM" type='SECONDARY' onPress={() => setJoinTeamModal(true)} />
         </View>
       </ScrollView>
 
@@ -101,10 +68,14 @@ const MyTeams = () => {
           }}>
           <View style={styles.centeredView}>
             <View style={styles.modalView}>
-              <Text style={styles.teamName}>What is the name of your Team?</Text>
+              <Text style={styles.teamName}>Team Name:</Text>
               <CustomInput
-                value={teamName}
-                setValue={(text) => setTeamName(text)} />
+                value={teamInfo.teamName}
+                setValue={(text) => setTeamInfo({ ...teamInfo, teamName: text })} />
+              <Text style={styles.teamName}>Team Location:</Text>
+              <CustomInput
+                value={teamInfo.teamLocation}
+                setValue={(text) => setTeamInfo({ ...teamInfo, teamLocation: text })} />
               <CustomButton text="Continue" onPress={onContinuePressed} />
 
               <Modal
@@ -117,7 +88,6 @@ const MyTeams = () => {
                 }}>
                 <View style={styles.centeredView}>
                   <View style={styles.modalView}>
-                    <Text style={styles.secondModalText}>TM-{teamCode}</Text>
                     <Text style={styles.secondModalText}>Get the team onboard</Text>
                     <Text style={styles.secondModalTextInfo}>It's easy to get everyone onboard, simply share the team invite link or team code with your team.</Text>
                     <CustomButton text="Share link" onPress={() => setSecondModalVisible(!secondModalVisible)} />
