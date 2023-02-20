@@ -25,8 +25,9 @@ const MyTeams = () => {
     const code = Math.floor(Math.random() * (max - min + 1)) + min;
     setTeamCode(code)
     firestore()
-      .collection('My_teams_info')
-      .add({
+      .collection('teams')
+      .doc(`${teamName}`)
+      .set({
         teamName: teamName,
         teamCode: code
       })
@@ -39,7 +40,7 @@ const MyTeams = () => {
   const onConfirmPressed = () => {
     if (teamCode == joinTeamCode) {
       firestore()
-        .collection('My_teams_info').doc()
+        .collection('teams').doc()
         .update({
           squad: {
             player_1: "P1"

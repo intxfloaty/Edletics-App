@@ -134,6 +134,7 @@ const PlayerProfileInfoScreen = () => {
         })
         .then(() => {
           console.log("Player Profile added!")
+          navigation.navigate('Home')
         })
         .catch((error) => console.log(error, "error message"))
     }
