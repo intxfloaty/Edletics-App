@@ -8,7 +8,6 @@ import { userAuthState } from '../firebase/firebase';
 import firestore from '@react-native-firebase/firestore';
 import { useNavigation } from "@react-navigation/native"
 
-
 const PlayerProfileInfoScreen = () => {
   const [image, setImage] = useState(null);
   const [fullName, setFullName] = useState("")
@@ -33,8 +32,8 @@ const PlayerProfileInfoScreen = () => {
     if (user) {
       setUid(user.uid)
       firestore()
-        .collection("Player_profile")
-        .doc(`${uid}`)
+        .collection("players")  
+        .doc(`praveshjha5@gmail.com`)  // TODO: update this line of code to automatically capture the players email
         .get()
         .then((doc) => {
           if (doc.exists) {
@@ -134,7 +133,6 @@ const PlayerProfileInfoScreen = () => {
         })
         .then(() => {
           console.log("Player Profile added!")
-          navigation.navigate('Home')
         })
         .catch((error) => console.log(error, "error message"))
     }

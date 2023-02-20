@@ -137,9 +137,7 @@ const TeamActivity = () => {
         }
 
         {typeOfActivity === "Tournament" &&
-          <NewActivityTournament
-            tournament={tournament}
-            setTournament={setTournament} />
+          <NewActivityTournament />
         }
       </ScrollView>
     </View>
