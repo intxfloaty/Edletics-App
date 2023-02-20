@@ -32,8 +32,8 @@ const PlayerProfileInfoScreen = () => {
     if (user) {
       setUid(user.uid)
       firestore()
-        .collection("players")  
-        .doc(`praveshjha5@gmail.com`)  // TODO: update this line of code to automatically capture the players email
+        .collection("players")
+        .doc(`${user.phoneNumber}`)
         .get()
         .then((doc) => {
           if (doc.exists) {
@@ -122,17 +122,19 @@ const PlayerProfileInfoScreen = () => {
       setUid(user.uid)
       firestore()
         .collection("players")
-        .doc(`${emailAddress}`)
+        .doc(`${user.phoneNumber}`)
         .set({
           fullName: fullName,
           dateOfBirth: date,
           gender: gender,
           emailAddress: emailAddress,
           location: location,
+          phoneNumber: user.phoneNumber,
           userId: uid,
         })
         .then(() => {
           console.log("Player Profile added!")
+          navigation.navigate("Home")
         })
         .catch((error) => console.log(error, "error message"))
     }
