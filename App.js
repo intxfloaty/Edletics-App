@@ -2,25 +2,22 @@ import React, { useState, useEffect } from 'react';
 import { View, StyleSheet } from "react-native";
 import { NavProvider } from './src/context/NavigationContext';
 import SignInScreen from "./src/screens/SignInScreen";
-import PlayerProfileInfoScreen from './src/screens/PlayerProfileInfoScreen';
 import { usePlayerDetails, userAuthState } from './src/firebase/firebase'
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import ProfileScreen from './src/screens/ProfileScreen';
+import ProfileOptionsScreen from './src/screens/ProfileOptionsScreen';
 import MyTeams from './src/screens/MyTeams';
 import TeamActivity from './src/screens/TeamActivity';
 import HomeScreen from './src/screens/HomeScreen';
 import MainMenuOptions from './src/components/MainMenuOptions';
 import AddPlayers from './src/screens/AddPlayers';
-import LoadingScreen from './src/components/LoadingScreen';
+import PlayerDetails from './src/screens/PlayerDetails';
 
 
 const Stack = createNativeStackNavigator();
 
 const YourApp = () => {
   const { user, initializing } = userAuthState();
-  const { playerProfileExists } = usePlayerDetails(user?.phoneNumber);
-
 
   if (initializing) return null;
 
@@ -36,9 +33,9 @@ const YourApp = () => {
     <NavProvider>
       <NavigationContainer>
         <Stack.Navigator screenOptions={{ headerShown: false }}>
-          {!playerProfileExists && <Stack.Screen name="PlayerProfileInfo" component={PlayerProfileInfoScreen} />}
+          <Stack.Screen name="PlayerDetails" component={PlayerDetails} />
           <Stack.Screen name='Home' component={HomeScreen} />
-          <Stack.Screen name="Profile" component={ProfileScreen} />
+          <Stack.Screen name="ProfileOptions" component={ProfileOptionsScreen} />
           <Stack.Screen name="MyTeams" component={MyTeams} />
           <Stack.Screen name="AddPlayers" component={AddPlayers} />
           <Stack.Screen name="TeamActivity" component={TeamActivity} />

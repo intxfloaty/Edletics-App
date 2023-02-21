@@ -23,7 +23,7 @@ export const userAuthState = () => {
 
 export const usePlayerDetails = (phoneNumber) => {
   const [playerDetails, setPlayerDetails] = useState({});
-  const [playerProfileExists, setPlayerProfileExists] = useState(false)
+
 
   useEffect(() => {
     const fetchPlayerDetails = async () => {
@@ -33,7 +33,6 @@ export const usePlayerDetails = (phoneNumber) => {
 
         if (playerDoc.exists) {
           console.log(playerDoc.data(), "playerDetails");
-          setPlayerProfileExists(true);
           setPlayerDetails(playerDoc.data());
         } else {
           console.log("Player details not available");
@@ -48,7 +47,7 @@ export const usePlayerDetails = (phoneNumber) => {
     }
   }, [phoneNumber]);
 
-  return { playerProfileExists, playerDetails };
+  return { playerDetails };
 };
 
 

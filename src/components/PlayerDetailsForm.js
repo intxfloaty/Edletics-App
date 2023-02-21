@@ -1,15 +1,13 @@
 import { StyleSheet, Text, View, ScrollView, Pressable, Image } from 'react-native'
 import React, { useState, useEffect } from 'react'
-import CustomInput from '../components/CustomInput'
-import CustomButton from '../components/CustomButton'
+import CustomInput from './CustomInput'
+import CustomButton from './CustomButton'
 import { DateTimePickerAndroid } from '@react-native-community/datetimepicker';
 import ImagePicker from 'react-native-image-crop-picker';
-import { usePlayerDetails, userAuthState } from '../firebase/firebase';
 import firestore from '@react-native-firebase/firestore';
 import { useNavigation } from "@react-navigation/native"
-import LoadingScreen from '../components/LoadingScreen';
 
-const PlayerProfileInfoScreen = () => {
+const PlayerDetailsForm = () => {
   const [image, setImage] = useState(null);
   const [fullName, setFullName] = useState("")
   const [date, setDate] = useState("");
@@ -22,18 +20,7 @@ const PlayerProfileInfoScreen = () => {
     other: false,
   })
   const [fieldErrors, setFieldErrors] = useState({})
-  const [uid, setUid] = useState()
-  const [isLoading, setIsLoading] = useState(true)
-  const { user } = userAuthState();
-  const { playerProfileExists } = usePlayerDetails(user?.phoneNumber);
-  const navigation = useNavigation();
-
-  useEffect(() => {
-    if (playerProfileExists) {
-      setIsLoading(false)
-      navigation.navigate('Home')
-    }
-  }, [playerProfileExists])
+  const navigation = useNavigation()
 
   // function to select profile image
   const choseFromLibrary = () => {
@@ -117,7 +104,6 @@ const PlayerProfileInfoScreen = () => {
           emailAddress: emailAddress,
           location: location,
           phoneNumber: user.phoneNumber,
-          userId: uid,
         })
         .then(() => {
           console.log("Player Profile added!")
@@ -132,12 +118,6 @@ const PlayerProfileInfoScreen = () => {
       setFieldErrors(validate())
     }
   }, [fullName, date, gender, emailAddress, location])
-
-  if (isLoading) {
-    return (
-      <LoadingScreen />
-    )
-  }
 
   return (
     <ScrollView showsVerticalScrollIndicator={false} >
@@ -216,7 +196,7 @@ const PlayerProfileInfoScreen = () => {
   )
 }
 
-export default PlayerProfileInfoScreen
+export default PlayerDetailsForm
 
 const styles = StyleSheet.create({
   parent: {
