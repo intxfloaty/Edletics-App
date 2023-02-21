@@ -21,17 +21,19 @@ export const userAuthState = () => {
   return { user, initializing };
 }
 
-export const fetchPlayerDetails = async (playerId) => {
+export const usePlayerDetails = (phoneNumber) => {
   const [playerDetails, setPlayerDetails] = useState({});
+  const [playerProfileExists, setPlayerProfileExists] = useState(false)
 
   useEffect(() => {
-    const getPlayerDetails = async () => {
+    const fetchPlayerDetails = async () => {
       try {
-        const playerRef = firestore().collection("players").doc(`${playerId}`);
+        const playerRef = firestore().collection("players").doc(`${phoneNumber}`);
         const playerDoc = await playerRef.get();
 
         if (playerDoc.exists) {
           console.log(playerDoc.data(), "playerDetails");
+          setPlayerProfileExists(true);
           setPlayerDetails(playerDoc.data());
         } else {
           console.log("Player details not available");
@@ -41,16 +43,15 @@ export const fetchPlayerDetails = async (playerId) => {
       }
     };
 
-    getPlayerDetails();
+    if (phoneNumber) {
+      fetchPlayerDetails();
+    }
+  }, [phoneNumber]);
 
-    // return a cleanup function if necessary
-    return () => {
-      // do cleanup
-    };
-  }, []);
-
-  return playerDetails;
+  return { playerProfileExists, playerDetails };
 };
+
+
 
 
 

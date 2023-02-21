@@ -3,7 +3,7 @@ import { View, StyleSheet } from "react-native";
 import { NavProvider } from './src/context/NavigationContext';
 import SignInScreen from "./src/screens/SignInScreen";
 import PlayerProfileInfoScreen from './src/screens/PlayerProfileInfoScreen';
-import { userAuthState } from './src/firebase/firebase'
+import { usePlayerDetails, userAuthState } from './src/firebase/firebase'
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import ProfileScreen from './src/screens/ProfileScreen';
@@ -12,12 +12,15 @@ import TeamActivity from './src/screens/TeamActivity';
 import HomeScreen from './src/screens/HomeScreen';
 import MainMenuOptions from './src/components/MainMenuOptions';
 import AddPlayers from './src/screens/AddPlayers';
+import LoadingScreen from './src/components/LoadingScreen';
 
 
 const Stack = createNativeStackNavigator();
 
 const YourApp = () => {
   const { user, initializing } = userAuthState();
+  const { playerProfileExists } = usePlayerDetails(user?.phoneNumber);
+
 
   if (initializing) return null;
 
@@ -33,7 +36,7 @@ const YourApp = () => {
     <NavProvider>
       <NavigationContainer>
         <Stack.Navigator screenOptions={{ headerShown: false }}>
-          <Stack.Screen name="PlayerProfileInfo" component={PlayerProfileInfoScreen} />
+          {!playerProfileExists && <Stack.Screen name="PlayerProfileInfo" component={PlayerProfileInfoScreen} />}
           <Stack.Screen name='Home' component={HomeScreen} />
           <Stack.Screen name="Profile" component={ProfileScreen} />
           <Stack.Screen name="MyTeams" component={MyTeams} />
