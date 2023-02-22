@@ -78,8 +78,7 @@ const TeamActivity = () => {
     let obj = {}
     if (typeOfActivity === 'Practice') obj = practice
     if (typeOfActivity === 'Game') obj = game
-    if (typeOfActivity === 'Tournament') obj = tournament
-
+    
     if (isObjectNotEmpty(obj)) {
       try {
         firestore()
@@ -137,9 +136,7 @@ const TeamActivity = () => {
         }
 
         {typeOfActivity === "Tournament" &&
-          <NewActivityTournament
-            tournament={tournament}
-            setTournament={setTournament} />
+          <NewActivityTournament />
         }
       </ScrollView>
     </View>

@@ -1,15 +1,14 @@
 import { StyleSheet, Text, View, ScrollView, Pressable, Image } from 'react-native'
 import React, { useState, useEffect } from 'react'
-import CustomInput from '../components/CustomInput'
-import CustomButton from '../components/CustomButton'
+import CustomInput from './CustomInput'
+import CustomButton from './CustomButton'
 import { DateTimePickerAndroid } from '@react-native-community/datetimepicker';
 import ImagePicker from 'react-native-image-crop-picker';
-import { userAuthState } from '../firebase/firebase';
 import firestore from '@react-native-firebase/firestore';
 import { useNavigation } from "@react-navigation/native"
+import { userAuthState } from '../firebase/firebase';
 
-
-const PlayerProfileInfoScreen = () => {
+const PlayerDetailsForm = () => {
   const [image, setImage] = useState(null);
   const [fullName, setFullName] = useState("")
   const [date, setDate] = useState("");
@@ -22,32 +21,8 @@ const PlayerProfileInfoScreen = () => {
     other: false,
   })
   const [fieldErrors, setFieldErrors] = useState({})
-  const [uid, setUid] = useState()
-
-  const { user } = userAuthState()
-  const navigation = useNavigation();
-  console.log(user, "user")
-
-  // check if player profile already exists
-  useEffect(() => {
-    if (user) {
-      setUid(user.uid)
-      firestore()
-        .collection("Player_profile")
-        .doc(`${uid}`)
-        .get()
-        .then((doc) => {
-          if (doc.exists) {
-            console.log("Profile info already exists for the player")
-            console.log(doc.data(), "player info")
-            navigation.navigate('Home')
-          } else {
-            console.log("Player info does not exist for the player")
-          }
-        })
-        .catch(error => console.log(error))
-    }
-  }, [user])
+  const navigation = useNavigation()
+  const {user} = userAuthState();
 
   // function to select profile image
   const choseFromLibrary = () => {
@@ -117,23 +92,22 @@ const PlayerProfileInfoScreen = () => {
   }
 
   const onSubmitPressed = () => {
-    console.log(uid, "id")
     setFieldErrors(validate())
     if (Object.keys(fieldErrors).length === 0) {
-      setUid(user.uid)
       firestore()
-        .collection("Player_profile")
-        .doc(`${uid}`)
+        .collection("players")
+        .doc(`${user?.phoneNumber}`)
         .set({
           fullName: fullName,
           dateOfBirth: date,
           gender: gender,
           emailAddress: emailAddress,
           location: location,
-          userId: uid,
+          phoneNumber: user.phoneNumber,
         })
         .then(() => {
           console.log("Player Profile added!")
+          navigation.navigate("Home")
         })
         .catch((error) => console.log(error, "error message"))
     }
@@ -222,7 +196,7 @@ const PlayerProfileInfoScreen = () => {
   )
 }
 
-export default PlayerProfileInfoScreen
+export default PlayerDetailsForm
 
 const styles = StyleSheet.create({
   parent: {

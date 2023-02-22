@@ -32,7 +32,7 @@ const MainMenuOptions = () => {
         chatboxOutline: false,
         personOutline: true
       })
-    navigation.navigate("Profile")
+    navigation.navigate("ProfileOptions")
   }
 
   const isFootballOutlinePressed = () => {

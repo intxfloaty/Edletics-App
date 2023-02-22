@@ -7,7 +7,7 @@ import auth from '@react-native-firebase/auth';
 import { useNavigation } from "@react-navigation/native"
 
 
-const ProfileScreen = () => {
+const ProfileOptionsScreen = () => {
 
   const navigation = useNavigation();
 
@@ -68,7 +68,7 @@ const ProfileScreen = () => {
   )
 }
 
-export default ProfileScreen
+export default ProfileOptionsScreen
 
 const styles = StyleSheet.create({
   parent: {
