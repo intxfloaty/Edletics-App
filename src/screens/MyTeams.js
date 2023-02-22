@@ -22,7 +22,7 @@ const MyTeams = () => {
   const onContinuePressed = () => {
     firestore()
       .collection('teams')
-      .doc(`${teamInfo.teamName}`)
+      .doc(`${teamInfo.teamName}_${playerDetails?.phoneNumber}`)
       .set({
         teamName: teamInfo.teamName,
         teamLocation: teamInfo.teamLocation,

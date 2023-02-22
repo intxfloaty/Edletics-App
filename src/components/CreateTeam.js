@@ -3,9 +3,8 @@ import React, { useState, useEffect } from 'react'
 import CustomButton from './CustomButton'
 import CustomInput from './CustomInput'
 
-const CreateTeam = ({myTeams, teamInfo, setTeamInfo, onContinuePressed}) => {
+const CreateTeam = ({myTeams, teamInfo, setTeamInfo,shareLinkModal,setShareLinkModal, onContinuePressed}) => {
   const [createTeamModal, setCreateTeamModal] = useState(false)
-  const [shareLinkModal, setShareLinkModal] = useState(false)
 
   return (
     <View style={styles.parent} >
