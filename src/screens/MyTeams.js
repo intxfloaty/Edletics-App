@@ -1,24 +1,20 @@
 import { StyleSheet, Text, View, Modal, Image, ScrollView, Pressable } from 'react-native'
 import React, { useState, useEffect } from 'react'
 import firestore from '@react-native-firebase/firestore';
-import { useNavigation } from "@react-navigation/native"
-import { userAuthState, usePlayerDetails } from '../firebase/firebase';
+import { userAuthState, usePlayerDetails, fetchTeamDetails } from '../firebase/firebase';
 import CreateTeam from '../components/CreateTeam';
 
 const MyTeams = () => {
+  const { user } = userAuthState();
+  const { playerDetails } = usePlayerDetails(user?.phoneNumber)
+  const {teamId, myTeams} = fetchTeamDetails();
   const [shareLinkModal, setShareLinkModal] = useState(false)
   const [teamInfo, setTeamInfo] = useState({
     teamName: "",
     teamLocation: "",
   })
-  const [myTeams, setMyTeams] = useState([])
 
-  const { user } = userAuthState();
-  const { playerDetails } = usePlayerDetails(user?.phoneNumber)
-
-
-  const navigation = useNavigation();
-
+  // to create new teams 
   const onContinuePressed = () => {
     firestore()
       .collection('teams')
@@ -39,8 +35,19 @@ const MyTeams = () => {
     setShareLinkModal(true)
   }
 
-  useEffect(() => {
-  }, [])
+  // to fetch myTeams
+  // useEffect(() => {
+  //   firestore()
+  //     .collection("teams")
+  //     .get()
+  //     .then((querySnapShot) => {
+  //       querySnapShot.forEach((doc) => {
+  //         console.log(doc.id, '=>', doc.data())
+  //         setMyTeams(myTeams.concat(doc.data()))
+  //         setTeamId(doc.id)
+  //       })
+  //     })
+  // }, [])
 
   return (
     <CreateTeam

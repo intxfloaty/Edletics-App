@@ -1,10 +1,13 @@
 import { StyleSheet, Text, View, Modal, Image, ScrollView, Pressable } from 'react-native'
 import React, { useState, useEffect } from 'react'
+import { useNavigation } from "@react-navigation/native"
 import CustomButton from './CustomButton'
 import CustomInput from './CustomInput'
 
-const CreateTeam = ({myTeams, teamInfo, setTeamInfo,shareLinkModal,setShareLinkModal, onContinuePressed}) => {
+const CreateTeam = ({ myTeams, teamInfo, setTeamInfo, shareLinkModal, setShareLinkModal, onContinuePressed }) => {
   const [createTeamModal, setCreateTeamModal] = useState(false)
+  const navigation = useNavigation();
+
 
   return (
     <View style={styles.parent} >

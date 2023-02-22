@@ -21,6 +21,8 @@ export const userAuthState = () => {
   return { user, initializing };
 }
 
+
+// to fetch player details
 export const usePlayerDetails = (phoneNumber) => {
   const [playerDetails, setPlayerDetails] = useState({});
   const [isPlayerDetail, setIsPlayerDetail] = useState(false)
@@ -49,6 +51,27 @@ export const usePlayerDetails = (phoneNumber) => {
 
   return { playerDetails, isPlayerDetail };
 };
+
+// to fetch team details
+export const fetchTeamDetails = () => {
+  const [myTeams, setMyTeams] = useState([])
+  const [teamId, setTeamId] = useState('')
+
+  useEffect(() => {
+    firestore()
+      .collection("teams")
+      .get()
+      .then((querySnapShot) => {
+        querySnapShot.forEach((doc) => {
+          console.log(doc.id, '=>', doc.data())
+          setMyTeams(myTeams.concat(doc.data()))
+          setTeamId(doc.id)
+        })
+      })
+  }, [])
+
+  return {myTeams, teamId}
+}
 
 
 
