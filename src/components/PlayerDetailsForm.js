@@ -6,6 +6,7 @@ import { DateTimePickerAndroid } from '@react-native-community/datetimepicker';
 import ImagePicker from 'react-native-image-crop-picker';
 import firestore from '@react-native-firebase/firestore';
 import { useNavigation } from "@react-navigation/native"
+import { userAuthState } from '../firebase/firebase';
 
 const PlayerDetailsForm = () => {
   const [image, setImage] = useState(null);
@@ -21,6 +22,7 @@ const PlayerDetailsForm = () => {
   })
   const [fieldErrors, setFieldErrors] = useState({})
   const navigation = useNavigation()
+  const {user} = userAuthState();
 
   // function to select profile image
   const choseFromLibrary = () => {
@@ -90,13 +92,11 @@ const PlayerDetailsForm = () => {
   }
 
   const onSubmitPressed = () => {
-    console.log(uid, "id")
     setFieldErrors(validate())
     if (Object.keys(fieldErrors).length === 0) {
-      setUid(user.uid)
       firestore()
         .collection("players")
-        .doc(`${user.phoneNumber}`)
+        .doc(`${user?.phoneNumber}`)
         .set({
           fullName: fullName,
           dateOfBirth: date,

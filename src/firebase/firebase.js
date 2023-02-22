@@ -23,8 +23,7 @@ export const userAuthState = () => {
 
 export const usePlayerDetails = (phoneNumber) => {
   const [playerDetails, setPlayerDetails] = useState({});
-
-
+  const [isPlayerDetail, setIsPlayerDetail] = useState(false)
   useEffect(() => {
     const fetchPlayerDetails = async () => {
       try {
@@ -32,6 +31,7 @@ export const usePlayerDetails = (phoneNumber) => {
         const playerDoc = await playerRef.get();
 
         if (playerDoc.exists) {
+          setIsPlayerDetail(true)
           console.log(playerDoc.data(), "playerDetails");
           setPlayerDetails(playerDoc.data());
         } else {
@@ -47,7 +47,7 @@ export const usePlayerDetails = (phoneNumber) => {
     }
   }, [phoneNumber]);
 
-  return { playerDetails };
+  return { playerDetails, isPlayerDetail };
 };
 
 
