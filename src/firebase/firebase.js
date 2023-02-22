@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import auth from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
+import MyTeams from '../screens/MyTeams';
 
 
 export const userAuthState = () => {
@@ -52,25 +53,42 @@ export const usePlayerDetails = (phoneNumber) => {
   return { playerDetails, isPlayerDetail };
 };
 
-// to fetch team details
-export const fetchTeamDetails = () => {
-  const [myTeams, setMyTeams] = useState([])
-  const [teamId, setTeamId] = useState('')
+// to create new teams and fetch team details
+export const createAndFetchTeam = (teamInfo, playerDetails) => {
+const [numberOfTeams, setNumberOfTeams] = useState() //to keep a count whenever a new team is added
 
-  useEffect(() => {
+  const createTeam = () => {
     firestore()
-      .collection("teams")
-      .get()
-      .then((querySnapShot) => {
-        querySnapShot.forEach((doc) => {
-          console.log(doc.id, '=>', doc.data())
-          setMyTeams(myTeams.concat(doc.data()))
-          setTeamId(doc.id)
-        })
+      .collection('teams')
+      .doc(`${teamInfo.teamName}_${playerDetails?.phoneNumber}`)
+      .set({
+        teamName: teamInfo.teamName,
+        teamLocation: teamInfo.teamLocation,
+        teamAdminName: playerDetails?.fullName,
+        teamAdminId: playerDetails?.phoneNumber,
       })
-  }, [])
+      .then(() => {
+        console.log('team added!');
+        setNumberOfTeams(numberOfTeams + 1)
+      });
+  }
 
-  return {myTeams, teamId}
+  const fetchTeamDetails = (setMyTeams) => {
+    useEffect(() => {
+      firestore()
+        .collection("teams")
+        .get()
+        .then((querySnapShot) => {
+          const newTeams = []
+          querySnapShot.forEach((doc) => {
+            newTeams.push(doc.data())
+          })
+          setMyTeams(newTeams)
+        })
+    }, [numberOfTeams])
+  }
+
+  return { createTeam, fetchTeamDetails }
 }
 
 

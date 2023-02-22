@@ -1,18 +1,16 @@
 import { ScrollView, StyleSheet, Text, View } from 'react-native'
 import React, { useState, useEffect } from 'react'
-import { usePlayerDetails, userAuthState, fetchTeamDetails} from '../firebase/firebase'
+import { usePlayerDetails, userAuthState, fetchTeamDetails } from '../firebase/firebase'
 import firestore from '@react-native-firebase/firestore';
 import CustomButton from '../components/CustomButton';
 import CustomInput from '../components/CustomInput';
 
-
 const AddPlayers = () => {
   const { user } = userAuthState()
   const { playerDetails } = usePlayerDetails(user?.phoneNumber)
-  const {teamId, myTeams} = fetchTeamDetails();
+  const { teamId } = fetchTeamDetails();
   const [player, setPlayer] = useState("+91")
   const [playerList, setPlayerList] = useState([])
-
 
   // to add new players to the team
   const onAddPlayerPressed = () => {
@@ -56,7 +54,7 @@ const AddPlayers = () => {
         setValue={(text) => setPlayer(text)} />
       <CustomButton text="Add Player" onPress={onAddPlayerPressed} />
       <Text style={styles.text}>Player List:</Text>
-      {playerList.map((player, index)=> {
+      {playerList.map((player, index) => {
         return (
           <Text style={styles.text} key={index}>{player.playerId}</Text>
         )
