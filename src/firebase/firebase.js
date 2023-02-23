@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react'
 import auth from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
 
-
 export const userAuthState = () => {
   const [initializing, setInitializing] = useState(true);
   const [user, setUser] = useState();
@@ -43,7 +42,6 @@ export const usePlayerDetails = (phoneNumber) => {
         console.log(error);
       }
     };
-
     if (phoneNumber) {
       fetchPlayerDetails();
     }
@@ -52,25 +50,137 @@ export const usePlayerDetails = (phoneNumber) => {
   return { playerDetails, isPlayerDetail };
 };
 
-// to fetch team details
-export const fetchTeamDetails = () => {
-  const [myTeams, setMyTeams] = useState([])
-  const [teamId, setTeamId] = useState('')
 
-  useEffect(() => {
+// to create new teams and fetch team details
+export const createAndFetchTeam = (teamInfo, playerDetails) => {
+  const [numberOfTeams, setNumberOfTeams] = useState() //to keep a count whenever a new team is added
+
+  const createTeam = () => {
+    firestore()
+      .collection('teams')
+      .doc(`${teamInfo.teamName}_${playerDetails?.phoneNumber}`)
+      .set({
+        teamName: teamInfo.teamName,
+        teamLocation: teamInfo.teamLocation,
+        teamId: (`${teamInfo.teamName}_${playerDetails?.phoneNumber}`),
+        teamAdminName: playerDetails?.fullName,
+        teamAdminId: playerDetails?.phoneNumber,
+      })
+      .then(() => {
+        console.log('team added!');
+        setNumberOfTeams(numberOfTeams + 1)
+
+        // update the player document with team information
+        firestore()
+          .collection("players")
+          .doc(`${playerDetails?.phoneNumber}`)
+          .collection("myTeams")
+          .add({
+            teamName: teamInfo.teamName,
+            teamLocation: teamInfo.teamLocation,
+            teamId: (`${teamInfo.teamName}_${playerDetails?.phoneNumber}`),
+            teamAdminName: playerDetails?.fullName,
+            teamAdminId: playerDetails?.phoneNumber,
+          })
+          .then(() => {
+            console.log("Player updated with team information");
+          })
+          .catch((error) => {
+            console.error("Error updating player: ", error);
+          });
+      })
+  }
+
+  const fetchTeamDetails = (setMyTeams) => {
+    useEffect(() => {
+      firestore()
+        .collection("players")
+        .doc(`${playerDetails?.phoneNumber}`)
+        .collection("myTeams")
+        .get()
+        .then((querySnapShot) => {
+          const newTeams = []
+          querySnapShot.forEach((doc) => {
+            newTeams.push(doc.data())
+          })
+          setMyTeams(newTeams)
+        })
+    }, [playerDetails])
+  }
+
+  return { createTeam, fetchTeamDetails }
+}
+
+
+
+export const addAndFetchPlayers = () => {
+  const [numberOfPlayers, setNumberOfPlayers] = useState() //to keep a count of whenever a new player is added
+
+  const addNewPlayer = (currentTeam, player) => {
+
+    // add new player to the team
     firestore()
       .collection("teams")
-      .get()
-      .then((querySnapShot) => {
-        querySnapShot.forEach((doc) => {
-          console.log(doc.id, '=>', doc.data())
-          setMyTeams(myTeams.concat(doc.data()))
-          setTeamId(doc.id)
-        })
+      .doc(currentTeam?.teamId)
+      .collection("players")
+      .add({
+        playerId: player,
       })
-  }, [])
+      .then((docRef) => {
+        console.log("Player added with ID: ", docRef.id);
+        setNumberOfPlayers(numberOfPlayers + 1);
+        // Update the player document with team information
+        firestore()
+          .collection("players")
+          .doc(player)
+          .collection("myTeams")
+          .add(currentTeam)
+          .then(() => {
+            console.log("Player updated with team information");
+          })
+          .catch((error) => {
+            console.error("Error updating player: ", error);
+          });
+      })
+      .catch((error) => {
+        console.error("Error adding player: ", error);
+      });
+  }
 
-  return {myTeams, teamId}
+  // to fetch players of a team
+  const fetchPlayersOfTeam = (currentTeam, setPlayerList) => {
+    useEffect(() => {
+      const unsubscribe = firestore()
+        .collection("teams")
+        .doc(currentTeam?.teamId)
+        .collection("players")
+        .onSnapshot((querySnapShot) => {
+          const promises = [];
+          const newPlayerList = [];
+          querySnapShot.forEach((doc) => {
+            const playerData = doc.data();
+            const playerId = playerData.playerId;
+            const promise = firestore()
+              .collection("players")
+              .doc(playerId)
+              .get()
+              .then((playerDoc) => {
+                if (playerDoc.exists) {
+                  const player = { id: playerId, ...playerDoc.data() };
+                  newPlayerList.push(player);
+                }
+              });
+            promises.push(promise);
+          });
+          Promise.all(promises).then(() => {
+            setPlayerList(newPlayerList);
+          });
+        });
+      return () => unsubscribe();
+    }, [currentTeam]);
+  };
+
+  return { addNewPlayer, fetchPlayersOfTeam }
 }
 
 
