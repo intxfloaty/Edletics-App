@@ -21,7 +21,6 @@ const AddPlayers = ({ route }) => {
 
   // to fetch players
   fetchPlayersOfTeam(currentTeam, setPlayerList);
-  console.log(playerList, "list")
 
   return (
     <View style={styles.parent}>

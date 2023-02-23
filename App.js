@@ -12,6 +12,7 @@ import HomeScreen from './src/screens/HomeScreen';
 import MainMenuOptions from './src/components/MainMenuOptions';
 import AddPlayers from './src/screens/AddPlayers';
 import PlayerDetails from './src/screens/PlayerDetails';
+import JoinTournament from './src/screens/JoinTournament';
 
 
 const Stack = createNativeStackNavigator();
@@ -39,6 +40,7 @@ const YourApp = () => {
           <Stack.Screen name="MyTeams" component={MyTeams} />
           <Stack.Screen name="AddPlayers" component={AddPlayers} />
           <Stack.Screen name="TeamActivity" component={TeamActivity} />
+          <Stack.Screen name="JoinTournament" component={JoinTournament}/>
         </Stack.Navigator>
         <MainMenuOptions />
       </NavigationContainer>
