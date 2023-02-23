@@ -13,6 +13,8 @@ import MainMenuOptions from './src/components/MainMenuOptions';
 import AddPlayers from './src/screens/AddPlayers';
 import PlayerDetails from './src/screens/PlayerDetails';
 import JoinTournament from './src/screens/JoinTournament';
+import { Provider } from 'react-redux';
+import store from './src/redux/store';
 
 
 const Stack = createNativeStackNavigator();
@@ -31,6 +33,7 @@ const YourApp = () => {
   }
 
   return (
+    <Provider store={store}>
     <NavProvider>
       <NavigationContainer>
         <Stack.Navigator screenOptions={{ headerShown: false }}>
@@ -45,6 +48,7 @@ const YourApp = () => {
         <MainMenuOptions />
       </NavigationContainer>
     </NavProvider>
+    </Provider>
   );
 
 }

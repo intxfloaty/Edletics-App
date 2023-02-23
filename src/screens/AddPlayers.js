@@ -3,14 +3,15 @@ import React, { useState, useEffect } from 'react'
 import { usePlayerDetails, userAuthState, addAndFetchPlayers } from '../firebase/firebase'
 import CustomButton from '../components/CustomButton';
 import CustomInput from '../components/CustomInput';
+import { useSelector } from 'react-redux';
 
-const AddPlayers = ({ route }) => {
+const AddPlayers = () => {
   const { user } = userAuthState()
   const { playerDetails } = usePlayerDetails(user?.phoneNumber)
   const { addNewPlayer, fetchPlayersOfTeam } = addAndFetchPlayers();
   const [player, setPlayer] = useState("+91")
   const [playerList, setPlayerList] = useState([])
-  const { currentTeam } = route.params;
+  const { currentTeam } = useSelector(state => state.currentTeam)
 
 
   // to add new players to the team

@@ -3,6 +3,8 @@ import React, { useState, useEffect } from 'react'
 import { userAuthState, usePlayerDetails, createAndFetchTeam } from '../firebase/firebase';
 import CreateTeam from '../components/CreateTeam';
 import { useNavigation } from "@react-navigation/native"
+import { useSelector, useDispatch } from 'react-redux';
+import { selectMyCurrentTeam } from '../redux/actions/actions';
 
 
 const MyTeams = () => {
@@ -15,8 +17,10 @@ const MyTeams = () => {
   })
   const { createTeam, fetchTeamDetails } = createAndFetchTeam(teamInfo, playerDetails)
   const [myTeams, setMyTeams] = useState([])
-  const [currentTeam, setCurrentTeam] = useState({})
+  // const [currentTeam, setCurrentTeam] = useState({})
   const navigation = useNavigation()
+  const currentTeam = useSelector(state => state.currentTeam)
+  const dispatch = useDispatch()
 
 
   fetchTeamDetails(setMyTeams);
@@ -31,13 +35,11 @@ const MyTeams = () => {
     setShareLinkModal(true)
   }
 
-  const currentTeamInfo = (myTeam) => {
-    setCurrentTeam(myTeam);
-  }
+
 
   useEffect(() => {
     if (currentTeam && currentTeam.teamId) {
-      navigation.navigate("AddPlayers", { currentTeam })
+      navigation.navigate("AddPlayers")
     }
   }, [currentTeam]);
 
@@ -49,7 +51,7 @@ const MyTeams = () => {
         return (
           <Pressable style={styles.teamContainer}
             onPress={() => {
-              currentTeamInfo(myTeam);
+              dispatch(selectMyCurrentTeam(myTeam))
             }} key={index}>
             {/* <Image style={styles.teamLogo} /> */}
             <Text style={styles.teamInfo}>{myTeam.teamName}</Text>
