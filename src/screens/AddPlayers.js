@@ -34,7 +34,7 @@ const AddPlayers = ({ route }) => {
       <Text style={styles.text}>Player List:</Text>
       {playerList?.map((player, index) => {
         return (
-          <Text style={styles.text} key={index}>{player.emailAddress}{player.fullName}</Text>
+          <Text style={styles.text} key={index}>{player.emailAddress}--{player.fullName}</Text>
         )
       })}
     </View>

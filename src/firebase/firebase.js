@@ -69,13 +69,34 @@ export const createAndFetchTeam = (teamInfo, playerDetails) => {
       .then(() => {
         console.log('team added!');
         setNumberOfTeams(numberOfTeams + 1)
-      });
+
+        // update the player document with team information
+        firestore()
+          .collection("players")
+          .doc(`${playerDetails?.phoneNumber}`)
+          .collection("myTeams")
+          .add({
+            teamName: teamInfo.teamName,
+            teamLocation: teamInfo.teamLocation,
+            teamId: (`${teamInfo.teamName}_${playerDetails?.phoneNumber}`),
+            teamAdminName: playerDetails?.fullName,
+            teamAdminId: playerDetails?.phoneNumber,
+          })
+          .then(() => {
+            console.log("Player updated with team information");
+          })
+          .catch((error) => {
+            console.error("Error updating player: ", error);
+          });
+      })
   }
 
   const fetchTeamDetails = (setMyTeams) => {
     useEffect(() => {
       firestore()
-        .collection("teams")
+        .collection("players")
+        .doc(`${playerDetails?.phoneNumber}`)
+        .collection("myTeams")
         .get()
         .then((querySnapShot) => {
           const newTeams = []
@@ -84,7 +105,7 @@ export const createAndFetchTeam = (teamInfo, playerDetails) => {
           })
           setMyTeams(newTeams)
         })
-    }, [numberOfTeams])
+    }, [playerDetails])
   }
 
   return { createTeam, fetchTeamDetails }
@@ -112,9 +133,8 @@ export const addAndFetchPlayers = () => {
         firestore()
           .collection("players")
           .doc(player)
-          .update({
-            team: currentTeam?.teamName,
-          })
+          .collection("myTeams")
+          .add(currentTeam)
           .then(() => {
             console.log("Player updated with team information");
           })
@@ -125,8 +145,6 @@ export const addAndFetchPlayers = () => {
       .catch((error) => {
         console.error("Error adding player: ", error);
       });
-
-
   }
 
   // to fetch players of a team
