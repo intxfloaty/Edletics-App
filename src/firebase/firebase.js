@@ -116,21 +116,36 @@ export const addAndFetchPlayers = () => {
   // to fetch players of a team
   const fetchPlayersOfTeam = (currentTeam, setPlayerList) => {
     useEffect(() => {
-      firestore()
+      const unsubscribe = firestore()
         .collection("teams")
         .doc(currentTeam?.teamId)
         .collection("players")
-        .get()
-        .then((querySnapShot) => {
-          const newPlayerList = []
+        .onSnapshot((querySnapShot) => {
+          const promises = [];
+          const newPlayerList = [];
           querySnapShot.forEach((doc) => {
-            console.log(doc.data(), "data")
-            newPlayerList.push(doc.data())
-          })
-          setPlayerList(newPlayerList)
-        })
-    }, [numberOfPlayers])
-  }
+            const playerData = doc.data();
+            const playerId = playerData.playerId;
+            const promise = firestore()
+              .collection("players")
+              .doc(playerId)
+              .get()
+              .then((playerDoc) => {
+                if (playerDoc.exists) {
+                  const player = { id: playerId, ...playerDoc.data() };
+                  newPlayerList.push(player);
+                }
+              });
+            promises.push(promise);
+          });
+          Promise.all(promises).then(() => {
+            setPlayerList(newPlayerList);
+          });
+        });
+      return () => unsubscribe();
+    }, [currentTeam]);
+  };
+
   return { addNewPlayer, fetchPlayersOfTeam }
 }
 

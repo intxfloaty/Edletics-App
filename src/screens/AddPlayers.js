@@ -12,8 +12,6 @@ const AddPlayers = ({ route }) => {
   const [playerList, setPlayerList] = useState([])
   const { currentTeam } = route.params;
 
-  console.log(currentTeam, "curr")
-
 
   // to add new players to the team
   const onAddPlayerPressed = () => {
@@ -21,9 +19,9 @@ const AddPlayers = ({ route }) => {
     setPlayer("+91")
   }
 
+  // to fetch players
   fetchPlayersOfTeam(currentTeam, setPlayerList);
-
-
+  console.log(playerList, "list")
 
   return (
     <View style={styles.parent}>
@@ -34,9 +32,9 @@ const AddPlayers = ({ route }) => {
         setValue={(text) => setPlayer(text)} />
       <CustomButton text="Add Player" onPress={onAddPlayerPressed} />
       <Text style={styles.text}>Player List:</Text>
-      {playerList.map((player, index) => {
+      {playerList?.map((player, index) => {
         return (
-          <Text style={styles.text} key={index}>{player.playerId}</Text>
+          <Text style={styles.text} key={index}>{player.emailAddress}{player.fullName}</Text>
         )
       })}
     </View>
@@ -49,7 +47,6 @@ const styles = StyleSheet.create({
   parent: {
     height: "100%",
     alignItems: "center",
-    justifyContent: "center",
     padding: 20,
     backgroundColor: "#101112",
   },
