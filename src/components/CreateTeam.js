@@ -1,27 +1,14 @@
 import { StyleSheet, Text, View, Modal, Image, ScrollView, Pressable } from 'react-native'
 import React, { useState, useEffect } from 'react'
-import { useNavigation } from "@react-navigation/native"
 import CustomButton from './CustomButton'
 import CustomInput from './CustomInput'
 
-const CreateTeam = ({ myTeams, teamInfo, setTeamInfo, shareLinkModal, setShareLinkModal, onContinuePressed }) => {
+const CreateTeam = ({ teamInfo, setTeamInfo, shareLinkModal, setShareLinkModal, onContinuePressed }) => {
   const [createTeamModal, setCreateTeamModal] = useState(false)
-  const navigation = useNavigation();
-
 
   return (
     <View style={styles.parent} >
       <ScrollView contentContainerStyle={{ flexGrow: 1 }} showsVerticalScrollIndicator={false}>
-        <Text style={styles.modalText}>MY TEAMS</Text>
-        {myTeams?.map((myTeam, index) => {
-          return (
-            <Pressable style={styles.teamContainer} onPress={() => navigation.navigate('AddPlayers')} key={index}>
-              {/* <Image style={styles.teamLogo} /> */}
-              <Text style={styles.teamName}>{myTeam.teamName}</Text>
-            </Pressable>
-          )
-        })
-        }
         <View style={styles.createTeamContainer} >
           <CustomButton text="CREATE TEAM" type='SECONDARY' onPress={() => setCreateTeamModal(true)} />
         </View>
@@ -79,7 +66,6 @@ const CreateTeam = ({ myTeams, teamInfo, setTeamInfo, shareLinkModal, setShareLi
   )
 }
 
-
 export default CreateTeam
 
 const styles = StyleSheet.create({
@@ -88,20 +74,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#101112",
     padding: 10,
   },
-  modalText: {
-    margin: 20,
-    color: "white",
-    fontSize: 22,
-    marginBottom: 15,
-    textAlign: "center"
-  },
-  teamContainer: {
-    backgroundColor: "#202224",
-    height: 150,
-    borderRadius: 10,
-    alignItems: 'center',
-    marginBottom: 20
-  },
+
   teamLogo: {
     marginVertical: 10,
     height: 70,
