@@ -95,8 +95,9 @@ export const createAndFetchTeam = (teamInfo, playerDetails) => {
 export const addAndFetchPlayers = () => {
   const [numberOfPlayers, setNumberOfPlayers] = useState() //to keep a count of whenever a new player is added
 
-  // to add new players to the team
   const addNewPlayer = (currentTeam, player) => {
+
+    // add new player to the team
     firestore()
       .collection("teams")
       .doc(currentTeam?.teamId)
@@ -107,10 +108,25 @@ export const addAndFetchPlayers = () => {
       .then((docRef) => {
         console.log("Player added with ID: ", docRef.id);
         setNumberOfPlayers(numberOfPlayers + 1);
+        // Update the player document with team information
+        firestore()
+          .collection("players")
+          .doc(player)
+          .update({
+            team: currentTeam?.teamName,
+          })
+          .then(() => {
+            console.log("Player updated with team information");
+          })
+          .catch((error) => {
+            console.error("Error updating player: ", error);
+          });
       })
       .catch((error) => {
         console.error("Error adding player: ", error);
       });
+
+
   }
 
   // to fetch players of a team
