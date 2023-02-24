@@ -1,12 +1,26 @@
 import { StyleSheet, Text, View } from 'react-native'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import CustomButton from '../components/CustomButton';
+import { useSelector } from 'react-redux';
+import firestore from '@react-native-firebase/firestore';
 
 const JoinTournament = ({ route }) => {
   const { currentTournament } = route.params;
+  const currentTeam = useSelector(state => state.currentTeam)
 
   const onJoinPressed = () => {
     console.log("navigate to payment page and make payment")
+    if (currentTeam?.teamId) {
+      firestore()
+        .collection("tournament")
+        .doc(`${currentTournament?.eventName}`)
+        .collection("tournamentTeams")
+        .add(currentTeam)
+        .then(() => {
+          console.log("team added to the tournament")
+        })
+        .catch(error => console.log(error))
+    }
   }
 
   return (

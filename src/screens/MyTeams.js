@@ -4,8 +4,6 @@ import { userAuthState, usePlayerDetails, createAndFetchTeam } from '../firebase
 import CreateTeam from '../components/CreateTeam';
 import SelectTeam from '../components/SelectTeam';
 
-
-
 const MyTeams = () => {
   const { user } = userAuthState();
   const { playerDetails } = usePlayerDetails(user?.phoneNumber)
@@ -56,5 +54,4 @@ const styles = StyleSheet.create({
     backgroundColor: "#101112",
     padding: 10,
   },
-
 })
