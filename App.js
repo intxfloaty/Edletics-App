@@ -15,6 +15,7 @@ import PlayerDetails from './src/screens/PlayerDetails';
 import JoinTournament from './src/screens/JoinTournament';
 import { Provider } from 'react-redux';
 import store from './src/redux/store';
+import TournamentScreen from './src/screens/TournamentScreen';
 
 
 const Stack = createNativeStackNavigator();
@@ -44,6 +45,7 @@ const YourApp = () => {
           <Stack.Screen name="AddPlayers" component={AddPlayers} />
           <Stack.Screen name="TeamActivity" component={TeamActivity} />
           <Stack.Screen name="JoinTournament" component={JoinTournament}/>
+          <Stack.Screen name="TournamentScreen" component={TournamentScreen}/>
         </Stack.Navigator>
         <MainMenuOptions />
       </NavigationContainer>

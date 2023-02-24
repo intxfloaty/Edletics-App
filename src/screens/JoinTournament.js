@@ -3,24 +3,38 @@ import React, { useEffect, useState } from 'react'
 import CustomButton from '../components/CustomButton';
 import { useSelector } from 'react-redux';
 import firestore from '@react-native-firebase/firestore';
+import { useNavigation } from '@react-navigation/native';
 
 const JoinTournament = ({ route }) => {
   const { currentTournament } = route.params;
   const currentTeam = useSelector(state => state.currentTeam)
+  const navigation = useNavigation()
 
   const onJoinPressed = () => {
     console.log("navigate to payment page and make payment")
-    if (currentTeam?.teamId) {
-      firestore()
-        .collection("tournament")
-        .doc(`${currentTournament?.eventName}`)
-        .collection("tournamentTeams")
-        .add(currentTeam)
-        .then(() => {
-          console.log("team added to the tournament")
-        })
-        .catch(error => console.log(error))
-    }
+    navigation.navigate("TournamentScreen")
+    // add team to the tournament
+    // if (currentTeam?.teamId) {
+    //   firestore()
+    //     .collection("tournament")
+    //     .doc(`${currentTournament?.eventName}`)
+    //     .collection("tournamentTeams")
+    //     .add(currentTeam)
+    //     .then(() => {
+    //       console.log("team added to the tournament")
+    //       // update the team document with the tournament info
+    //       firestore()
+    //         .collection("teams")
+    //         .doc(`${currentTeam?.teamId}`)
+    //         .collection("myTournaments")
+    //         .add(currentTournament)
+    //         .then(() => {
+    //           console.log("We joined the tournament")
+    //         })
+    //         .catch(error => console.log(error))
+    //     })
+    //     .catch(error => console.log(error))
+    // }
   }
 
   return (
