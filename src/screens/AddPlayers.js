@@ -11,7 +11,9 @@ const AddPlayers = () => {
   const { addNewPlayer, fetchPlayersOfTeam } = addAndFetchPlayers();
   const [player, setPlayer] = useState("+91")
   const [playerList, setPlayerList] = useState([])
-  const { currentTeam } = useSelector(state => state.currentTeam)
+  const  currentTeam  = useSelector(state => state.currentTeam)
+
+  console.log(currentTeam, "curre")
 
 
   // to add new players to the team
@@ -21,7 +23,7 @@ const AddPlayers = () => {
   }
 
   // to fetch players
-  fetchPlayersOfTeam(currentTeam, setPlayerList);
+    fetchPlayersOfTeam(currentTeam, setPlayerList);
 
   return (
     <View style={styles.parent}>
