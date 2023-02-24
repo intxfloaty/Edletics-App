@@ -105,7 +105,7 @@ export const createAndFetchTeam = (teamInfo, playerDetails) => {
           })
           setMyTeams(newTeams)
         })
-    }, [playerDetails])
+    }, [playerDetails, numberOfTeams])
   }
 
   return { createTeam, fetchTeamDetails }
@@ -182,8 +182,3 @@ export const addAndFetchPlayers = () => {
 
   return { addNewPlayer, fetchPlayersOfTeam }
 }
-
-
-
-
-

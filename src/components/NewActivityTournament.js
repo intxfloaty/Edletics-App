@@ -1,12 +1,12 @@
-import { StyleSheet, Text, View } from 'react-native'
+import { Pressable, StyleSheet, Text, View } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import firestore from '@react-native-firebase/firestore';
-import { userAuthState } from '../firebase/firebase';
-
+import { useNavigation } from '@react-navigation/native';
 
 const NewActivityTournament = () => {
-  const [tournamentDetails, setTournamentDetails] = useState({})
-  const { user } = userAuthState()
+  const [tournamentDetails, setTournamentDetails] = useState([])
+  const [currentTournament, setCurrentTournament] = useState({})
+  const navigation = useNavigation()
 
   useEffect(() => {
     const fetchTournamentDetails = async () => {
@@ -16,7 +16,7 @@ const NewActivityTournament = () => {
 
         if (tournamentDoc.exists) {
           console.log("Here are the tourna details");
-          setTournamentDetails(tournamentDoc.data());
+          setTournamentDetails(tournamentDetails.concat(tournamentDoc.data()));
         } else {
           console.log("No tourna is available");
         }
@@ -24,25 +24,34 @@ const NewActivityTournament = () => {
         console.log(error);
       }
     };
-
     fetchTournamentDetails();
   }, []);
+
+  useEffect(() => {
+    if (currentTournament && currentTournament.eventName) {
+      navigation.navigate("JoinTournament", { currentTournament })
+    }
+  }, [currentTournament]);
 
   return (
     <View>
       <View style={styles.activityTitle}>
         <Text style={styles.label}>Upcoming Tournaments</Text>
       </View>
-      <View style={styles.tournamentDetailsContainer}>
-        <Text style={styles.label}>Name: {tournamentDetails.eventName}</Text>
-        <Text style={styles.label}>Location: {tournamentDetails.location}</Text>
-        <Text style={styles.label}>Date: {tournamentDetails.date}</Text>
-        <Text style={styles.label}>Category: {tournamentDetails.category}</Text>
-        <Text style={styles.label}>Format: {tournamentDetails.format}</Text>
-        <Text style={styles.label}>Squad Size: {tournamentDetails.squadSize}</Text>
-        <Text style={styles.label}>Pool Prize: {tournamentDetails.poolPrize}</Text>
-        <Text style={styles.label}>Total no of Teams: {tournamentDetails.totalTeams}</Text>
-      </View>
+      {tournamentDetails?.map((tournament, index) => {
+        return (
+          <Pressable style={styles.tournamentDetailsContainer} key={index} onPress={()=>setCurrentTournament(tournament)}>
+            <Text style={styles.label}>Name: {tournament.eventName}</Text>
+            <Text style={styles.label}>Location: {tournament.location}</Text>
+            <Text style={styles.label}>Date: {tournament.date}</Text>
+            <Text style={styles.label}>Category: {tournament.category}</Text>
+            <Text style={styles.label}>Format: {tournament.format}</Text>
+            <Text style={styles.label}>Squad Size: {tournament.squadSize}</Text>
+            <Text style={styles.label}>Pool Prize: {tournament.poolPrize}</Text>
+            <Text style={styles.label}>Total no of Teams: {tournament.totalTeams}</Text>
+          </Pressable>
+        )
+      })}
     </View>
   )
 }
