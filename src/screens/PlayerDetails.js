@@ -14,7 +14,7 @@ const PlayerDetails = () => {
 
   useEffect(() => {
     if (playerDetails?.phoneNumber) {
-      navigation.navigate("Home")
+      navigation.navigate("MyDrawer")
     } else {
       setLoading(false)
     }

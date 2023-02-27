@@ -4,7 +4,10 @@ import React from 'react'
 const Details = () => {
   return (
     <View>
-      <Text>Details</Text>
+      <Text>Damians Cup</Text>
+      <Text>Location</Text>
+      <Text>Match of the week</Text>
+      <Text>Team of the week</Text>
     </View>
   )
 }

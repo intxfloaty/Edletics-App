@@ -15,16 +15,16 @@ const TournamentScreen = () => {
   return (
     <Tab.Navigator
       screenOptions={{
-        tabBarLabelStyle: { fontSize: 12, color:"white" },
+        tabBarLabelStyle: { fontSize: 12, color: "white" },
         tabBarItemStyle: { width: 100 },
         tabBarStyle: { backgroundColor: "#202224" },
         tabBarScrollEnabled: true
       }}>
-        <Tab.Screen name='Details' component={Details} />
-        <Tab.Screen name='Matches' component={Matches} />
-        <Tab.Screen name='Standings' component={Standings} />
-        <Tab.Screen name='Stats' component={Stats} />
-        <Tab.Screen name='TopTeams' component={TopTeams} />
+      <Tab.Screen name='Details' component={Details} />
+      <Tab.Screen name='Matches' component={Matches} />
+      <Tab.Screen name='Standings' component={Standings} />
+      <Tab.Screen name='Stats' component={Stats} />
+      <Tab.Screen name='TopTeams' component={TopTeams} />
     </Tab.Navigator>
   )
 }

@@ -1,11 +1,12 @@
 import { StyleSheet, Text, View } from 'react-native'
 import React, { useState } from 'react'
-import MainMenuOptions from '../components/MainMenuOptions'
+
 
 const HomeScreen = () => {
 
   return (
     <View style={styles.parent}>
+
     </View>
   )
 }
