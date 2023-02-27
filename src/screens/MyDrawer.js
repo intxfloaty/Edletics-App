@@ -19,7 +19,7 @@ const MyDrawer = () => {
         drawerStyle: {
           backgroundColor: '#202224',
         },
-        drawerLabelStyle:{color: "white"}
+        drawerLabelStyle: { color: "white" }
       }}>
       <Drawer.Screen name='HomeScreen' component={HomeScreen} />
       <Drawer.Screen name="My Teams" component={MyTeams} />
