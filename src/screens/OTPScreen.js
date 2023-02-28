@@ -20,6 +20,9 @@ const OTPScreen = ({ setCode, confirmCode }) => {
       }
     } else if (text.length === 0) {
       newOtp[index] = ""
+      if (index > 0 && index <= 5) {
+        inputRefs[index - 1].focus();
+      }
     }
     setOtp(newOtp);
     const otpString = newOtp.join("")
