@@ -30,18 +30,17 @@ const MyTeams = () => {
 
   return (
     <View style={styles.parent}>
-      <Text style={styles.modalText}>MY TEAMS</Text>
-
-      <SelectTeam
-        myTeams={myTeams} />
-
-      <CreateTeam
-        teamInfo={teamInfo}
-        setTeamInfo={setTeamInfo}
-        shareLinkModal={shareLinkModal}
-        setShareLinkModal={setShareLinkModal}
-        onContinuePressed={onContinuePressed} />
-
+      <ScrollView showsVerticalScrollIndicator={false}>
+        <Text style={styles.modalText}>MY TEAMS</Text>
+        <SelectTeam
+          myTeams={myTeams} />
+        <CreateTeam
+          teamInfo={teamInfo}
+          setTeamInfo={setTeamInfo}
+          shareLinkModal={shareLinkModal}
+          setShareLinkModal={setShareLinkModal}
+          onContinuePressed={onContinuePressed} />
+      </ScrollView>
     </View>
   )
 }
@@ -50,7 +49,7 @@ export default MyTeams
 
 const styles = StyleSheet.create({
   parent: {
-    height: "100%",
+    minHeight: "100%",
     backgroundColor: "#101112",
     padding: 10,
   },

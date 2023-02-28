@@ -51,7 +51,9 @@ const MyDrawer = () => {
       <Drawer.Screen name='Home' component={HomeScreen} />
       <Drawer.Screen name='Profile' component={PlayerDetails} />
       <Drawer.Screen name='Inbox' component={Inbox} />
-      <Drawer.Screen name="My Teams" component={MyTeams} />
+      <Drawer.Screen options={{
+        headerShown: false
+      }} name="My Teams" component={MyTeams} />
       <Drawer.Screen name='Create a game' component={CreateGame} />
       <Drawer.Screen name='Tournaments' component={Tournament} />
       <Drawer.Screen name='Leaderboard' component={Leaderboard} />
