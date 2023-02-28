@@ -1,12 +1,17 @@
 import { StyleSheet, Text, View } from 'react-native'
 import React, { useState } from 'react'
+import CustomButton from '../components/CustomButton'
+import auth from '@react-native-firebase/auth';
 
 
 const HomeScreen = () => {
 
   return (
     <View style={styles.parent}>
-
+      <CustomButton text="Log Out"
+        onPress={() => {
+          auth().signOut()
+        }} />
     </View>
   )
 }

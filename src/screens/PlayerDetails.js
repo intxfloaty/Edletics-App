@@ -12,17 +12,25 @@ const PlayerDetails = () => {
   const navigation = useNavigation()
   const { playerDetails, isPlayerDetail } = usePlayerDetails(user?.phoneNumber)
 
+  // initially playerDetails is an empty object, as usePlayerDetails is an async func, it takes some time to fetch details
   useEffect(() => {
-    if (playerDetails?.phoneNumber) {
-      navigation.navigate("MyDrawer")
-    } else {
-      setLoading(false)
-    }
-  }, [playerDetails?.phoneNumber])
+    const timeoutId = setTimeout(() => {
+      if (playerDetails?.phoneNumber) {
+        navigation.navigate("MyDrawer")
+      } else {
+        setLoading(false)
+      }
+    }, 5000);
+
+    return () => {
+      clearTimeout(timeoutId);
+    };
+  }, [playerDetails?.phoneNumber]);
+
 
   return (
     <>
-      {loading ? <LoadingScreen /> : !(playerDetails?.phoneNumber) ? <PlayerDetailsForm /> : <LoadingScreen />}
+      {loading ? <LoadingScreen /> : <PlayerDetailsForm />}
     </>
   );
 };
