@@ -16,6 +16,7 @@ import store from './src/redux/store';
 import TournamentScreen from './src/screens/TournamentScreen';
 import MyDrawer from './src/screens/MyDrawer';
 import TeamScreenTabs from './src/screens/team/TeamScreenTabs';
+import TeamSettings from './src/screens/team/TeamSettings';
 
 
 const Stack = createNativeStackNavigator();
@@ -38,10 +39,15 @@ const YourApp = () => {
       <NavigationContainer>
         <Stack.Navigator screenOptions={{ headerShown: false }}>
           <Stack.Screen name="PlayerDetails" component={PlayerDetails} />
-          <Stack.Screen name ="MyDrawer" component={MyDrawer} />
+          <Stack.Screen name="MyDrawer" component={MyDrawer} />
           <Stack.Screen name='Home' component={HomeScreen} />
           <Stack.Screen name="MyTeams" component={MyTeams} />
           <Stack.Screen name="TeamScreen" component={TeamScreenTabs} />
+
+          <Stack.Group screenOptions={{ presentation: 'modal' }}>
+            <Stack.Screen name="TeamSettings" component={TeamSettings} />
+          </Stack.Group>
+
           <Stack.Screen name="TeamActivity" component={TeamActivity} />
           <Stack.Screen name="JoinTournament" component={JoinTournament} />
           <Stack.Screen name="TournamentScreen" component={TournamentScreen} />

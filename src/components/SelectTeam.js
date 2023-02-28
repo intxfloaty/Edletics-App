@@ -1,5 +1,5 @@
 import { StyleSheet, Text, View, Modal, Image, ScrollView, Pressable } from 'react-native'
-import React, {useState} from 'react'
+import React, { useState } from 'react'
 import { useNavigation } from "@react-navigation/native"
 import { useSelector, useDispatch } from 'react-redux';
 import { selectMyCurrentTeam } from '../redux/actions/actions';
@@ -21,6 +21,10 @@ const SelectTeam = ({ myTeams }) => {
       console.log(image);
       setImage(image.path)
     });
+  }
+
+  const onSettingsPressed = () => {
+
   }
 
   return (
@@ -70,8 +74,10 @@ const styles = StyleSheet.create({
     width: 350,
     borderWidth: 1,
   },
-  teamInfo: {
-    fontSize: 24,
-    color: "black"
+  settings: {
+    position: "absolute",
+    top: 0,
+    right: 0,
+    padding: 5
   },
 })

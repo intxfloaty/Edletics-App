@@ -3,7 +3,6 @@ import React, { useState, useEffect } from 'react'
 import { userAuthState, usePlayerDetails, createAndFetchTeam } from '../firebase/firebase';
 import CreateTeam from '../components/CreateTeam';
 import SelectTeam from '../components/SelectTeam';
-import CustomButton from '../components/CustomButton';
 
 const MyTeams = () => {
   const { user } = userAuthState();
