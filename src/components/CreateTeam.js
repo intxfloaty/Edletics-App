@@ -8,11 +8,9 @@ const CreateTeam = ({ teamInfo, setTeamInfo, shareLinkModal, setShareLinkModal, 
 
   return (
     <View style={styles.parent} >
-      <ScrollView contentContainerStyle={{ flexGrow: 1 }} showsVerticalScrollIndicator={false}>
         <View style={styles.createTeamContainer} >
-          <CustomButton text="CREATE TEAM" type='SECONDARY' onPress={() => setCreateTeamModal(true)} />
+          <CustomButton text="Create Team" type='SECONDARY' onPress={() => setCreateTeamModal(true)} />
         </View>
-      </ScrollView>
 
       {/* Create team modal */}
       <View>
@@ -70,7 +68,7 @@ export default CreateTeam
 
 const styles = StyleSheet.create({
   parent: {
-    height: "100%",
+    // height: "100%",
     backgroundColor: "#101112",
     padding: 10,
   },

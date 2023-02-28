@@ -36,6 +36,9 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     color: "black",
   },
+  container_SECONDARY:{
+    width:"80%"
+  },
   container_active: {
     width: "30%",
     marginVertical: 5,

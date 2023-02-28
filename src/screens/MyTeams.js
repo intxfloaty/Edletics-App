@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react'
 import { userAuthState, usePlayerDetails, createAndFetchTeam } from '../firebase/firebase';
 import CreateTeam from '../components/CreateTeam';
 import SelectTeam from '../components/SelectTeam';
+import CustomButton from '../components/CustomButton';
 
 const MyTeams = () => {
   const { user } = userAuthState();
@@ -30,17 +31,17 @@ const MyTeams = () => {
 
   return (
     <View style={styles.parent}>
-      <ScrollView showsVerticalScrollIndicator={false}>
-        <Text style={styles.modalText}>MY TEAMS</Text>
+      <Text style={styles.text}>My Teams</Text>
+      <ScrollView horizontal showsVerticalScrollIndicator={false}>
         <SelectTeam
           myTeams={myTeams} />
-        <CreateTeam
-          teamInfo={teamInfo}
-          setTeamInfo={setTeamInfo}
-          shareLinkModal={shareLinkModal}
-          setShareLinkModal={setShareLinkModal}
-          onContinuePressed={onContinuePressed} />
       </ScrollView>
+      <CreateTeam
+        teamInfo={teamInfo}
+        setTeamInfo={setTeamInfo}
+        shareLinkModal={shareLinkModal}
+        setShareLinkModal={setShareLinkModal}
+        onContinuePressed={onContinuePressed} />
     </View>
   )
 }
@@ -51,6 +52,11 @@ const styles = StyleSheet.create({
   parent: {
     minHeight: "100%",
     backgroundColor: "#101112",
-    padding: 10,
+    alignItems: "center",
+  },
+  text: {
+    color: "white",
+    fontSize: 20,
+    marginVertical: 16,
   },
 })
