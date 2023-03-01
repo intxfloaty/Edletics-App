@@ -8,7 +8,7 @@ import { useSelector } from 'react-redux';
 import { createAndFetchGame } from "../firebase/firebase"
 
 const CreateGame = () => {
-  const { createGame } = createAndFetchGame()
+  const { createNewGame } = createAndFetchGame()
   const currentTeam = useSelector(state => state.currentTeam)
   const formatOptions = ["5v5", "6v6", "7v7", "8v8", "9v9", "11v11"]
   const categoryOptions = ["open", "U23", "U21", "U19", "U16", "corporate"]
@@ -55,7 +55,7 @@ const CreateGame = () => {
 
   const onCreateGamePressed = () => {
     if (isObjectNotEmpty(game)) {
-      createGame(currentTeam?.teamId, game)
+      createNewGame(currentTeam?.teamId, game)
     } else console.log("no activity")
   }
 

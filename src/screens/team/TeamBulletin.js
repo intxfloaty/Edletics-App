@@ -4,25 +4,17 @@ import firestore from '@react-native-firebase/firestore';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { useNavigation } from '@react-navigation/native';
 import { useSelector } from 'react-redux';
+import { createAndFetchGame } from '../../firebase/firebase';
 
 const TeamBulletin = () => {
   const currentTeam = useSelector(state => state.currentTeam)
-  const [newGame, setNewGame] = useState({})
+  const {fetchNewGame} = createAndFetchGame()
+  const [newGame, setNewGame] = useState([])
   const navigation = useNavigation()
 
-  useEffect(() => {
-    firestore()
-      .collection("newGame")
-      .doc(currentTeam?.teamId)
-      .get()
-      .then((querySnapShot) => {
-        console.log("Team Admin created a new game!")
-        setNewGame(querySnapShot.data())
-        console.log(newGame)
-      })
-      .catch(error => console.log(error))
-  }, [])
+  fetchNewGame(currentTeam?.teamId, setNewGame)
 
+  console.log(newGame, "newGame")
   const onAddPressed = () => {
     navigation.navigate("CreateGame")
   }

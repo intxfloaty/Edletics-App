@@ -188,7 +188,7 @@ export const addAndFetchPlayers = () => {
 export const createAndFetchGame = () => {
 
   // to create a new game and add it as a sub-collection to teams
-  const createGame = (teamId, game) => {
+  const createNewGame = (teamId, game) => {
     try {
       firestore()
         .collection("teams")
@@ -203,5 +203,28 @@ export const createAndFetchGame = () => {
       console.log(error, "error")
     }
   }
-  return { createGame }
+
+  // to fetch the games created
+  const fetchNewGame = (teamId, setNewGame) => {
+    useEffect(()=>{
+      try{
+        firestore()
+        .collection("teams")
+        .doc(teamId)
+        .collection("newGame")
+        .get()
+        .then((querySnapShot)=>{
+          const newGame = []
+          querySnapShot.forEach((doc)=>{
+            newGame.push(doc.data())
+          })
+          setNewGame(newGame)
+        })
+      } catch(error) {
+        console.log(error, "error")
+      }
+    }, [])
+  }
+
+  return { createNewGame, fetchNewGame }
 }
