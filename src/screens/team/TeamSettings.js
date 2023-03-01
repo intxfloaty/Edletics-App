@@ -11,7 +11,6 @@ const AddPlayers = () => {
   const { playerDetails } = usePlayerDetails(user?.phoneNumber)
   const { addNewPlayer, fetchPlayersOfTeam } = addAndFetchPlayers();
   const [player, setPlayer] = useState("+91")
-  const [playerList, setPlayerList] = useState([])
   const  currentTeam  = useSelector(state => state.currentTeam)
 
 
@@ -22,20 +21,12 @@ const AddPlayers = () => {
     setPlayer("+91")
   }
 
-  // to fetch players
-    fetchPlayersOfTeam(currentTeam, setPlayerList);
-
   return (
     <View style={styles.parent}>
       <CustomInput
         value={player}
         setValue={(text) => setPlayer(text)} />
       <CustomButton text="Add Player" type="SECONDARY" onPress={onAddPlayerPressed} />
-      {/* {playerList?.map((player, index) => {
-        return (
-          <Text style={styles.text} key={index}>{player.emailAddress}--{player.fullName}</Text>
-        )
-      })} */}
     </View>
   )
 }

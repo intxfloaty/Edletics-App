@@ -8,7 +8,6 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import MyTeams from './src/screens/MyTeams';
 import TeamActivity from './src/screens/TeamActivity';
 import HomeScreen from './src/screens/HomeScreen';
-import AddPlayers from './src/screens/AddPlayers';
 import PlayerDetails from './src/screens/PlayerDetails';
 import JoinTournament from './src/screens/JoinTournament';
 import { Provider } from 'react-redux';
