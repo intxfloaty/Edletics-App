@@ -3,7 +3,7 @@ import React from 'react'
 
 const TeamMatches = () => {
   return (
-    <View>
+    <View style={styles.parent}>
       <Text>TeamMatches</Text>
     </View>
   )
@@ -11,4 +11,10 @@ const TeamMatches = () => {
 
 export default TeamMatches
 
-const styles = StyleSheet.create({})
+const styles = StyleSheet.create({
+  parent: {
+    height: "100%",
+    backgroundColor: "#101112",
+    padding: 20
+  },
+})

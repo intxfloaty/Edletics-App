@@ -3,7 +3,6 @@ import React, { useState } from 'react'
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import MyTeams from './MyTeams';
 import HomeScreen from './HomeScreen';
-import CreateGame from './CreateGame';
 import Tournament from './Tournament';
 import Leaderboard from './Leaderboard';
 import Stats from './Stats';
@@ -54,7 +53,6 @@ const MyDrawer = () => {
       <Drawer.Screen options={{
         headerShown: false
       }} name="My Teams" component={MyTeams} />
-      <Drawer.Screen name='Create a game' component={CreateGame} />
       <Drawer.Screen name='Tournaments' component={Tournament} />
       <Drawer.Screen name='Leaderboard' component={Leaderboard} />
       <Drawer.Screen name='Stats' component={Stats} />

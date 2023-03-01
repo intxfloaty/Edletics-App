@@ -15,6 +15,7 @@ import TournamentScreen from './src/screens/TournamentScreen';
 import MyDrawer from './src/screens/MyDrawer';
 import TeamScreenTabs from './src/screens/team/TeamScreenTabs';
 import TeamSettings from './src/screens/team/TeamSettings';
+import CreateGame from './src/screens/CreateGame';
 
 
 const Stack = createNativeStackNavigator();
@@ -41,6 +42,7 @@ const YourApp = () => {
           <Stack.Screen name='Home' component={HomeScreen} />
           <Stack.Screen name="MyTeams" component={MyTeams} />
           <Stack.Screen name="TeamScreen" component={TeamScreenTabs} />
+          <Stack.Screen name="CreateGame" component={CreateGame} />
 
           <Stack.Group screenOptions={{ presentation: 'modal' }}>
             <Stack.Screen name="TeamSettings" component={TeamSettings} />
