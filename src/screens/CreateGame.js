@@ -1,17 +1,21 @@
 import { Pressable, ScrollView, StyleSheet, Text, View, Modal, TouchableHighlight } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import CustomButton from '../components/CustomButton'
-import firestore from '@react-native-firebase/firestore';
 import CustomInput from '../components/CustomInput';
 import { DateTimePickerAndroid } from '@react-native-community/datetimepicker';
 import CustomModal from '../components/CustomModal';
-
+import { useSelector } from 'react-redux';
+import { createAndFetchGame } from "../firebase/firebase"
 
 const CreateGame = () => {
+  const { createGame } = createAndFetchGame()
+  const currentTeam = useSelector(state => state.currentTeam)
   const formatOptions = ["5v5", "6v6", "7v7", "8v8", "9v9", "11v11"]
   const categoryOptions = ["open", "U23", "U21", "U19", "U16", "corporate"]
   const modeOptions = ["Rated", "Friendly"]
   const locationOptions = ["MRIS Turf", "Kicksal", "Jasola Sports Complex", "Addidas base chhatarpur"]
+
+  console.log(currentTeam)
 
 
   const [game, setGame] = useState({
@@ -49,17 +53,9 @@ const CreateGame = () => {
     return true;
   }
 
-  const onGamePressed = () => {
+  const onCreateGamePressed = () => {
     if (isObjectNotEmpty(game)) {
-      try {
-        firestore()
-          .collection("newGame")
-          .doc(`${game?.format}_${game?.category}`)
-          .set(game);
-        console.log("New Activity added!");
-      } catch (error) {
-        console.log(error, "error message");
-      }
+      createGame(currentTeam?.teamId, game)
     } else console.log("no activity")
   }
 
@@ -115,7 +111,7 @@ const CreateGame = () => {
         <View style={styles.btnContainer}>
           <CustomButton
             text=" Create Game"
-            onPress={onGamePressed}
+            onPress={onCreateGamePressed}
             type="SECONDARY"
           />
         </View>

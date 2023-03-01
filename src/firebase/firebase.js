@@ -112,7 +112,7 @@ export const createAndFetchTeam = (teamInfo, playerDetails) => {
 }
 
 
-
+// to add new players to the team and fetch players in a team
 export const addAndFetchPlayers = () => {
   const [numberOfPlayers, setNumberOfPlayers] = useState() //to keep a count of whenever a new player is added
 
@@ -181,4 +181,27 @@ export const addAndFetchPlayers = () => {
   };
 
   return { addNewPlayer, fetchPlayersOfTeam }
+}
+
+
+// to create new games and fetch new games created
+export const createAndFetchGame = () => {
+
+  // to create a new game and add it as a sub-collection to teams
+  const createGame = (teamId, game) => {
+    try {
+      firestore()
+        .collection("teams")
+        .doc(teamId)
+        .collection("newGame")
+        .add(game)
+        .then(() => {
+          console.log("New game created!")
+        })
+        .catch(error => console.log(error, "error"))
+    } catch (error) {
+      console.log(error, "error")
+    }
+  }
+  return { createGame }
 }

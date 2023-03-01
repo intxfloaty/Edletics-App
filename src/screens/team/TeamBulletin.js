@@ -3,15 +3,17 @@ import React, { useState, useEffect } from 'react'
 import firestore from '@react-native-firebase/firestore';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { useNavigation } from '@react-navigation/native';
+import { useSelector } from 'react-redux';
 
 const TeamBulletin = () => {
+  const currentTeam = useSelector(state => state.currentTeam)
   const [newGame, setNewGame] = useState({})
   const navigation = useNavigation()
 
   useEffect(() => {
     firestore()
       .collection("newGame")
-      .doc("5v5_open")
+      .doc(currentTeam?.teamId)
       .get()
       .then((querySnapShot) => {
         console.log("Team Admin created a new game!")
@@ -25,10 +27,8 @@ const TeamBulletin = () => {
     navigation.navigate("CreateGame")
   }
 
-
   return (
     <View style={styles.parent}>
-      <Text style={styles.text}>{newGame?.format}</Text>
       <Icon
         name="add-outline"
         size={40}
