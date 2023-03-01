@@ -6,7 +6,6 @@ import { userAuthState } from './src/firebase/firebase'
 import { NavigationContainer, } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import MyTeams from './src/screens/MyTeams';
-import TeamActivity from './src/screens/TeamActivity';
 import HomeScreen from './src/screens/HomeScreen';
 import PlayerDetails from './src/screens/PlayerDetails';
 import JoinTournament from './src/screens/JoinTournament';
@@ -47,7 +46,6 @@ const YourApp = () => {
             <Stack.Screen name="TeamSettings" component={TeamSettings} />
           </Stack.Group>
 
-          <Stack.Screen name="TeamActivity" component={TeamActivity} />
           <Stack.Screen name="JoinTournament" component={JoinTournament} />
           <Stack.Screen name="TournamentScreen" component={TournamentScreen} />
         </Stack.Navigator>
