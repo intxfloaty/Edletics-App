@@ -1,7 +1,7 @@
 import { Pressable, StyleSheet, Text, View, ScrollView } from 'react-native'
 import React, { useState } from 'react'
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
-import TeamAnnouncement from './TeamAnnouncement';
+import TeamBulletin from './TeamBulletin';
 import TeamMatches from './TeamMatches';
 import TeamSquad from './TeamSquad';
 import TeamStats from './TeamStats';
@@ -37,7 +37,7 @@ const TeamScreenTabs = () => {
         }}>
         <Tab.Screen
           name='Bulletin'
-          component={TeamAnnouncement}
+          component={TeamBulletin}
         // options={{
         //   tabBarLabel: ({ focused }) => (
         //     <Text style={[styles.tabBarLabel, focused && styles.tabBarLabelActive]}>

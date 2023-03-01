@@ -54,7 +54,7 @@ const CreateGame = () => {
       try {
         firestore()
           .collection("newGame")
-          .doc()
+          .doc(`${game?.format}_${game?.category}`)
           .set(game);
         console.log("New Activity added!");
       } catch (error) {
