@@ -4,12 +4,14 @@ import { useNavigation } from "@react-navigation/native"
 import { useSelector, useDispatch } from 'react-redux';
 import { selectMyCurrentTeam } from '../redux/actions/actions';
 import ImagePicker from 'react-native-image-crop-picker';
+import Icon from 'react-native-vector-icons/Ionicons';
 
 const SelectTeam = ({ myTeams }) => {
   const navigation = useNavigation()
   const currentTeam = useSelector(state => state.currentTeam)
   const dispatch = useDispatch()
   const [image, setImage] = useState(null);
+  const [selectedItem, setSelectedItem] = useState(null);
 
   // function to select profile image
   const choseFromLibrary = () => {
@@ -23,10 +25,6 @@ const SelectTeam = ({ myTeams }) => {
     });
   }
 
-  const onSettingsPressed = () => {
-
-  }
-
   return (
     <View style={styles.parent}>
       {myTeams?.map((myTeam, index) => {
@@ -34,16 +32,23 @@ const SelectTeam = ({ myTeams }) => {
           <Pressable style={styles.teamContainer}
             onPress={() => {
               dispatch(selectMyCurrentTeam(myTeam))
-              // choseFromLibrary()
               if (currentTeam.teamId) {
                 navigation.navigate("TeamScreen")
               }
             }} key={index}>
             <Image source={{
-              uri: image,
+              uri: selectedItem === myTeam ?  image: null,
             }} style={styles.profileImage} />
-            {/* <Text style={styles.teamInfo}>{myTeam.teamName}</Text> */}
-            {/* <Text style={styles.teamInfo}>{myTeam.teamAdminName}</Text> */}
+            <Icon
+              name="camera-outline"
+              size={30}
+              style={styles.settings}
+              color={"black"}
+              onPress={()=>{
+                setSelectedItem(myTeam)
+                choseFromLibrary();
+              }}
+            />
           </Pressable>
         )
       })
