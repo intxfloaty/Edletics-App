@@ -4,7 +4,7 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import { useNavigation } from '@react-navigation/native';
 import { useSelector } from 'react-redux';
 import { createAndFetchGame } from '../../firebase/firebase';
-import { Modal, Portal } from 'react-native-paper';
+import { Modal, Portal, List } from 'react-native-paper';
 
 
 
@@ -19,15 +19,15 @@ const TeamBulletin = () => {
   const hideModal = () => setVisible(false);
   const containerStyle = { backgroundColor: 'white', padding: 20, height: "100%" };
 
+
+  const [expanded, setExpanded] = React.useState(true);
+
+  const handlePress = () => setExpanded(!expanded);
   fetchNewGame(currentTeam?.teamId, setNewGame)
 
   console.log(newGame, "newGame")
   const onAddPressed = () => {
     navigation.navigate("CreateGame")
-  }
-
-  const onGamePressed = () => {
-
   }
 
   return (
@@ -54,7 +54,6 @@ const TeamBulletin = () => {
       </View>
       <Portal>
         <Modal visible={visible} onDismiss={hideModal} contentContainerStyle={containerStyle}>
-          <Text>Example Modal.  Click outside this area to dismiss.</Text>
           <Icon
             name="arrow-back"
             size={40}
@@ -62,6 +61,23 @@ const TeamBulletin = () => {
             color={"black"}
             onPress={hideModal}
           />
+          <List.Section title="Accordions">
+            <List.Accordion
+              title="Uncontrolled Accordion"
+              left={props => <List.Icon {...props} icon="folder" />}>
+              <List.Item title="First item" />
+              <List.Item title="Second item" />
+            </List.Accordion>
+
+            <List.Accordion
+              title=""
+              left={props => <List.Icon {...props} icon="folder" />}
+              expanded={expanded}
+              onPress={handlePress}>
+              <List.Item title="First item" />
+              <List.Item title="Second item" />
+            </List.Accordion>
+          </List.Section>
         </Modal>
       </Portal>
     </>
