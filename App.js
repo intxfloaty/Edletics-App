@@ -10,12 +10,14 @@ import HomeScreen from './src/screens/HomeScreen';
 import PlayerDetails from './src/screens/PlayerDetails';
 import JoinTournament from './src/screens/JoinTournament';
 import { Provider } from 'react-redux';
+import { Provider as PaperProvider } from 'react-native-paper'
 import store from './src/redux/store';
 import TournamentScreen from './src/screens/TournamentScreen';
 import MyDrawer from './src/screens/MyDrawer';
 import TeamScreenTabs from './src/screens/team/TeamScreenTabs';
 import TeamSettings from './src/screens/team/TeamSettings';
 import CreateGame from './src/screens/CreateGame';
+import Icon from 'react-native-vector-icons/Ionicons';
 
 
 const Stack = createNativeStackNavigator();
@@ -35,23 +37,28 @@ const YourApp = () => {
 
   return (
     <Provider store={store}>
-      <NavigationContainer>
-        <Stack.Navigator screenOptions={{ headerShown: false }}>
-          <Stack.Screen name="PlayerDetails" component={PlayerDetails} />
-          <Stack.Screen name="MyDrawer" component={MyDrawer} />
-          <Stack.Screen name='Home' component={HomeScreen} />
-          <Stack.Screen name="MyTeams" component={MyTeams} />
-          <Stack.Screen name="TeamScreen" component={TeamScreenTabs} />
-          <Stack.Screen name="CreateGame" component={CreateGame} />
+      <PaperProvider 
+       settings={{
+        icon: props => <Icon {...props} />,
+      }}>
+        <NavigationContainer>
+          <Stack.Navigator screenOptions={{ headerShown: false }}>
+            <Stack.Screen name="PlayerDetails" component={PlayerDetails} />
+            <Stack.Screen name="MyDrawer" component={MyDrawer} />
+            <Stack.Screen name='Home' component={HomeScreen} />
+            <Stack.Screen name="MyTeams" component={MyTeams} />
+            <Stack.Screen name="TeamScreen" component={TeamScreenTabs} />
+            <Stack.Screen name="CreateGame" component={CreateGame} />
 
-          <Stack.Group screenOptions={{ presentation: 'modal' }}>
-            <Stack.Screen name="TeamSettings" component={TeamSettings} />
-          </Stack.Group>
+            <Stack.Group screenOptions={{ presentation: 'modal' }}>
+              <Stack.Screen name="TeamSettings" component={TeamSettings} />
+            </Stack.Group>
 
-          <Stack.Screen name="JoinTournament" component={JoinTournament} />
-          <Stack.Screen name="TournamentScreen" component={TournamentScreen} />
-        </Stack.Navigator>
-      </NavigationContainer>
+            <Stack.Screen name="JoinTournament" component={JoinTournament} />
+            <Stack.Screen name="TournamentScreen" component={TournamentScreen} />
+          </Stack.Navigator>
+        </NavigationContainer>
+      </PaperProvider>
     </Provider>
   );
 }

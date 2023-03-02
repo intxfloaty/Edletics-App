@@ -34,7 +34,8 @@ const TeamScreenTabs = () => {
           tabBarItemStyle: { width: 100 },
           tabBarStyle: { backgroundColor: "#202224" },
           tabBarScrollEnabled: true,
-        }}>
+        }}
+        >
         <Tab.Screen
           name='Bulletin'
           component={TeamBulletin}

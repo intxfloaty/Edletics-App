@@ -206,21 +206,21 @@ export const createAndFetchGame = () => {
 
   // to fetch the games created
   const fetchNewGame = (teamId, setNewGame) => {
-    useEffect(()=>{
-      try{
-        firestore()
-        .collection("teams")
-        .doc(teamId)
-        .collection("newGame")
-        .get()
-        .then((querySnapShot)=>{
-          const newGame = []
-          querySnapShot.forEach((doc)=>{
-            newGame.push(doc.data())
+    useEffect(() => {
+      try {
+         firestore()
+          .collection("teams")
+          .doc(teamId)
+          .collection("newGame")
+          .get()
+          .then((querySnapShot) => {
+            const newGame = []
+            querySnapShot.forEach((doc) => {
+              newGame.push(doc.data())
+            })
+            setNewGame(newGame)
           })
-          setNewGame(newGame)
-        })
-      } catch(error) {
+      } catch (error) {
         console.log(error, "error")
       }
     }, [])
