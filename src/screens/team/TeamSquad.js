@@ -2,7 +2,7 @@ import { StyleSheet, Text, View, ScrollView } from 'react-native'
 import React, { useState } from 'react'
 import { useSelector } from 'react-redux';
 import { addAndFetchPlayers } from '../../firebase/firebase';
-import { Avatar, Divider } from 'react-native-paper';
+import { Avatar } from 'react-native-paper';
 
 const TeamSquad = () => {
   const currentTeam = useSelector(state => state.currentTeam)
@@ -15,11 +15,11 @@ const TeamSquad = () => {
   return (
     <View style={styles.parent}>
       <ScrollView showsVerticalScrollIndicator >
-
+    <View>
         <View style={styles.coach}>
-          <Avatar.Text size={40} label="XD" style={styles.avatar} />
+          <Avatar.Text size={40} label="P" style={styles.avatar} />
           <View style={styles.textContainer}>
-            <Text style={styles.text}>Julian Nagelsman</Text>
+            <Text style={styles.text}>{currentTeam?.teamAdminName}</Text>
             <Text style={styles.subText}>Coach</Text>
           </View>
         </View>
@@ -156,6 +156,8 @@ const TeamSquad = () => {
         <View style={styles.forward}>
           <Text style={styles.title}>GoalKeeper</Text>
         </View>
+        </View>
+      <View style={styles.footer}></View>
       </ScrollView>
     </View>
   )
@@ -165,11 +167,11 @@ export default TeamSquad
 
 const styles = StyleSheet.create({
   parent: {
-    flex: 1,
+    height:"100%",
     backgroundColor: "#101112",
   },
   coach: {
-    minHeight: "10%",
+    minHeight: "5%",
     width: "100%",
     display: "flex",
     alignItems: "center",
@@ -215,6 +217,10 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
   },
-
-
+  footer:{
+    height:250,
+    width:"100%",
+    // backgroundColor:"blue",
+    zIndex:2
+  }
 })

@@ -7,10 +7,13 @@ import ImagePicker from 'react-native-image-crop-picker';
 import firestore from '@react-native-firebase/firestore';
 import { useNavigation } from "@react-navigation/native"
 import { userAuthState } from '../firebase/firebase';
+import CustomModal from './CustomModal';
 
 const PlayerDetailsForm = () => {
   const [image, setImage] = useState(null);
   const [fullName, setFullName] = useState("")
+  const positionOptions = ["Forward", "Mid-Fielder", "Defender", "Goal Keeper"]
+  const [position, setPosition] = useState("")
   const [date, setDate] = useState("");
   const [gender, setGender] = useState("")
   const [emailAddress, setEmailAddress] = useState("")
@@ -22,7 +25,7 @@ const PlayerDetailsForm = () => {
   })
   const [fieldErrors, setFieldErrors] = useState({})
   const navigation = useNavigation()
-  const {user} = userAuthState();
+  const { user } = userAuthState();
 
   // function to select profile image
   const choseFromLibrary = () => {
@@ -76,6 +79,9 @@ const PlayerDetailsForm = () => {
     if (!fullName) {
       errors.fullName = "Please enter your full name"
     }
+    if(!position){
+      errors.position = "Please select your playing position"
+    }
     if (!date) {
       errors.date = "Please select your date of birth"
     }
@@ -99,6 +105,7 @@ const PlayerDetailsForm = () => {
         .doc(`${user?.phoneNumber}`)
         .set({
           fullName: fullName,
+          position:position,
           dateOfBirth: date,
           gender: gender,
           emailAddress: emailAddress,
@@ -137,6 +144,13 @@ const PlayerDetailsForm = () => {
             setValue={(text) => setFullName(text)}
           />
           {fieldErrors.fullName !== "" && <Text style={styles.errorInfo}>{fieldErrors.fullName}</Text>}
+
+          <Text style={styles.inputText}>POSITION</Text>
+          <CustomModal
+            options={positionOptions}
+            selectedValue={position}
+            handleOptionPress={(optionValue) => setPosition(optionValue)} />
+            {fieldErrors.position !== "" && <Text style={styles.errorInfo}>{fieldErrors.position}</Text>}
 
           <Text style={styles.inputText}>DATE OF BIRTH</Text>
           <CustomInput
