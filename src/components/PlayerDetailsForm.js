@@ -111,6 +111,7 @@ const PlayerDetailsForm = () => {
           emailAddress: emailAddress,
           location: location,
           phoneNumber: user.phoneNumber,
+          userId:user.uid
         })
         .then(() => {
           console.log("Player Profile added!")

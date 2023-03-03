@@ -65,6 +65,7 @@ export const createAndFetchTeam = (teamInfo, playerDetails) => {
         teamId: (`${teamInfo.teamName}_${playerDetails?.phoneNumber}`),
         teamAdminName: playerDetails?.fullName,
         teamAdminId: playerDetails?.phoneNumber,
+        teamAdmin:playerDetails?.userId
       })
       .then(() => {
         console.log('team added!');
@@ -89,6 +90,7 @@ export const createAndFetchTeam = (teamInfo, playerDetails) => {
             console.error("Error updating player: ", error);
           });
       })
+      .catch(error => console.log(error, "can't create team"))
   }
 
   const fetchTeamDetails = (setMyTeams) => {
@@ -157,7 +159,7 @@ export const addAndFetchPlayers = () => {
         .onSnapshot((querySnapShot) => {
           const promises = [];
           const newPlayerList = [];
-          querySnapShot.forEach((doc) => {
+          querySnapShot?.forEach((doc) => {
             const playerData = doc.data();
             const playerId = playerData.playerId;
             const promise = firestore()
