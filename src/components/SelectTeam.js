@@ -37,14 +37,15 @@ const SelectTeam = ({ myTeams }) => {
               }
             }} key={index}>
             <Image source={{
-              uri: selectedItem === myTeam ?  image: null,
+              uri: selectedItem === myTeam ? image : null,
             }} style={styles.profileImage} />
+            <Text style={styles.teamName}>{myTeam?.teamName}</Text>
             <Icon
               name="camera-outline"
               size={30}
-              style={styles.settings}
+              style={styles.camera}
               color={"black"}
-              onPress={()=>{
+              onPress={() => {
                 setSelectedItem(myTeam)
                 choseFromLibrary();
               }}
@@ -79,7 +80,13 @@ const styles = StyleSheet.create({
     width: 350,
     borderWidth: 1,
   },
-  settings: {
+  teamName: {
+    fontSize: 26,
+    color: "black",
+    position: "absolute",
+    top: 0
+  },
+  camera: {
     position: "absolute",
     top: 0,
     right: 0,

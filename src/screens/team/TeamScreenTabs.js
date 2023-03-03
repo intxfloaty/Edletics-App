@@ -70,8 +70,8 @@ const styles = StyleSheet.create({
   teamName: {
     color: "white",
     fontSize: 22,
-    textAlign:"center",
-    textTransform:"uppercase"
+    textAlign: "center",
+    textTransform: "uppercase"
   },
   settings: {
     position: "absolute",

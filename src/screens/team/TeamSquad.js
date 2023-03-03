@@ -15,149 +15,149 @@ const TeamSquad = () => {
   return (
     <View style={styles.parent}>
       <ScrollView showsVerticalScrollIndicator >
-    <View>
-        <View style={styles.coach}>
-          <Avatar.Text size={40} label="P" style={styles.avatar} />
-          <View style={styles.textContainer}>
-            <Text style={styles.text}>{currentTeam?.teamAdminName}</Text>
-            <Text style={styles.subText}>Coach</Text>
+        <View>
+          <View style={styles.coach}>
+            <Avatar.Text size={40} label="P" style={styles.avatar} />
+            <View style={styles.textContainer}>
+              <Text style={styles.text}>{currentTeam?.teamAdminName}</Text>
+              <Text style={styles.subText}>Coach</Text>
+            </View>
           </View>
-        </View>
 
-        <View style={styles.forward}>
-          <Text style={styles.title}>Forward</Text>
-          <View style={styles.playerContainer}>
-            <Avatar.Text size={40} label="MT" style={styles.avatar} />
-            <View style={styles.textContainer}>
-              <Text style={styles.text}>Karim Benzema</Text>
-              <Text style={styles.subText}>9</Text>
+          <View style={styles.forward}>
+            <Text style={styles.title}>Forward</Text>
+            <View style={styles.playerContainer}>
+              <Avatar.Text size={40} label="MT" style={styles.avatar} />
+              <View style={styles.textContainer}>
+                <Text style={styles.text}>Karim Benzema</Text>
+                <Text style={styles.subText}>9</Text>
+              </View>
+            </View>
+            <View style={styles.playerContainer}>
+              <Avatar.Text size={40} label="MT" style={styles.avatar} />
+              <View style={styles.textContainer}>
+                <Text style={styles.text}>Vinicius Junior</Text>
+                <Text style={styles.subText}>20</Text>
+              </View>
+            </View>
+            <View style={styles.playerContainer}>
+              <Avatar.Text size={40} label="MT" style={styles.avatar} />
+              <View style={styles.textContainer}>
+                <Text style={styles.text}>Rodrygo</Text>
+                <Text style={styles.subText}>21</Text>
+              </View>
+            </View>
+            <View style={styles.playerContainer}>
+              <Avatar.Text size={40} label="MT" style={styles.avatar} />
+              <View style={styles.textContainer}>
+                <Text style={styles.text}>Eden Hazard</Text>
+                <Text style={styles.subText}>7</Text>
+              </View>
+            </View>
+            <View style={styles.playerContainer}>
+              <Avatar.Text size={40} label="MT" style={styles.avatar} />
+              <View style={styles.textContainer}>
+                <Text style={styles.text}>Marco Asensio</Text>
+                <Text style={styles.subText}>11</Text>
+              </View>
             </View>
           </View>
-          <View style={styles.playerContainer}>
-            <Avatar.Text size={40} label="MT" style={styles.avatar} />
-            <View style={styles.textContainer}>
-              <Text style={styles.text}>Vinicius Junior</Text>
-              <Text style={styles.subText}>20</Text>
-            </View>
-          </View>
-          <View style={styles.playerContainer}>
-            <Avatar.Text size={40} label="MT" style={styles.avatar} />
-            <View style={styles.textContainer}>
-              <Text style={styles.text}>Rodrygo</Text>
-              <Text style={styles.subText}>21</Text>
-            </View>
-          </View>
-          <View style={styles.playerContainer}>
-            <Avatar.Text size={40} label="MT" style={styles.avatar} />
-            <View style={styles.textContainer}>
-              <Text style={styles.text}>Eden Hazard</Text>
-              <Text style={styles.subText}>7</Text>
-            </View>
-          </View>
-          <View style={styles.playerContainer}>
-            <Avatar.Text size={40} label="MT" style={styles.avatar} />
-            <View style={styles.textContainer}>
-              <Text style={styles.text}>Marco Asensio</Text>
-              <Text style={styles.subText}>11</Text>
-            </View>
-          </View>
-        </View>
 
-        <View style={styles.forward}>
-          <Text style={styles.title}>Mid-Fielder</Text>
-          <View style={styles.playerContainer}>
-            <Avatar.Text size={40} label="MT" style={styles.avatar} />
-            <View style={styles.textContainer}>
-              <Text style={styles.text}>Luka Modric</Text>
-              <Text style={styles.subText}>10</Text>
+          <View style={styles.forward}>
+            <Text style={styles.title}>Mid-Fielder</Text>
+            <View style={styles.playerContainer}>
+              <Avatar.Text size={40} label="MT" style={styles.avatar} />
+              <View style={styles.textContainer}>
+                <Text style={styles.text}>Luka Modric</Text>
+                <Text style={styles.subText}>10</Text>
+              </View>
+            </View>
+            <View style={styles.playerContainer}>
+              <Avatar.Text size={40} label="MT" style={styles.avatar} />
+              <View style={styles.textContainer}>
+                <Text style={styles.text}>Toni Kroos</Text>
+                <Text style={styles.subText}>8</Text>
+              </View>
+            </View>
+            <View style={styles.playerContainer}>
+              <Avatar.Text size={40} label="MT" style={styles.avatar} />
+              <View style={styles.textContainer}>
+                <Text style={styles.text}>Federico Valverde</Text>
+                <Text style={styles.subText}>15</Text>
+              </View>
+            </View>
+            <View style={styles.playerContainer}>
+              <Avatar.Text size={40} label="MT" style={styles.avatar} />
+              <View style={styles.textContainer}>
+                <Text style={styles.text}>Eduardo Camavinga</Text>
+                <Text style={styles.subText}>12</Text>
+              </View>
+            </View>
+            <View style={styles.playerContainer}>
+              <Avatar.Text size={40} label="MT" style={styles.avatar} />
+              <View style={styles.textContainer}>
+                <Text style={styles.text}>Aurellen Tchouameni</Text>
+                <Text style={styles.subText}>18</Text>
+              </View>
+            </View>
+            <View style={styles.playerContainer}>
+              <Avatar.Text size={40} label="MT" style={styles.avatar} />
+              <View style={styles.textContainer}>
+                <Text style={styles.text}>Dani Ceballos</Text>
+                <Text style={styles.subText}>19</Text>
+              </View>
             </View>
           </View>
-          <View style={styles.playerContainer}>
-            <Avatar.Text size={40} label="MT" style={styles.avatar} />
-            <View style={styles.textContainer}>
-              <Text style={styles.text}>Toni Kroos</Text>
-              <Text style={styles.subText}>8</Text>
+          <View style={styles.forward}>
+            <Text style={styles.title}>Defender</Text>
+            <View style={styles.playerContainer}>
+              <Avatar.Text size={40} label="MT" style={styles.avatar} />
+              <View style={styles.textContainer}>
+                <Text style={styles.text}>David Alaba</Text>
+                <Text style={styles.subText}>4</Text>
+              </View>
+            </View>
+            <View style={styles.playerContainer}>
+              <Avatar.Text size={40} label="MT" style={styles.avatar} />
+              <View style={styles.textContainer}>
+                <Text style={styles.text}>Eder Militao</Text>
+                <Text style={styles.subText}>3</Text>
+              </View>
+            </View>
+            <View style={styles.playerContainer}>
+              <Avatar.Text size={40} label="MT" style={styles.avatar} />
+              <View style={styles.textContainer}>
+                <Text style={styles.text}>Antonio Rudiger</Text>
+                <Text style={styles.subText}>22</Text>
+              </View>
+            </View>
+            <View style={styles.playerContainer}>
+              <Avatar.Text size={40} label="MT" style={styles.avatar} />
+              <View style={styles.textContainer}>
+                <Text style={styles.text}>Daniel Carvajal</Text>
+                <Text style={styles.subText}>2</Text>
+              </View>
+            </View>
+            <View style={styles.playerContainer}>
+              <Avatar.Text size={40} label="MT" style={styles.avatar} />
+              <View style={styles.textContainer}>
+                <Text style={styles.text}>Ferland Mendy</Text>
+                <Text style={styles.subText}>23</Text>
+              </View>
+            </View>
+            <View style={styles.playerContainer}>
+              <Avatar.Text size={40} label="MT" style={styles.avatar} />
+              <View style={styles.textContainer}>
+                <Text style={styles.text}>Nacho</Text>
+                <Text style={styles.subText}>6</Text>
+              </View>
             </View>
           </View>
-          <View style={styles.playerContainer}>
-            <Avatar.Text size={40} label="MT" style={styles.avatar} />
-            <View style={styles.textContainer}>
-              <Text style={styles.text}>Federico Valverde</Text>
-              <Text style={styles.subText}>15</Text>
-            </View>
-          </View>
-          <View style={styles.playerContainer}>
-            <Avatar.Text size={40} label="MT" style={styles.avatar} />
-            <View style={styles.textContainer}>
-              <Text style={styles.text}>Eduardo Camavinga</Text>
-              <Text style={styles.subText}>12</Text>
-            </View>
-          </View>
-          <View style={styles.playerContainer}>
-            <Avatar.Text size={40} label="MT" style={styles.avatar} />
-            <View style={styles.textContainer}>
-              <Text style={styles.text}>Aurellen Tchouameni</Text>
-              <Text style={styles.subText}>18</Text>
-            </View>
-          </View>
-          <View style={styles.playerContainer}>
-            <Avatar.Text size={40} label="MT" style={styles.avatar} />
-            <View style={styles.textContainer}>
-              <Text style={styles.text}>Dani Ceballos</Text>
-              <Text style={styles.subText}>19</Text>
-            </View>
+          <View style={styles.forward}>
+            <Text style={styles.title}>GoalKeeper</Text>
           </View>
         </View>
-        <View style={styles.forward}>
-          <Text style={styles.title}>Defender</Text>
-          <View style={styles.playerContainer}>
-            <Avatar.Text size={40} label="MT" style={styles.avatar} />
-            <View style={styles.textContainer}>
-              <Text style={styles.text}>David Alaba</Text>
-              <Text style={styles.subText}>4</Text>
-            </View>
-          </View>
-          <View style={styles.playerContainer}>
-            <Avatar.Text size={40} label="MT" style={styles.avatar} />
-            <View style={styles.textContainer}>
-              <Text style={styles.text}>Eder Militao</Text>
-              <Text style={styles.subText}>3</Text>
-            </View>
-          </View>
-          <View style={styles.playerContainer}>
-            <Avatar.Text size={40} label="MT" style={styles.avatar} />
-            <View style={styles.textContainer}>
-              <Text style={styles.text}>Antonio Rudiger</Text>
-              <Text style={styles.subText}>22</Text>
-            </View>
-          </View>
-          <View style={styles.playerContainer}>
-            <Avatar.Text size={40} label="MT" style={styles.avatar} />
-            <View style={styles.textContainer}>
-              <Text style={styles.text}>Daniel Carvajal</Text>
-              <Text style={styles.subText}>2</Text>
-            </View>
-          </View>
-          <View style={styles.playerContainer}>
-            <Avatar.Text size={40} label="MT" style={styles.avatar} />
-            <View style={styles.textContainer}>
-              <Text style={styles.text}>Ferland Mendy</Text>
-              <Text style={styles.subText}>23</Text>
-            </View>
-          </View>
-          <View style={styles.playerContainer}>
-            <Avatar.Text size={40} label="MT" style={styles.avatar} />
-            <View style={styles.textContainer}>
-              <Text style={styles.text}>Nacho</Text>
-              <Text style={styles.subText}>6</Text>
-            </View>
-          </View>
-        </View>
-        <View style={styles.forward}>
-          <Text style={styles.title}>GoalKeeper</Text>
-        </View>
-        </View>
-      <View style={styles.footer}></View>
+        <View style={styles.footer}></View>
       </ScrollView>
     </View>
   )
@@ -167,7 +167,7 @@ export default TeamSquad
 
 const styles = StyleSheet.create({
   parent: {
-    height:"100%",
+    height: "100%",
     backgroundColor: "#101112",
   },
   coach: {
@@ -217,10 +217,10 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
   },
-  footer:{
-    height:250,
-    width:"100%",
+  footer: {
+    height: 250,
+    width: "100%",
     // backgroundColor:"blue",
-    zIndex:2
+    zIndex: 2
   }
 })

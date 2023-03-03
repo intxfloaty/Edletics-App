@@ -79,7 +79,7 @@ const PlayerDetailsForm = () => {
     if (!fullName) {
       errors.fullName = "Please enter your full name"
     }
-    if(!position){
+    if (!position) {
       errors.position = "Please select your playing position"
     }
     if (!date) {
@@ -105,7 +105,7 @@ const PlayerDetailsForm = () => {
         .doc(`${user?.phoneNumber}`)
         .set({
           fullName: fullName,
-          position:position,
+          position: position,
           dateOfBirth: date,
           gender: gender,
           emailAddress: emailAddress,
@@ -150,7 +150,7 @@ const PlayerDetailsForm = () => {
             options={positionOptions}
             selectedValue={position}
             handleOptionPress={(optionValue) => setPosition(optionValue)} />
-            {fieldErrors.position !== "" && <Text style={styles.errorInfo}>{fieldErrors.position}</Text>}
+          {fieldErrors.position !== "" && <Text style={styles.errorInfo}>{fieldErrors.position}</Text>}
 
           <Text style={styles.inputText}>DATE OF BIRTH</Text>
           <CustomInput
