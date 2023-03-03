@@ -7,11 +7,13 @@ import TeamSquad from './TeamSquad';
 import TeamStats from './TeamStats';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { useNavigation } from '@react-navigation/native';
+import { useSelector } from 'react-redux';
 
 const Tab = createMaterialTopTabNavigator()
 
 const TeamScreenTabs = () => {
   const navigation = useNavigation()
+  const currentTeam = useSelector(state => state.currentTeam)
 
   const onSettingsPressed = () => {
     navigation.navigate("TeamSettings")
@@ -20,6 +22,7 @@ const TeamScreenTabs = () => {
   return (
     <>
       <View style={styles.header}>
+        <Text style={styles.teamName}>{currentTeam?.teamName}</Text>
         <Icon
           name="settings-outline"
           size={20}
@@ -35,7 +38,7 @@ const TeamScreenTabs = () => {
           tabBarStyle: { backgroundColor: "#202224" },
           tabBarScrollEnabled: true,
         }}
-        >
+      >
         <Tab.Screen
           name='Bulletin'
           component={TeamBulletin}
@@ -60,11 +63,19 @@ export default TeamScreenTabs
 const styles = StyleSheet.create({
   header: {
     backgroundColor: "#202224",
-    minHeight: 50,
+    minHeight: 60,
+    alignItems: "center",
+    justifyContent: "center"
+  },
+  teamName: {
+    color: "white",
+    fontSize: 22,
+    textAlign:"center",
+    textTransform:"uppercase"
   },
   settings: {
     position: "absolute",
-    top: 0,
+    top: 10,
     right: 0,
     padding: 10
   },
