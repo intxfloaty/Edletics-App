@@ -138,7 +138,8 @@ export const addAndFetchPlayers = () => {
           .collection("players")
           .doc(player)
           .collection("myTeams")
-          .add(currentTeam)
+          .doc(currentTeam?.teamId)
+          .set(currentTeam)
           .then(() => {
             console.log("Player updated with team information");
           })

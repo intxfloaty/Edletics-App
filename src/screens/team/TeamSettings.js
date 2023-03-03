@@ -31,7 +31,7 @@ const AddPlayers = () => {
         value={player}
         setValue={(text) => setPlayer(text)} />
       <CustomButton text="Add Player" type="SECONDARY" onPress={onAddPlayerPressed} />
-      <CustomButton text="Delete Team" type="SECONDARY" onPress={onDeleteTeamPressed} />
+      <CustomButton text={currentTeam?.teamAdmin === playerDetails?.userId ? "Delete Team" : "Leave Team"} type="SECONDARY" onPress={onDeleteTeamPressed} />
     </View>
   )
 }
