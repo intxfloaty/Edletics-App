@@ -31,6 +31,7 @@ const SelectTeam = ({ myTeams }) => {
         return (
           <Pressable style={styles.teamContainer}
             onPress={() => {
+              console.log(myTeam, "my")
               dispatch(selectMyCurrentTeam(myTeam))
               if (currentTeam.teamId) {
                 navigation.navigate("TeamScreen")

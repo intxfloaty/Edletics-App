@@ -3,17 +3,20 @@ import React, { useState, useEffect } from 'react'
 import Icon from 'react-native-vector-icons/Ionicons';
 import { useNavigation } from '@react-navigation/native';
 import { useSelector } from 'react-redux';
-import { createAndFetchGame } from '../../firebase/firebase';
+import { userAuthState, usePlayerDetails, createAndFetchGame } from '../../firebase/firebase';
 import { Modal, Portal, List } from 'react-native-paper';
 
 
 
 const TeamBulletin = () => {
   const currentTeam = useSelector(state => state.currentTeam)
+  const { user } = userAuthState();
+  const { playerDetails } = usePlayerDetails(user?.phoneNumber)
   const { fetchNewGame } = createAndFetchGame()
   const [newGame, setNewGame] = useState([])
   const navigation = useNavigation()
   const [visible, setVisible] = React.useState(false);
+
 
   const showModal = () => setVisible(true);
   const hideModal = () => setVisible(false);
@@ -25,7 +28,6 @@ const TeamBulletin = () => {
   const handlePress = () => setExpanded(!expanded);
   fetchNewGame(currentTeam?.teamId, setNewGame)
 
-  console.log(newGame, "newGame")
   const onAddPressed = () => {
     navigation.navigate("CreateGame")
   }
@@ -44,13 +46,15 @@ const TeamBulletin = () => {
             )
           })}
         </ScrollView>
-        <Icon
-          name="add-outline"
-          size={40}
-          style={styles.addIcon}
-          color={"white"}
-          onPress={onAddPressed}
-        />
+        {currentTeam?.teamAdmin === playerDetails?.userId &&
+          <Icon
+            name="add-outline"
+            size={40}
+            style={styles.addIcon}
+            color={"white"}
+            onPress={onAddPressed}
+          />
+        }
       </View>
       <Portal>
         <Modal visible={visible} onDismiss={hideModal} contentContainerStyle={containerStyle}>

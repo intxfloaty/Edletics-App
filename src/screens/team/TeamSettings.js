@@ -1,6 +1,6 @@
 import { ScrollView, StyleSheet, Text, View, Image } from 'react-native'
 import React, { useState, useEffect } from 'react'
-import { usePlayerDetails, userAuthState, addAndFetchPlayers } from '../../firebase/firebase'
+import { usePlayerDetails, userAuthState, addAndFetchPlayers, deleteMyTeam } from '../../firebase/firebase'
 import { useSelector } from 'react-redux';
 import CustomButton from '../../components/CustomButton';
 import CustomInput from '../../components/CustomInput';
@@ -11,7 +11,7 @@ const AddPlayers = () => {
   const { playerDetails } = usePlayerDetails(user?.phoneNumber)
   const { addNewPlayer, fetchPlayersOfTeam } = addAndFetchPlayers();
   const [player, setPlayer] = useState("+91")
-  const  currentTeam  = useSelector(state => state.currentTeam)
+  const currentTeam = useSelector(state => state.currentTeam)
 
 
 
@@ -21,12 +21,17 @@ const AddPlayers = () => {
     setPlayer("+91")
   }
 
+  const onDeleteTeamPressed = () => {
+    deleteMyTeam(playerDetails?.phoneNumber, currentTeam?.teamId)
+  }
+
   return (
     <View style={styles.parent}>
       <CustomInput
         value={player}
         setValue={(text) => setPlayer(text)} />
       <CustomButton text="Add Player" type="SECONDARY" onPress={onAddPlayerPressed} />
+      <CustomButton text="Delete Team" type="SECONDARY" onPress={onDeleteTeamPressed} />
     </View>
   )
 }

@@ -65,7 +65,7 @@ export const createAndFetchTeam = (teamInfo, playerDetails) => {
         teamId: (`${teamInfo.teamName}_${playerDetails?.phoneNumber}`),
         teamAdminName: playerDetails?.fullName,
         teamAdminId: playerDetails?.phoneNumber,
-        teamAdmin:playerDetails?.userId
+        teamAdmin: playerDetails?.userId
       })
       .then(() => {
         console.log('team added!');
@@ -76,12 +76,14 @@ export const createAndFetchTeam = (teamInfo, playerDetails) => {
           .collection("players")
           .doc(`${playerDetails?.phoneNumber}`)
           .collection("myTeams")
-          .add({
+          .doc(`${teamInfo.teamName}_${playerDetails?.phoneNumber}`)
+          .set({
             teamName: teamInfo.teamName,
             teamLocation: teamInfo.teamLocation,
             teamId: (`${teamInfo.teamName}_${playerDetails?.phoneNumber}`),
             teamAdminName: playerDetails?.fullName,
             teamAdminId: playerDetails?.phoneNumber,
+            teamAdmin: playerDetails?.userId
           })
           .then(() => {
             console.log("Player updated with team information");
@@ -210,7 +212,7 @@ export const createAndFetchGame = () => {
   const fetchNewGame = (teamId, setNewGame) => {
     useEffect(() => {
       try {
-         firestore()
+        firestore()
           .collection("teams")
           .doc(teamId)
           .collection("newGame")
@@ -229,4 +231,28 @@ export const createAndFetchGame = () => {
   }
 
   return { createNewGame, fetchNewGame }
+}
+
+// to delete a "myTeam" document from "myTeams" subcollection 
+export const deleteMyTeam = (playerId, teamId) => {
+  firestore()
+    .collection("players")
+    .doc(playerId)
+    .collection("myTeams")
+    .doc(teamId)
+    .delete()
+    .then(() => {
+      console.log("Team successfully deleted from players collection!")
+
+      // update "teams" document
+      firestore()
+        .collection("teams")
+        .doc(teamId)
+        .delete()
+        .then(() => {
+          console.log("Team successfully deleted from teams collection!")
+        })
+        .catch(error => console.log("Error removing team from teams collection: ", error))
+    })
+    .catch(error => console.log("Error removing team from players collection: ", error))
 }
