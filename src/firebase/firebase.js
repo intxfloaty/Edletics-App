@@ -235,25 +235,25 @@ export const createAndFetchGame = () => {
 }
 
 // to delete a "myTeam" document from "myTeams" subcollection 
-export const deleteMyTeam = (playerId, teamId) => {
-  firestore()
-    .collection("players")
-    .doc(playerId)
-    .collection("myTeams")
-    .doc(teamId)
-    .delete()
-    .then(() => {
-      console.log("Team successfully deleted from players collection!")
+// export const deleteMyTeam = (playerId, teamId) => {
+//   firestore()
+//     .collection("players")
+//     .doc(playerId)
+//     .collection("myTeams")
+//     .doc(teamId)
+//     .delete()
+//     .then(() => {
+//       console.log("Team successfully deleted from players collection!")
 
-      // update "teams" document
-      firestore()
-        .collection("teams")
-        .doc(teamId)
-        .delete()
-        .then(() => {
-          console.log("Team successfully deleted from teams collection!")
-        })
-        .catch(error => console.log("Error removing team from teams collection: ", error))
-    })
-    .catch(error => console.log("Error removing team from players collection: ", error))
-}
+//       // update "teams" document
+//       firestore()
+//         .collection("teams")
+//         .doc(teamId)
+//         .delete()
+//         .then(() => {
+//           console.log("Team successfully deleted from teams collection!")
+//         })
+//         .catch(error => console.log("Error removing team from teams collection: ", error))
+//     })
+//     .catch(error => console.log("Error removing team from players collection: ", error))
+// }

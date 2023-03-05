@@ -13,17 +13,15 @@ const AddPlayers = () => {
   const [player, setPlayer] = useState("+91")
   const currentTeam = useSelector(state => state.currentTeam)
 
-
-
   // to add new players to the team
   const onAddPlayerPressed = () => {
     addNewPlayer(currentTeam, player);
     setPlayer("+91")
   }
 
-  const onDeleteTeamPressed = () => {
-    deleteMyTeam(playerDetails?.phoneNumber, currentTeam?.teamId)
-  }
+  // const onDeleteTeamPressed = () => {
+  //   deleteMyTeam( currentTeam?.teamId)
+  // }
 
   return (
     <View style={styles.parent}>
@@ -31,7 +29,7 @@ const AddPlayers = () => {
         value={player}
         setValue={(text) => setPlayer(text)} />
       <CustomButton text="Add Player" type="SECONDARY" onPress={onAddPlayerPressed} />
-      <CustomButton text={currentTeam?.teamAdmin === playerDetails?.userId ? "Delete Team" : "Leave Team"} type="SECONDARY" onPress={onDeleteTeamPressed} />
+      {/* <CustomButton text={currentTeam?.teamAdmin === playerDetails?.userId ? "Delete Team" : "Leave Team"} type="SECONDARY" onPress={onDeleteTeamPressed} /> */}
     </View>
   )
 }
