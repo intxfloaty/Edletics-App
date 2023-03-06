@@ -279,5 +279,26 @@ export const updateTeamWithPlayers = () => {
     }
   }
 
-  return { updateTeamWithPlayersGoing, updateTeamWithPlayersNotGoing }
+
+  // to delete a game
+  const deleteGame = (teamId, gameId) => {
+    try {
+      firestore()
+        .collection("teams")
+        .doc(teamId)
+        .collection("newGame")
+        .doc(gameId)
+        .delete()
+        .then(() => {
+          console.log("Game deleted successfully!")
+        })
+        .catch(error => console.log(error, "error"))
+    } catch (error) {
+      console.log(error, "error")
+    }
+  }
+
+  return { updateTeamWithPlayersGoing, updateTeamWithPlayersNotGoing, deleteGame }
 }
+
+

@@ -12,7 +12,7 @@ const TeamBulletin = () => {
   const { user } = userAuthState();
   const { playerDetails } = usePlayerDetails(user?.phoneNumber)
   const { fetchNewGame } = createAndFetchGame()
-  const { updateTeamWithPlayersGoing, updateTeamWithPlayersNotGoing } = updateTeamWithPlayers()
+  const { updateTeamWithPlayersGoing, updateTeamWithPlayersNotGoing, deleteGame } = updateTeamWithPlayers()
   const [newGame, setNewGame] = useState([])
   const [visible, setVisible] = React.useState(false);
   const [going, setGoing] = useState(false)
@@ -27,12 +27,6 @@ const TeamBulletin = () => {
   const showModal = () => setVisible(true);
   const hideModal = () => setVisible(false);
 
-
-
-  const onNotGoingPressed = () => {
-
-  }
-
   return (
     <>
       <View style={styles.parent}>
@@ -40,6 +34,16 @@ const TeamBulletin = () => {
           {newGame.map((game, index) => {
             return (
               <Pressable key={index} style={styles.newGameContainer} onPress={showModal}>
+                {currentTeam?.teamAdmin === playerDetails?.userId &&
+                  <Icon
+                    name="trash-outline"
+                    size={25}
+                    color={"black"}
+                    style={styles.trashIcon}
+                    onPress={() => {
+                      deleteGame(currentTeam?.teamId, game.gameId)
+                    }} />
+                }
                 <Text style={styles.text}>{game.format} - {game.mode}</Text>
                 <Text style={styles.text}>{game.location}</Text>
                 <Text style={styles.text}>{game.date}</Text>
@@ -103,6 +107,11 @@ const styles = StyleSheet.create({
     marginVertical: 10,
     alignItems: "center",
     justifyContent: "center",
+  },
+  trashIcon: {
+    position: "absolute",
+    top: 5,
+    right: 5,
   },
   btn: {
     display: "flex",
