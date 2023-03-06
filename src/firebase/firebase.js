@@ -239,6 +239,30 @@ export const createAndFetchGame = () => {
   return { createNewGame, fetchNewGame }
 }
 
+//  function to update the team with players going for a game
+export const updateTeamWithPlayers = () => {
+  const updateTeamWithPlayersGoing = (teamId, gameId, player) => {
+    try {
+      firestore()
+        .collection("teams")
+        .doc(teamId)
+        .collection("newGame")
+        .doc(gameId)
+        .update({
+          playersGoing: firestore.FieldValue.arrayUnion(`${player}`)
+        })
+        .then(() => {
+          console.log("Players going updated successfully!")
+        })
+        .catch(error => console.log(error, "error"))
+    } catch (error) {
+      console.log(error, "error")
+    }
+  }
+
+  return { updateTeamWithPlayersGoing }
+}
+
 // to delete a "myTeam" document from "myTeams" subcollection
 // export const deleteMyTeam = (playerId, teamId) => {
 //   firestore()

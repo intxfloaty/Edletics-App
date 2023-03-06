@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react'
 import Icon from 'react-native-vector-icons/Ionicons';
 import { useNavigation } from '@react-navigation/native';
 import { useSelector } from 'react-redux';
-import { userAuthState, usePlayerDetails, createAndFetchGame } from '../../firebase/firebase';
+import { userAuthState, usePlayerDetails, createAndFetchGame, updateTeamWithPlayers } from '../../firebase/firebase';
 import GameModal from '../../components/GameModal';
 import CustomButton from '../../components/CustomButton';
 
@@ -12,6 +12,7 @@ const TeamBulletin = () => {
   const { user } = userAuthState();
   const { playerDetails } = usePlayerDetails(user?.phoneNumber)
   const { fetchNewGame } = createAndFetchGame()
+  const { updateTeamWithPlayersGoing } = updateTeamWithPlayers()
   const [newGame, setNewGame] = useState([])
   const [visible, setVisible] = React.useState(false);
   const navigation = useNavigation()
@@ -25,14 +26,12 @@ const TeamBulletin = () => {
   const showModal = () => setVisible(true);
   const hideModal = () => setVisible(false);
 
-  const onGoingPressed = () => {
 
-  }
 
   const onNotGoingPressed = () => {
 
   }
-  
+
   return (
     <>
       <View style={styles.parent}>
@@ -43,8 +42,11 @@ const TeamBulletin = () => {
                 <Text style={styles.text}>{game.format} - {game.mode}</Text>
                 <Text style={styles.text}>{game.location}</Text>
                 <Text style={styles.text}>{game.date}</Text>
+                <Text style={styles.text}>{game.gameId}</Text>
                 <View style={styles.btn}>
-                  <CustomButton text="Going" type="TERTIORY" onPress={onGoingPressed} />
+                  <CustomButton text="Going" type="TERTIORY" onPress={() => {
+                    updateTeamWithPlayersGoing(currentTeam?.teamId, game.gameId, playerDetails?.fullName)
+                  }} />
                   <CustomButton text="Not Going" type="TERTIORY" onPress={onNotGoingPressed} />
                 </View>
               </Pressable>
@@ -79,7 +81,7 @@ const styles = StyleSheet.create({
   text: {
     color: "black",
     fontSize: 20,
-    marginVertical: 10
+    marginVertical: 2
   },
   addIcon: {
     position: "absolute",
