@@ -14,10 +14,6 @@ const CreateGame = () => {
   const categoryOptions = ["open", "U23", "U21", "U19", "U16", "corporate"]
   const modeOptions = ["Rated", "Friendly"]
   const locationOptions = ["MRIS Turf", "Kicksal", "Jasola Sports Complex", "Addidas base chhatarpur"]
-
-  console.log(currentTeam)
-
-
   const [game, setGame] = useState({
     format: "5v5",
     category: "open",
@@ -25,7 +21,7 @@ const CreateGame = () => {
     location: "",
     date: "",
   })
-
+  
   // function to date and time of practice
   const showDatepicker = () => {
     const onChange = (event, selectedDate) => {

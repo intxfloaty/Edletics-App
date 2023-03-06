@@ -4,9 +4,8 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import { useNavigation } from '@react-navigation/native';
 import { useSelector } from 'react-redux';
 import { userAuthState, usePlayerDetails, createAndFetchGame } from '../../firebase/firebase';
-import { Modal, Portal, List } from 'react-native-paper';
-
-
+import GameModal from '../../components/GameModal';
+import CustomButton from '../../components/CustomButton';
 
 const TeamBulletin = () => {
   const currentTeam = useSelector(state => state.currentTeam)
@@ -14,24 +13,26 @@ const TeamBulletin = () => {
   const { playerDetails } = usePlayerDetails(user?.phoneNumber)
   const { fetchNewGame } = createAndFetchGame()
   const [newGame, setNewGame] = useState([])
-  const navigation = useNavigation()
   const [visible, setVisible] = React.useState(false);
+  const navigation = useNavigation()
 
-
-  const showModal = () => setVisible(true);
-  const hideModal = () => setVisible(false);
-  const containerStyle = { backgroundColor: 'white', padding: 20, height: "100%" };
-
-
-  const [expanded, setExpanded] = React.useState(true);
-
-  const handlePress = () => setExpanded(!expanded);
   fetchNewGame(currentTeam?.teamId, setNewGame)
 
   const onAddPressed = () => {
     navigation.navigate("CreateGame")
   }
 
+  const showModal = () => setVisible(true);
+  const hideModal = () => setVisible(false);
+
+  const onGoingPressed = () => {
+
+  }
+
+  const onNotGoingPressed = () => {
+
+  }
+  
   return (
     <>
       <View style={styles.parent}>
@@ -42,6 +43,10 @@ const TeamBulletin = () => {
                 <Text style={styles.text}>{game.format} - {game.mode}</Text>
                 <Text style={styles.text}>{game.location}</Text>
                 <Text style={styles.text}>{game.date}</Text>
+                <View style={styles.btn}>
+                  <CustomButton text="Going" type="TERTIORY" onPress={onGoingPressed} />
+                  <CustomButton text="Not Going" type="TERTIORY" onPress={onNotGoingPressed} />
+                </View>
               </Pressable>
             )
           })}
@@ -56,34 +61,9 @@ const TeamBulletin = () => {
           />
         }
       </View>
-      <Portal>
-        <Modal visible={visible} onDismiss={hideModal} contentContainerStyle={containerStyle}>
-          <Icon
-            name="arrow-back"
-            size={40}
-            style={styles.arrowBackIcon}
-            color={"black"}
-            onPress={hideModal}
-          />
-          <List.Section title="Accordions">
-            <List.Accordion
-              title="Uncontrolled Accordion"
-              left={props => <List.Icon {...props} icon="folder" />}>
-              <List.Item title="First item" />
-              <List.Item title="Second item" />
-            </List.Accordion>
-
-            <List.Accordion
-              title=""
-              left={props => <List.Icon {...props} icon="folder" />}
-              expanded={expanded}
-              onPress={handlePress}>
-              <List.Item title="First item" />
-              <List.Item title="Second item" />
-            </List.Accordion>
-          </List.Section>
-        </Modal>
-      </Portal>
+      <GameModal
+        visible={visible}
+        hideModal={hideModal} />
     </>
   )
 }
@@ -107,18 +87,18 @@ const styles = StyleSheet.create({
     right: 2,
     padding: 10,
   },
-  arrowBackIcon: {
-    position: "absolute",
-    top: 0,
-    left: 5
-  },
-
   newGameContainer: {
     backgroundColor: 'white',
-    height: 150,
+    minHeight: 150,
     borderRadius: 10,
     marginVertical: 10,
     alignItems: "center",
     justifyContent: "center",
   },
+  btn: {
+    display: "flex",
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between"
+  }
 })

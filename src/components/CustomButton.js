@@ -39,6 +39,10 @@ const styles = StyleSheet.create({
   container_SECONDARY:{
     width:"80%"
   },
+  container_TERTIORY:{
+    width:"40%",
+    marginHorizontal:5
+  },
   container_active: {
     width: "30%",
     marginVertical: 5,
