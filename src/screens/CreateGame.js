@@ -6,6 +6,7 @@ import { DateTimePickerAndroid } from '@react-native-community/datetimepicker';
 import CustomModal from '../components/CustomModal';
 import { useSelector } from 'react-redux';
 import { createAndFetchGame } from "../firebase/firebase"
+import { useNavigation } from '@react-navigation/native';
 
 const CreateGame = () => {
   const { createNewGame } = createAndFetchGame()
@@ -21,6 +22,7 @@ const CreateGame = () => {
     location: "",
     date: "",
   })
+  const navigation = useNavigation()
   
   // function to date and time of practice
   const showDatepicker = () => {
@@ -36,7 +38,6 @@ const CreateGame = () => {
         is24Hour: true,
       });
     };
-
     showMode('date');
   };
 
@@ -52,6 +53,7 @@ const CreateGame = () => {
   const onCreateGamePressed = () => {
     if (isObjectNotEmpty(game)) {
       createNewGame(currentTeam?.teamId, game)
+      navigation.goBack("TeamBulletin")
     } else console.log("no activity")
   }
 

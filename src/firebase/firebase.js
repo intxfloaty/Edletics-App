@@ -193,15 +193,20 @@ export const addAndFetchPlayers = () => {
 export const createAndFetchGame = () => {
 
   // to create a new game and add it as a sub-collection to teams
-  const createNewGame = (teamId, game) => {
+  const createNewGame = (teamId, game, setGameId) => {
     try {
       firestore()
         .collection("teams")
         .doc(teamId)
         .collection("newGame")
-        .add(game)
-        .then(() => {
-          console.log("New game created!")
+        .add({
+          ...game,
+          gameId: "" // Add an empty gameId field
+        })
+        .then((doc) => {
+          console.log("New game created! with ID: ", doc.id);
+          // Update the gameId field with the newly generated document ID
+          doc.update({ gameId: doc.id });
         })
         .catch(error => console.log(error, "error"))
     } catch (error) {
@@ -234,7 +239,7 @@ export const createAndFetchGame = () => {
   return { createNewGame, fetchNewGame }
 }
 
-// to delete a "myTeam" document from "myTeams" subcollection 
+// to delete a "myTeam" document from "myTeams" subcollection
 // export const deleteMyTeam = (playerId, teamId) => {
 //   firestore()
 //     .collection("players")
