@@ -12,9 +12,10 @@ const TeamBulletin = () => {
   const { user } = userAuthState();
   const { playerDetails } = usePlayerDetails(user?.phoneNumber)
   const { fetchNewGame } = createAndFetchGame()
-  const { updateTeamWithPlayersGoing } = updateTeamWithPlayers()
+  const { updateTeamWithPlayersGoing, updateTeamWithPlayersNotGoing } = updateTeamWithPlayers()
   const [newGame, setNewGame] = useState([])
   const [visible, setVisible] = React.useState(false);
+  const [going, setGoing] = useState(false)
   const navigation = useNavigation()
 
   fetchNewGame(currentTeam?.teamId, setNewGame)
@@ -44,10 +45,16 @@ const TeamBulletin = () => {
                 <Text style={styles.text}>{game.date}</Text>
                 <Text style={styles.text}>{game.gameId}</Text>
                 <View style={styles.btn}>
-                  <CustomButton text="Going" type="TERTIORY" onPress={() => {
-                    updateTeamWithPlayersGoing(currentTeam?.teamId, game.gameId, playerDetails?.fullName)
+                  {!going &&
+                    <CustomButton text="Going" type="TERTIORY" onPress={() => {
+                      setGoing(true)
+                      updateTeamWithPlayersGoing(currentTeam?.teamId, game.gameId, playerDetails?.fullName)
+                    }} />
+                  }
+                  <CustomButton text="Not Going" type="TERTIORY" onPress={() => {
+                    setGoing(false)
+                    updateTeamWithPlayersNotGoing(currentTeam?.teamId, game.gameId, playerDetails?.fullName)
                   }} />
-                  <CustomButton text="Not Going" type="TERTIORY" onPress={onNotGoingPressed} />
                 </View>
               </Pressable>
             )

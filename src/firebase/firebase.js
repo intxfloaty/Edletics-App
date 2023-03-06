@@ -260,29 +260,24 @@ export const updateTeamWithPlayers = () => {
     }
   }
 
-  return { updateTeamWithPlayersGoing }
+  const updateTeamWithPlayersNotGoing = (teamId, gameId, player) => {
+    try {
+      firestore()
+        .collection("teams")
+        .doc(teamId)
+        .collection("newGame")
+        .doc(gameId)
+        .update({
+          playersGoing: firestore.FieldValue.arrayRemove(`${player}`)
+        })
+        .then(() => {
+          console.log("Players not going updated successfully!")
+        })
+        .catch(error => console.log(error, "error"))
+    } catch (error) {
+      console.log(error, "error")
+    }
+  }
+
+  return { updateTeamWithPlayersGoing, updateTeamWithPlayersNotGoing }
 }
-
-// to delete a "myTeam" document from "myTeams" subcollection
-// export const deleteMyTeam = (playerId, teamId) => {
-//   firestore()
-//     .collection("players")
-//     .doc(playerId)
-//     .collection("myTeams")
-//     .doc(teamId)
-//     .delete()
-//     .then(() => {
-//       console.log("Team successfully deleted from players collection!")
-
-//       // update "teams" document
-//       firestore()
-//         .collection("teams")
-//         .doc(teamId)
-//         .delete()
-//         .then(() => {
-//           console.log("Team successfully deleted from teams collection!")
-//         })
-//         .catch(error => console.log("Error removing team from teams collection: ", error))
-//     })
-//     .catch(error => console.log("Error removing team from players collection: ", error))
-// }
