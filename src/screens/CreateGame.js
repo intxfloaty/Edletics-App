@@ -15,15 +15,17 @@ const CreateGame = () => {
   const categoryOptions = ["open", "U23", "U21", "U19", "U16", "corporate"]
   const modeOptions = ["Rated", "Friendly"]
   const locationOptions = ["MRIS Turf", "Kicksal", "Jasola Sports Complex", "Addidas base chhatarpur"]
+  const numberOfPlayers = ["1", "3", "5", "6", "7", "8", "9", "10", "11"]
   const [game, setGame] = useState({
     format: "5v5",
     category: "open",
     mode: "Rated",
     location: "",
     date: "",
+    numOfPlayers: 3,
   })
   const navigation = useNavigation()
-  
+
   // function to date and time of practice
   const showDatepicker = () => {
     const onChange = (event, selectedDate) => {
@@ -89,6 +91,15 @@ const CreateGame = () => {
             }}
           />
         </View>
+        <View style={styles.numOfPlayersContainer}>
+          <Text style={styles.label}>Number of Players</Text>
+          <CustomModal
+            options={numberOfPlayers}
+            selectedValue={game.numOfPlayers}
+            handleOptionPress={(optionValue) => {
+              setGame({ ...game, numOfPlayers: optionValue })
+            }} />
+        </View>
         <View style={styles.locationContainer}>
           <Text style={styles.locationText}>Location</Text>
           <CustomModal
@@ -144,6 +155,14 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between"
+  },
+  numOfPlayersContainer: {
+    display: "flex",
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    marginVertical: 20,
+
   },
   locationContainer: {
     justifyContent: "center"

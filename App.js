@@ -17,6 +17,7 @@ import MyDrawer from './src/screens/MyDrawer';
 import TeamScreenTabs from './src/screens/team/TeamScreenTabs';
 import TeamSettings from './src/screens/team/TeamSettings';
 import CreateGame from './src/screens/CreateGame';
+import GameDetails from './src/screens/team/GameDetails';
 import Icon from 'react-native-vector-icons/Ionicons';
 
 
@@ -37,10 +38,10 @@ const YourApp = () => {
 
   return (
     <Provider store={store}>
-      <PaperProvider 
-       settings={{
-        icon: props => <Icon {...props} />,
-      }}>
+      <PaperProvider
+        settings={{
+          icon: props => <Icon {...props} />,
+        }}>
         <NavigationContainer>
           <Stack.Navigator screenOptions={{ headerShown: false }}>
             <Stack.Screen name="PlayerDetails" component={PlayerDetails} />
@@ -49,6 +50,7 @@ const YourApp = () => {
             <Stack.Screen name="MyTeams" component={MyTeams} />
             <Stack.Screen name="TeamScreen" component={TeamScreenTabs} />
             <Stack.Screen name="CreateGame" component={CreateGame} />
+            <Stack.Screen name="GameDetails" component={GameDetails} />
 
             <Stack.Group screenOptions={{ presentation: 'modal' }}>
               <Stack.Screen name="TeamSettings" component={TeamSettings} />

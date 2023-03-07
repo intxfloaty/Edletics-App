@@ -193,7 +193,7 @@ export const addAndFetchPlayers = () => {
 export const createAndFetchGame = () => {
 
   // to create a new game and add it as a sub-collection to teams
-  const createNewGame = (teamId, game, setGameId) => {
+  const createNewGame = (teamId, game) => {
     try {
       firestore()
         .collection("teams")
@@ -215,25 +215,23 @@ export const createAndFetchGame = () => {
   }
 
   // to fetch the games created
-  const fetchNewGame = (teamId, setNewGame) => {
+  const fetchNewGame = (teamId) => {
+    const [newGame, setNewGame] = useState([])
     useEffect(() => {
-      try {
-        firestore()
-          .collection("teams")
-          .doc(teamId)
-          .collection("newGame")
-          .get()
-          .then((querySnapShot) => {
-            const newGame = []
-            querySnapShot.forEach((doc) => {
-              newGame.push(doc.data())
-            })
-            setNewGame(newGame)
+      const subscribe = firestore()
+        .collection("teams")
+        .doc(teamId)
+        .collection("newGame")
+        .onSnapshot((querySnapShot) => {
+          const newGame = []
+          querySnapShot.forEach((doc) => {
+            newGame.push(doc.data())
           })
-      } catch (error) {
-        console.log(error, "error")
-      }
+          setNewGame(newGame)
+        })
+      return () => subscribe()
     }, [])
+    return newGame
   }
 
   return { createNewGame, fetchNewGame }
@@ -279,6 +277,25 @@ export const updateTeamWithPlayers = () => {
     }
   }
 
+  // to fetch players going for a game
+  const fetchPlayersGoing = (teamId, gameId) => {
+    const [playersGoing, setPlayersGoing] = useState([])
+    useEffect(() => {
+      const subscribe = firestore()
+        .collection("teams")
+        .doc(teamId)
+        .collection("newGame")
+        .doc(gameId)
+        .onSnapshot((doc) => {
+          const playersGoing = doc.data().playersGoing
+          setPlayersGoing(playersGoing)
+        })
+      return () => subscribe()
+    }, [])
+    return playersGoing
+  }
+
+
 
   // to delete a game
   const deleteGame = (teamId, gameId) => {
@@ -298,7 +315,5 @@ export const updateTeamWithPlayers = () => {
     }
   }
 
-  return { updateTeamWithPlayersGoing, updateTeamWithPlayersNotGoing, deleteGame }
+  return { updateTeamWithPlayersGoing, updateTeamWithPlayersNotGoing, deleteGame, fetchPlayersGoing }
 }
-
-
