@@ -19,6 +19,10 @@ const TeamScreenTabs = () => {
     navigation.navigate("TeamSettings")
   }
 
+  const onChatIconPressed = () => {
+    navigation.navigate("TeamChat")
+  }
+
   return (
     <>
       <View style={styles.header}>
@@ -28,7 +32,7 @@ const TeamScreenTabs = () => {
           size={25}
           style={styles.chatIcon}
           color={"white"}
-          onPress={onSettingsPressed}
+          onPress={onChatIconPressed}
         />
         <Icon
           name="settings-outline"

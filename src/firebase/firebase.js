@@ -201,12 +201,34 @@ export const createAndFetchGame = () => {
         .collection("newGame")
         .add({
           ...game,
+          teamId: teamId,
           gameId: "" // Add an empty gameId field
         })
         .then((doc) => {
           console.log("New game created! with ID: ", doc.id);
           // Update the gameId field with the newly generated document ID
           doc.update({ gameId: doc.id });
+        })
+        .catch(error => console.log(error, "error"))
+    } catch (error) {
+      console.log(error, "error")
+    }
+  }
+
+  const createNewGameFromGameRequest = (teamId, gameId, game) => {
+    try {
+      firestore()
+        .collection("teams")
+        .doc(teamId)
+        .collection("newGame")
+        .doc(gameId)
+        .set({ ...game }
+          // gameId: "" // Add an empty gameId field
+        )
+        .then((doc) => {
+          console.log("New game created! with ID: ", doc.id);
+          // Update the gameId field with the newly generated document ID
+          // doc.update({ gameId: doc.id });
         })
         .catch(error => console.log(error, "error"))
     } catch (error) {
@@ -234,8 +256,14 @@ export const createAndFetchGame = () => {
     return newGame
   }
 
-  return { createNewGame, fetchNewGame }
+  return { createNewGame, fetchNewGame, createNewGameFromGameRequest }
 }
+
+
+
+
+
+
 
 //  function to update the team with players going for a game
 export const updateTeamWithPlayers = () => {
@@ -313,7 +341,35 @@ export const updateTeamWithPlayers = () => {
     }
   }
 
-  return { updateTeamWithPlayersGoing, updateTeamWithPlayersNotGoing, deleteGame, fetchPlayersGoing }
+  return {
+    updateTeamWithPlayersGoing,
+    updateTeamWithPlayersNotGoing,
+    deleteGame,
+    fetchPlayersGoing,
+  }
+}
+
+// to update the team with opponent
+export const updateTeamWithOpponent = () => {
+  const updateOpponent = (teamId, gameId, opponent) => {
+    try {
+      firestore()
+        .collection("teams")
+        .doc(teamId)
+        .collection("newGame")
+        .doc(gameId)
+        .update({
+          opponent: opponent
+        })
+        .then(() => {
+          console.log("Opponent updated successfully!")
+        })
+        .catch(error => console.log(error, "error"))
+    } catch (error) {
+      console.log(error, "error")
+    }
+  }
+  return { updateOpponent }
 }
 
 
@@ -336,4 +392,53 @@ export const fetchAllTeams = (currentTeamAdminId) => {
   }, []);
 
   return allTeams
+}
+
+// send game request to other team
+export const sendGameRequest = () => {
+  const sendGameRequestToTeam = (teamId, gameRequest, opponentTeamId) => {
+    try {
+      firestore()
+        .collection("teams")
+        .doc(teamId)
+        .collection("gameRequest")
+        .add({
+          ...gameRequest,
+          gameStatus: "pending", // Add a gameStatus field with value "pending"
+          opponentTeamId: opponentTeamId, // Add an empty gameRequestedBy field
+          playersGoing: [], // Add an empty playersGoing field
+          gameRequestId: "" // Add an empty gameRequestId field
+        })
+        .then((doc) => {
+          console.log("Game request sent! with ID: ", doc.id);
+          // Update the gameRequestId field with the newly generated document ID
+          doc.update({ gameRequestId: doc.id });
+        })
+        .catch(error => console.log(error, "error"))
+    } catch (error) {
+      console.log(error, "error")
+    }
+  }
+
+  // to fetch game requests sent to a team
+  const fetchGameRequest = (teamId) => {
+    const [gameRequest, setGameRequest] = useState([])
+    useEffect(() => {
+      const subscribe = firestore()
+        .collection("teams")
+        .doc(teamId)
+        .collection("gameRequest")
+        .onSnapshot((querySnapShot) => {
+          const gameRequest = []
+          querySnapShot.forEach((doc) => {
+            gameRequest.push(doc.data())
+          })
+          setGameRequest(gameRequest)
+        })
+      return () => subscribe()
+    }, [])
+    return gameRequest
+  }
+
+  return { sendGameRequestToTeam, fetchGameRequest }
 }

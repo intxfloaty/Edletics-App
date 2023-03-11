@@ -19,6 +19,7 @@ import TeamSettings from './src/screens/team/TeamSettings';
 import CreateGame from './src/screens/CreateGame';
 import GameDetails from './src/screens/team/GameDetails';
 import Icon from 'react-native-vector-icons/Ionicons';
+import TeamChat from './src/screens/team/TeamChat';
 
 
 const Stack = createNativeStackNavigator();
@@ -51,6 +52,7 @@ const YourApp = () => {
             <Stack.Screen name="TeamScreen" component={TeamScreenTabs} />
             <Stack.Screen name="CreateGame" component={CreateGame} />
             <Stack.Screen name="GameDetails" component={GameDetails} />
+            <Stack.Screen name="TeamChat" component={TeamChat} />
 
             <Stack.Group screenOptions={{ presentation: 'modal' }}>
               <Stack.Screen name="TeamSettings" component={TeamSettings} />

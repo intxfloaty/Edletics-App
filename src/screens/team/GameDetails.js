@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react'
 import Icon from 'react-native-vector-icons/Ionicons';
 import { usePlayerDetails, userAuthState } from '../../firebase/firebase'
 import { useSelector } from 'react-redux';
-import { updateTeamWithPlayers } from '../../firebase/firebase'
+import { updateTeamWithPlayers, updateTeamWithOpponent } from '../../firebase/firebase'
 import CustomButton from '../../components/CustomButton';
 import { useNavigation } from '@react-navigation/native';
 import SelectOpponentModal from '../../components/SelectOpponentModal';
@@ -12,6 +12,7 @@ const GameDetails = () => {
   const { user } = userAuthState();
   const { playerDetails } = usePlayerDetails(user?.phoneNumber)
   const { updateTeamWithPlayersGoing, updateTeamWithPlayersNotGoing, fetchPlayersGoing } = updateTeamWithPlayers()
+  const { updateOpponent } = updateTeamWithOpponent()
   const currentTeam = useSelector(state => state.currentTeam)
   const currentGame = useSelector(state => state.currentGame)
   const playersGoing = fetchPlayersGoing(currentTeam?.teamId, currentGame?.gameId)
@@ -54,7 +55,8 @@ const GameDetails = () => {
           toggleModal={toggleModal}
           handleBackdropPress={handleBackdropPress}
           modalVisible={modalVisible}
-          currentTeam={currentTeam} />
+          currentTeam={currentTeam}
+          currentGame={currentGame} />
 
 
         <View style={styles.btn}>
@@ -65,6 +67,11 @@ const GameDetails = () => {
             updateTeamWithPlayersNotGoing(currentTeam?.teamId, currentGame?.gameId, playerDetails?.fullName)
           }} />
         </View>
+        {playersGoing?.length >= currentGame.numOfPlayers &&
+          <CustomButton text="Axxept Game" type="SECONDARY" onPress={() => {
+            updateOpponent(currentGame?.opponentTeamId, currentGame?.gameId, currentTeam?.teamName)
+          }} />
+        }
       </View>
     </>
   )

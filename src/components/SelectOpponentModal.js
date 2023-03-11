@@ -1,10 +1,11 @@
 import { Pressable, ScrollView, StyleSheet, Text, View, Modal, TouchableHighlight, TouchableWithoutFeedback } from 'react-native'
 import React, { useState } from 'react'
 import Icon from 'react-native-vector-icons/Ionicons';
-import { fetchAllTeams } from '../firebase/firebase';
+import { fetchAllTeams, sendGameRequest } from '../firebase/firebase';
 
-const CustomModal = ({ modalVisible, toggleModal, handleBackdropPress, currentTeam }) => {
+const CustomModal = ({ modalVisible, toggleModal, handleBackdropPress, currentTeam, currentGame }) => {
   const allTeams = fetchAllTeams(currentTeam?.teamAdminId)
+  const { sendGameRequestToTeam } = sendGameRequest()
   console.log(currentTeam, "currentTeam")
 
   return (
@@ -29,7 +30,7 @@ const CustomModal = ({ modalVisible, toggleModal, handleBackdropPress, currentTe
               {allTeams.map((team, index) => {
                 return (
                   <Pressable key={index} style={styles.teamList} onPress={() => {
-                    console.log("Game request sent")
+                    sendGameRequestToTeam(team.teamId, currentGame, currentGame.teamId)
                   }}>
                     <Text style={styles.teamName}>{team.teamName}</Text>
                   </Pressable>
