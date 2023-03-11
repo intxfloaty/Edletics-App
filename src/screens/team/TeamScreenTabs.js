@@ -24,8 +24,15 @@ const TeamScreenTabs = () => {
       <View style={styles.header}>
         <Text style={styles.teamName}>{currentTeam?.teamName}</Text>
         <Icon
+          name="chatbox-outline"
+          size={25}
+          style={styles.chatIcon}
+          color={"white"}
+          onPress={onSettingsPressed}
+        />
+        <Icon
           name="settings-outline"
-          size={20}
+          size={25}
           style={styles.settings}
           color={"white"}
           onPress={onSettingsPressed}
@@ -69,9 +76,15 @@ const styles = StyleSheet.create({
   },
   teamName: {
     color: "white",
-    fontSize: 22,
+    fontSize: 20,
     textAlign: "center",
     textTransform: "uppercase"
+  },
+  chatIcon: {
+    position: "absolute",
+    top: 10,
+    left: 0,
+    padding: 10
   },
   settings: {
     position: "absolute",
