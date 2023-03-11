@@ -6,6 +6,7 @@ import { useSelector } from 'react-redux';
 import { updateTeamWithPlayers } from '../../firebase/firebase'
 import CustomButton from '../../components/CustomButton';
 import { useNavigation } from '@react-navigation/native';
+import SelectOpponentModal from '../../components/SelectOpponentModal';
 
 const GameDetails = () => {
   const { user } = userAuthState();
@@ -16,35 +17,56 @@ const GameDetails = () => {
   const playersGoing = fetchPlayersGoing(currentTeam?.teamId, currentGame?.gameId)
   const navigation = useNavigation()
 
+  const [modalVisible, setModalVisible] = useState(false);
+
+
+  const toggleModal = () => {
+    setModalVisible(!modalVisible);
+  };
+
+
+  const handleBackdropPress = () => {
+    setModalVisible(false);
+  };
+
   return (
-    <View style={styles.parent}>
-      <Icon
-        name="arrow-back"
-        size={40}
-        style={styles.arrowBackIcon}
-        color={"white"}
-        onPress={() => {
-          navigation.goBack("TeamBulletin")
-        }}
-      />
-      {playersGoing.length >= currentGame.numOfPlayers &&
+    <>
+      <View style={styles.parent}>
         <Icon
-          name="game-controller-outline"
-          size={25}
+          name="arrow-back"
+          size={40}
+          style={styles.arrowBackIcon}
           color={"white"}
-          style={styles.gameControllerIcon}
           onPress={() => {
+            navigation.goBack("TeamBulletin")
+          }}
+        />
+        {playersGoing?.length >= currentGame.numOfPlayers &&
+          <Icon
+            name="game-controller-outline"
+            size={25}
+            color={"white"}
+            style={styles.gameControllerIcon}
+            onPress={toggleModal} />
+        }
+
+        <SelectOpponentModal
+          toggleModal={toggleModal}
+          handleBackdropPress={handleBackdropPress}
+          modalVisible={modalVisible}
+          currentTeam={currentTeam} />
+
+
+        <View style={styles.btn}>
+          {!playersGoing?.includes(`${playerDetails?.fullName}`) && <CustomButton text="Going" type="TERTIORY" onPress={() => {
+            updateTeamWithPlayersGoing(currentTeam?.teamId, currentGame?.gameId, playerDetails?.fullName)
+          }} />}
+          <CustomButton text="Not Going" type="TERTIORY" onPress={() => {
+            updateTeamWithPlayersNotGoing(currentTeam?.teamId, currentGame?.gameId, playerDetails?.fullName)
           }} />
-      }
-      <View style={styles.btn}>
-        {!playersGoing.includes(`${playerDetails?.fullName}`) && <CustomButton text="Going" type="TERTIORY" onPress={() => {
-          updateTeamWithPlayersGoing(currentTeam?.teamId, currentGame?.gameId, playerDetails?.fullName)
-        }} />}
-        <CustomButton text="Not Going" type="TERTIORY" onPress={() => {
-          updateTeamWithPlayersNotGoing(currentTeam?.teamId, currentGame?.gameId, playerDetails?.fullName)
-        }} />
+        </View>
       </View>
-    </View>
+    </>
   )
 }
 
@@ -59,12 +81,12 @@ const styles = StyleSheet.create({
   },
   arrowBackIcon: {
     position: "absolute",
-    top: 0,
+    top: 5,
     left: 5
   },
   gameControllerIcon: {
     position: "absolute",
-    top: 0,
+    top: 5,
     right: 5
   },
   btn: {
@@ -77,5 +99,4 @@ const styles = StyleSheet.create({
   listItem: {
     color: "white"
   }
-
 })

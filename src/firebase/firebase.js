@@ -295,8 +295,6 @@ export const updateTeamWithPlayers = () => {
     return playersGoing
   }
 
-
-
   // to delete a game
   const deleteGame = (teamId, gameId) => {
     try {
@@ -316,4 +314,26 @@ export const updateTeamWithPlayers = () => {
   }
 
   return { updateTeamWithPlayersGoing, updateTeamWithPlayersNotGoing, deleteGame, fetchPlayersGoing }
+}
+
+
+// to fetch all the teams
+export const fetchAllTeams = (currentTeamAdminId) => {
+  const [allTeams, setAllTeams] = useState([])
+
+  useEffect(() => {
+    const unsubscribe = firestore()
+      .collection("teams")
+      .where("teamAdminId", "!=", currentTeamAdminId) // exclude teams created by currentTeamAdmin
+      .onSnapshot((querySnapShot) => {
+        const newAllTeams = [];
+        querySnapShot.forEach((doc) => {
+          newAllTeams.push(doc.data());
+        });
+        setAllTeams(newAllTeams);
+      });
+    return () => unsubscribe();
+  }, []);
+
+  return allTeams
 }
