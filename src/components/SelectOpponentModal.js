@@ -5,8 +5,7 @@ import { fetchAllTeams, sendGameRequest } from '../firebase/firebase';
 
 const CustomModal = ({ modalVisible, toggleModal, handleBackdropPress, currentTeam, currentGame }) => {
   const allTeams = fetchAllTeams(currentTeam?.teamAdminId)
-  const { sendGameRequestToTeam } = sendGameRequest()
-  console.log(currentTeam, "currentTeam")
+  const { createGameRequest, sendGameRequestToTeam } = sendGameRequest()
 
   return (
     <View>
@@ -30,7 +29,8 @@ const CustomModal = ({ modalVisible, toggleModal, handleBackdropPress, currentTe
               {allTeams.map((team, index) => {
                 return (
                   <Pressable key={index} style={styles.teamList} onPress={() => {
-                    sendGameRequestToTeam(team.teamId, currentGame, currentGame.teamId)
+                    createGameRequest(currentTeam?.teamId, currentGame, team?.teamId)
+                    sendGameRequestToTeam(team?.teamId, currentGame, currentTeam?.teamId)
                   }}>
                     <Text style={styles.teamName}>{team.teamName}</Text>
                   </Pressable>
