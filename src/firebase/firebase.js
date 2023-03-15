@@ -315,19 +315,19 @@ export const createAndFetchGame = () => {
 
 
 //  function to update the team with players going for a game
-export const updateTeamWithPlayers = () => {
-  const updateTeamWithPlayersGoing = (teamId, gameId, player) => {
+export const updateNewGameSquad = () => {
+  const updateNewGameSquadList = (teamId, squadId, player) => {
     try {
       firestore()
         .collection("teams")
         .doc(teamId)
-        .collection("newGame")
-        .doc(gameId)
+        .collection("newGameSquad")
+        .doc(squadId)
         .update({
-          playersGoing: firestore.FieldValue.arrayUnion(`${player}`)
+          playersList: firestore.FieldValue.arrayUnion(`${player}`)
         })
         .then(() => {
-          console.log("Players going updated successfully!")
+          console.log("Players List updated successfully!")
         })
         .catch(error => console.log(error, "error"))
     } catch (error) {
@@ -335,51 +335,33 @@ export const updateTeamWithPlayers = () => {
     }
   }
 
-  const updateTeamWithPlayersNotGoing = (teamId, gameId, player) => {
-    try {
-      firestore()
-        .collection("teams")
-        .doc(teamId)
-        .collection("newGame")
-        .doc(gameId)
-        .update({
-          playersGoing: firestore.FieldValue.arrayRemove(`${player}`)
-        })
-        .then(() => {
-          console.log("Players not going updated successfully!")
-        })
-        .catch(error => console.log(error, "error"))
-    } catch (error) {
-      console.log(error, "error")
-    }
-  }
 
   // to fetch players going for a game
-  const fetchPlayersGoing = (teamId, gameId) => {
-    const [playersGoing, setPlayersGoing] = useState([])
-    useEffect(() => {
-      const subscribe = firestore()
-        .collection("teams")
-        .doc(teamId)
-        .collection("newGame")
-        .doc(gameId)
-        .onSnapshot((doc) => {
-          const playersGoing = doc.data().playersGoing
-          setPlayersGoing(playersGoing)
-        })
-      return () => subscribe()
-    }, [])
-    return playersGoing
-  }
+  // const fetchPlayersGoing = (teamId, gameId) => {
+  //   const [playersGoing, setPlayersGoing] = useState([])
+  //   useEffect(() => {
+  //     const subscribe = firestore()
+  //       .collection("teams")
+  //       .doc(teamId)
+  //       .collection("newGame")
+  //       .doc(gameId)
+  //       .onSnapshot((doc) => {
+  //         const playersGoing = doc.data().playersGoing
+  //         setPlayersGoing(playersGoing)
+  //       })
+  //     return () => subscribe()
+  //   }, [])
+  //   return playersGoing
+  // }
 
   // to delete a game
-  const deleteGame = (teamId, gameId) => {
+  const deleteNewGameSquad = (teamId, squadId) => {
     try {
       firestore()
         .collection("teams")
         .doc(teamId)
-        .collection("newGame")
-        .doc(gameId)
+        .collection("newGameSquad")
+        .doc(squadId)
         .delete()
         .then(() => {
           console.log("Game deleted successfully!")
@@ -391,10 +373,9 @@ export const updateTeamWithPlayers = () => {
   }
 
   return {
-    updateTeamWithPlayersGoing,
-    updateTeamWithPlayersNotGoing,
-    deleteGame,
-    fetchPlayersGoing,
+    updateNewGameSquadList,
+    deleteNewGameSquad,
+    // fetchPlayersGoing,
   }
 }
 

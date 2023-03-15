@@ -8,8 +8,6 @@ import { useSelector } from 'react-redux';
 import { useNavigation } from '@react-navigation/native';
 import { DateTimePickerAndroid } from '@react-native-community/datetimepicker';
 
-
-
 const CreateSquad = () => {
   const currentTeam = useSelector(state => state.currentTeam)
   const { createSquadForGame } = createSquad()

@@ -11,11 +11,8 @@ import SelectOpponentModal from '../../components/SelectOpponentModal';
 const GameDetails = () => {
   const { user } = userAuthState();
   const { playerDetails } = usePlayerDetails(user?.phoneNumber)
-  const { updateTeamWithPlayersGoing, updateTeamWithPlayersNotGoing, fetchPlayersGoing } = updateTeamWithPlayers()
-  const { updateOpponent } = updateTeamWithOpponent()
   const currentTeam = useSelector(state => state.currentTeam)
   const currentGame = useSelector(state => state.currentGame)
-  const playersGoing = fetchPlayersGoing(currentTeam?.teamId, currentGame?.gameId)
   const navigation = useNavigation()
   const [modalVisible, setModalVisible] = useState(false);
 
@@ -28,55 +25,30 @@ const GameDetails = () => {
   };
 
   return (
-    <>
-      <View style={styles.parent}>
-        <Icon
-          name="arrow-back"
-          size={25}
-          style={styles.arrowBackIcon}
-          color={"white"}
-          onPress={() => {
-            navigation.goBack("TeamBulletin")
-          }} />
+    <View style={styles.parent}>
+      <Icon
+        name="arrow-back"
+        size={25}
+        style={styles.arrowBackIcon}
+        color={"white"}
+        onPress={() => {
+          navigation.goBack("TeamBulletin")
+        }} />
 
-        <Text style={styles.text}>{currentGame?.numOfPlayers}-{currentGame?.format} - {currentGame?.mode}</Text>
-        <Text style={styles.text}>{currentGame?.location}</Text>
-        <Text style={styles.text}>{currentGame?.date}</Text>
-        <Text style={styles.text}>{currentGame?.gameId}</Text>
-        {currentGame?.opponent && <Text style={styles.text}>Opponent: {currentGame?.opponent}</Text>}
-
-        {playersGoing?.includes(`${playerDetails?.fullName}`) && playersGoing?.length >= currentGame.numOfPlayers &&
-          <Icon
-            name="game-controller-outline"
-            size={25}
-            color={"white"}
-            style={styles.gameControllerIcon}
-            onPress={toggleModal} />
-        }
-
-        <SelectOpponentModal
-          toggleModal={toggleModal}
-          handleBackdropPress={handleBackdropPress}
-          modalVisible={modalVisible}
-          currentTeam={currentTeam}
-          currentGame={currentGame} />
+      <SelectOpponentModal
+        toggleModal={toggleModal}
+        handleBackdropPress={handleBackdropPress}
+        modalVisible={modalVisible}
+        currentTeam={currentTeam}
+        currentGame={currentGame} />
 
 
-        <View style={styles.btn}>
-          {!playersGoing?.includes(`${playerDetails?.fullName}`) && <CustomButton text="Going" type="TERTIORY" onPress={() => {
-            updateTeamWithPlayersGoing(currentTeam?.teamId, currentGame?.gameId, playerDetails?.fullName)
-          }} />}
-          <CustomButton text="Not Going" type="TERTIORY" onPress={() => {
-            updateTeamWithPlayersNotGoing(currentTeam?.teamId, currentGame?.gameId, playerDetails?.fullName)
-          }} />
-        </View>
-        {playersGoing?.includes(`${playerDetails?.fullName}`) && playersGoing?.length >= currentGame.numOfPlayers  &&
-          < CustomButton text="Axxept Game" type="SECONDARY" onPress={() => {
-            updateOpponent(currentGame?.opponentTeamId, currentGame?.gameId, currentTeam?.teamName)
-          }} />
-        }
+      <View style={styles.btn}>
+        <CustomButton text="Join Squad" type="TERTIORY" onPress={() => {
+          console.log(first)
+        }} />
       </View>
-    </>
+    </View>
   )
 }
 

@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react'
 import Icon from 'react-native-vector-icons/Ionicons';
 import { useNavigation } from '@react-navigation/native';
 import { useSelector, useDispatch } from 'react-redux';
-import { userAuthState, usePlayerDetails, createSquad, updateTeamWithPlayers } from '../../firebase/firebase';
+import { userAuthState, usePlayerDetails, createSquad, updateNewGameSquad } from '../../firebase/firebase';
 import { selectMyCurrentGame } from '../../redux/actions/actions';
 
 const TeamBulletin = () => {
@@ -13,7 +13,7 @@ const TeamBulletin = () => {
   const { user } = userAuthState();
   const { playerDetails } = usePlayerDetails(user?.phoneNumber)
   const { fetchSquad } = createSquad()
-  const { deleteGame } = updateTeamWithPlayers()
+  const { deleteNewGameSquad } = updateNewGameSquad()
   const newSquad = fetchSquad(currentTeam?.teamId)
   const navigation = useNavigation()
 
@@ -28,10 +28,10 @@ const TeamBulletin = () => {
           {newSquad?.map((squad, index) => {
             return (
               <Pressable key={index} style={styles.newGameContainer} onPress={() => {
-                dispatch(selectMyCurrentGame(game))
-                if (currentGame?.gameId) {
+                // dispatch(selectMyCurrentGame(game))
+                // if (currentGame?.gameId) {
                   navigation.navigate("GameDetails")
-                }
+                // }
               }}>
                 {currentTeam?.teamAdmin === playerDetails?.userId &&
                   <Icon
@@ -40,7 +40,7 @@ const TeamBulletin = () => {
                     color={"black"}
                     style={styles.trashIcon}
                     onPress={() => {
-                      deleteGame(currentTeam?.teamId, game.gameId)
+                      deleteNewGameSquad(currentTeam?.teamId, squad.squadId)
                     }} />
                 }
                 <Text style={styles.text}>{squad.numOfPlayers}-{squad.format} - {squad.mode}</Text>
