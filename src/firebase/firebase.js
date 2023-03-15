@@ -189,6 +189,56 @@ export const addAndFetchPlayers = () => {
 }
 
 
+// to create squad for games and tournaments
+export const createSquad = () => {
+
+  const createSquadForGame = (teamId,  squad) => {
+    try {
+      firestore()
+        .collection("teams")
+        .doc(teamId)
+        .collection("newGameSquad")
+        .add({
+          ...squad,
+          squadId: "",
+        })
+        .then((docRef) => {
+          console.log("Squad added with ID: ", docRef.id);
+          // Update the squadId field with the newly generated document ID
+          docRef.update({ squadId: docRef.id });
+        })
+        .catch((error) => {
+          console.error("Error adding squad: ", error);
+        });
+    } catch (error) { 
+      console.log(error)
+    }
+  }
+
+  // to fetch the squad created
+  const fetchSquad = (teamId) => {
+    const [newSquad, setNewSquad] = useState([])
+    useEffect(() => {
+      const subscribe = firestore()
+        .collection("teams")
+        .doc(teamId)
+        .collection("newGameSquad")
+        .onSnapshot((querySnapShot) => {
+          const newSquad = []
+          querySnapShot.forEach((doc) => {
+            newSquad.push(doc.data())
+          })
+          setNewSquad(newSquad)
+        })
+      return () => subscribe()
+    }, [])
+    return newSquad
+  }
+
+  return { createSquadForGame , fetchSquad }
+}
+
+
 // to create new games and fetch new games created
 export const createAndFetchGame = () => {
 

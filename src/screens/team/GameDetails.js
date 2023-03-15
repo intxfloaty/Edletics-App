@@ -17,14 +17,11 @@ const GameDetails = () => {
   const currentGame = useSelector(state => state.currentGame)
   const playersGoing = fetchPlayersGoing(currentTeam?.teamId, currentGame?.gameId)
   const navigation = useNavigation()
-
   const [modalVisible, setModalVisible] = useState(false);
-
 
   const toggleModal = () => {
     setModalVisible(!modalVisible);
   };
-
 
   const handleBackdropPress = () => {
     setModalVisible(false);
@@ -35,14 +32,20 @@ const GameDetails = () => {
       <View style={styles.parent}>
         <Icon
           name="arrow-back"
-          size={40}
+          size={25}
           style={styles.arrowBackIcon}
           color={"white"}
           onPress={() => {
             navigation.goBack("TeamBulletin")
-          }}
-        />
-        {playersGoing?.length >= currentGame.numOfPlayers &&
+          }} />
+
+        <Text style={styles.text}>{currentGame?.numOfPlayers}-{currentGame?.format} - {currentGame?.mode}</Text>
+        <Text style={styles.text}>{currentGame?.location}</Text>
+        <Text style={styles.text}>{currentGame?.date}</Text>
+        <Text style={styles.text}>{currentGame?.gameId}</Text>
+        {currentGame?.opponent && <Text style={styles.text}>Opponent: {currentGame?.opponent}</Text>}
+
+        {playersGoing?.includes(`${playerDetails?.fullName}`) && playersGoing?.length >= currentGame.numOfPlayers &&
           <Icon
             name="game-controller-outline"
             size={25}
@@ -67,8 +70,8 @@ const GameDetails = () => {
             updateTeamWithPlayersNotGoing(currentTeam?.teamId, currentGame?.gameId, playerDetails?.fullName)
           }} />
         </View>
-        {playersGoing?.length >= currentGame.numOfPlayers &&
-          <CustomButton text="Axxept Game" type="SECONDARY" onPress={() => {
+        {playersGoing?.includes(`${playerDetails?.fullName}`) && playersGoing?.length >= currentGame.numOfPlayers  &&
+          < CustomButton text="Axxept Game" type="SECONDARY" onPress={() => {
             updateOpponent(currentGame?.opponentTeamId, currentGame?.gameId, currentTeam?.teamName)
           }} />
         }
@@ -90,6 +93,11 @@ const styles = StyleSheet.create({
     position: "absolute",
     top: 5,
     left: 5
+  },
+  text: {
+    color: "white",
+    fontSize: 20,
+    marginVertical: 2
   },
   gameControllerIcon: {
     position: "absolute",

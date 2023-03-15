@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react'
 import Icon from 'react-native-vector-icons/Ionicons';
 import { useNavigation } from '@react-navigation/native';
 import { useSelector, useDispatch } from 'react-redux';
-import { userAuthState, usePlayerDetails, createAndFetchGame, updateTeamWithPlayers } from '../../firebase/firebase';
+import { userAuthState, usePlayerDetails, createSquad, updateTeamWithPlayers } from '../../firebase/firebase';
 import { selectMyCurrentGame } from '../../redux/actions/actions';
 
 const TeamBulletin = () => {
@@ -12,20 +12,20 @@ const TeamBulletin = () => {
   const currentGame = useSelector(state => state.currentGame)
   const { user } = userAuthState();
   const { playerDetails } = usePlayerDetails(user?.phoneNumber)
-  const { fetchNewGame } = createAndFetchGame()
+  const { fetchSquad } = createSquad()
   const { deleteGame } = updateTeamWithPlayers()
-  const newGame = fetchNewGame(currentTeam?.teamId)
+  const newSquad = fetchSquad(currentTeam?.teamId)
   const navigation = useNavigation()
 
   const onAddPressed = () => {
-    navigation.navigate("CreateGame")
+    navigation.navigate("CreateSquad")
   }
 
   return (
     <>
       <View style={styles.parent}>
         <ScrollView showsVerticalScrollIndicator={false}>
-          {newGame.map((game, index) => {
+          {newSquad?.map((squad, index) => {
             return (
               <Pressable key={index} style={styles.newGameContainer} onPress={() => {
                 dispatch(selectMyCurrentGame(game))
@@ -43,10 +43,10 @@ const TeamBulletin = () => {
                       deleteGame(currentTeam?.teamId, game.gameId)
                     }} />
                 }
-                <Text style={styles.text}>{game.numOfPlayers}-{game.format} - {game.mode}</Text>
-                <Text style={styles.text}>{game.location}</Text>
-                <Text style={styles.text}>{game.date}</Text>
-                <Text style={styles.text}>{game.gameId}</Text>
+                <Text style={styles.text}>{squad.numOfPlayers}-{squad.format} - {squad.mode}</Text>
+                <Text style={styles.text}>{squad.location}</Text>
+                <Text style={styles.text}>{squad.date}</Text>
+                <Text style={styles.text}>{squad.squadId}</Text>
               </Pressable>
             )
           })}

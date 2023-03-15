@@ -16,6 +16,7 @@ import TournamentScreen from './src/screens/TournamentScreen';
 import MyDrawer from './src/screens/MyDrawer';
 import TeamScreenTabs from './src/screens/team/TeamScreenTabs';
 import TeamSettings from './src/screens/team/TeamSettings';
+import CreateSquad from './src/screens/team/CreateSquad';
 import CreateGame from './src/screens/CreateGame';
 import GameDetails from './src/screens/team/GameDetails';
 import Icon from 'react-native-vector-icons/Ionicons';
@@ -50,6 +51,7 @@ const YourApp = () => {
             <Stack.Screen name='Home' component={HomeScreen} />
             <Stack.Screen name="MyTeams" component={MyTeams} />
             <Stack.Screen name="TeamScreen" component={TeamScreenTabs} />
+            <Stack.Screen name = "CreateSquad" component = {CreateSquad} />
             <Stack.Screen name="CreateGame" component={CreateGame} />
             <Stack.Screen name="GameDetails" component={GameDetails} />
             <Stack.Screen name="TeamChat" component={TeamChat} />
