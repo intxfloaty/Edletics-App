@@ -3,14 +3,16 @@ import React, { useEffect, useState } from 'react'
 import Icon from 'react-native-vector-icons/Ionicons';
 import { usePlayerDetails, userAuthState } from '../../firebase/firebase'
 import { useSelector } from 'react-redux';
-import { updateTeamWithPlayers, updateTeamWithOpponent } from '../../firebase/firebase'
+import { updateNewGameSquad } from '../../firebase/firebase'
 import CustomButton from '../../components/CustomButton';
 import { useNavigation } from '@react-navigation/native';
 import SelectOpponentModal from '../../components/SelectOpponentModal';
 
-const GameDetails = () => {
+const GameDetails = ({ route }) => {
+  const { squadId } = route.params
   const { user } = userAuthState();
   const { playerDetails } = usePlayerDetails(user?.phoneNumber)
+  const { updateNewGameSquadList } = updateNewGameSquad()
   const currentTeam = useSelector(state => state.currentTeam)
   const currentGame = useSelector(state => state.currentGame)
   const navigation = useNavigation()
@@ -45,7 +47,7 @@ const GameDetails = () => {
 
       <View style={styles.btn}>
         <CustomButton text="Join Squad" type="TERTIORY" onPress={() => {
-          console.log(first)
+          updateNewGameSquadList(currentTeam?.teamId, squadId, playerDetails?.fullName)
         }} />
       </View>
     </View>

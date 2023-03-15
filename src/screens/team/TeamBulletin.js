@@ -30,7 +30,7 @@ const TeamBulletin = () => {
               <Pressable key={index} style={styles.newGameContainer} onPress={() => {
                 // dispatch(selectMyCurrentGame(game))
                 // if (currentGame?.gameId) {
-                  navigation.navigate("GameDetails")
+                navigation.navigate("GameDetails", { squadId: squad.squadId })
                 // }
               }}>
                 {currentTeam?.teamAdmin === playerDetails?.userId &&

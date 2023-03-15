@@ -192,7 +192,7 @@ export const addAndFetchPlayers = () => {
 // to create squad for games and tournaments
 export const createSquad = () => {
 
-  const createSquadForGame = (teamId,  squad) => {
+  const createSquadForGame = (teamId, squad) => {
     try {
       firestore()
         .collection("teams")
@@ -210,7 +210,7 @@ export const createSquad = () => {
         .catch((error) => {
           console.error("Error adding squad: ", error);
         });
-    } catch (error) { 
+    } catch (error) {
       console.log(error)
     }
   }
@@ -235,7 +235,7 @@ export const createSquad = () => {
     return newSquad
   }
 
-  return { createSquadForGame , fetchSquad }
+  return { createSquadForGame, fetchSquad }
 }
 
 
