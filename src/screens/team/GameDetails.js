@@ -9,7 +9,7 @@ import { useNavigation } from '@react-navigation/native';
 import SelectOpponentModal from '../../components/SelectOpponentModal';
 
 const GameDetails = ({ route }) => {
-  const { squadId } = route.params
+  const { squad } = route.params
   const { user } = userAuthState();
   const { playerDetails } = usePlayerDetails(user?.phoneNumber)
   const { updateNewGameSquadList } = updateNewGameSquad()
@@ -37,6 +37,19 @@ const GameDetails = ({ route }) => {
           navigation.goBack("TeamBulletin")
         }} />
 
+      <Text style={styles.text}>{squad?.numOfPlayers}-{squad?.format} - {squad?.mode}</Text>
+      <Text style={styles.text}>{squad?.location}</Text>
+      <Text style={styles.text}>{squad?.date}</Text>
+      <Text style={styles.text}>{squad?.squadId}</Text>
+
+      {squad?.playersList?.map((player, index) => {
+        console.log(player)
+        return (
+          <Text key={index} style={styles.listItem}>{player}</Text>
+        )
+      })}
+
+
       <SelectOpponentModal
         toggleModal={toggleModal}
         handleBackdropPress={handleBackdropPress}
@@ -46,9 +59,10 @@ const GameDetails = ({ route }) => {
 
 
       <View style={styles.btn}>
-        <CustomButton text="Join Squad" type="TERTIORY" onPress={() => {
-          updateNewGameSquadList(currentTeam?.teamId, squadId, playerDetails?.fullName)
-        }} />
+        {!(squad?.playersList?.includes(`${playerDetails?.fullName}`)) &&
+          <CustomButton text="Join Squad" type="TERTIORY" onPress={() => {
+            updateNewGameSquadList(currentTeam?.teamId, squad?.squadId, playerDetails?.fullName)
+          }} />}
       </View>
     </View>
   )
@@ -73,11 +87,6 @@ const styles = StyleSheet.create({
     fontSize: 20,
     marginVertical: 2
   },
-  gameControllerIcon: {
-    position: "absolute",
-    top: 5,
-    right: 5
-  },
   btn: {
     display: "flex",
     flexDirection: "row",
@@ -86,6 +95,8 @@ const styles = StyleSheet.create({
     marginVertical: 20
   },
   listItem: {
-    color: "white"
+    marginVertical: 20,
+    color: "white",
+    fontSize: 20,
   }
 })

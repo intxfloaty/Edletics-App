@@ -28,10 +28,7 @@ const TeamBulletin = () => {
           {newSquad?.map((squad, index) => {
             return (
               <Pressable key={index} style={styles.newGameContainer} onPress={() => {
-                // dispatch(selectMyCurrentGame(game))
-                // if (currentGame?.gameId) {
-                navigation.navigate("GameDetails", { squadId: squad.squadId })
-                // }
+                navigation.navigate("GameDetails", { squad: squad })
               }}>
                 {currentTeam?.teamAdmin === playerDetails?.userId &&
                   <Icon
