@@ -200,6 +200,7 @@ export const createSquad = () => {
         .collection("newGameSquad")
         .add({
           ...squad,
+          status: "inProgress",
           squadId: "",
         })
         .then((docRef) => {
@@ -225,10 +226,12 @@ export const createSquad = () => {
         .collection("newGameSquad")
         .onSnapshot((querySnapShot) => {
           const newSquad = []
-          querySnapShot.forEach((doc) => {
+          querySnapShot?.forEach((doc) => {
             newSquad.push(doc.data())
           })
           setNewSquad(newSquad)
+        }, (error) => {
+          console.log(error, "error5")
         })
       return () => subscribe()
     }, [])
@@ -309,12 +312,7 @@ export const createAndFetchGame = () => {
 }
 
 
-
-
-
-
-
-//  function to update the team with players going for a game
+//  function to update the squad with players 
 export const updateNewGameSquad = () => {
   const updateNewGameSquadList = (teamId, squadId, player) => {
     try {
@@ -328,6 +326,32 @@ export const updateNewGameSquad = () => {
         })
         .then(() => {
           console.log("Players List updated successfully!")
+
+          // Fetch the updated document
+          firestore()
+            .collection("teams")
+            .doc(teamId)
+            .collection("newGameSquad")
+            .doc(squadId)
+            .get()
+            .then((doc) => {
+              console.log("Updated doc:", doc.data())
+              if (doc.data().playersList.length == doc.data().squadSize) {
+                firestore()
+                  .collection("teams")
+                  .doc(teamId)
+                  .collection("newGameSquad")
+                  .doc(squadId)
+                  .update({
+                    status: "ready"
+                  })
+                  .then(() => {
+                    console.log("Squad status updated successfully!")
+                  })
+                  .catch((error) => console.log(error, "error"))
+              }
+            })
+            .catch((error) => console.log(error, "error"))
         })
         .catch(error => console.log(error, "error"))
     } catch (error) {
@@ -335,24 +359,6 @@ export const updateNewGameSquad = () => {
     }
   }
 
-
-  // to fetch players going for a game
-  // const fetchPlayersGoing = (teamId, gameId) => {
-  //   const [playersGoing, setPlayersGoing] = useState([])
-  //   useEffect(() => {
-  //     const subscribe = firestore()
-  //       .collection("teams")
-  //       .doc(teamId)
-  //       .collection("newGame")
-  //       .doc(gameId)
-  //       .onSnapshot((doc) => {
-  //         const playersGoing = doc.data().playersGoing
-  //         setPlayersGoing(playersGoing)
-  //       })
-  //     return () => subscribe()
-  //   }, [])
-  //   return playersGoing
-  // }
 
   // to delete a game
   const deleteNewGameSquad = (teamId, squadId) => {
@@ -380,70 +386,30 @@ export const updateNewGameSquad = () => {
 }
 
 // to update the team with opponent
-export const updateTeamWithOpponent = () => {
-  const updateOpponent = (teamId, gameId, opponent) => {
+export const addAndFetchOpponent = () => {
+  const addOpponent = (teamId, team, opponentId, opponent) => {
     try {
       firestore()
         .collection("teams")
         .doc(teamId)
-        .collection("newGame")
-        .doc(gameId)
-        .update({
-          opponent: opponent
-        })
+        .collection("opponent")
+        .doc(opponentId)
+        .set(opponent)
         .then(() => {
-          console.log("Opponent updated successfully!")
-        })
-        .catch(error => console.log(error, "error"))
-    } catch (error) {
-      console.log(error, "error")
-    }
-  }
-  return { updateOpponent }
-}
+          console.log("Opponent added successfully!")
 
-
-// to fetch all the teams
-export const fetchAllTeams = (currentTeamAdminId) => {
-  const [allTeams, setAllTeams] = useState([])
-
-  useEffect(() => {
-    const unsubscribe = firestore()
-      .collection("teams")
-      .where("teamAdminId", "!=", currentTeamAdminId) // exclude teams created by currentTeamAdmin
-      .onSnapshot((querySnapShot) => {
-        const newAllTeams = [];
-        querySnapShot.forEach((doc) => {
-          newAllTeams.push(doc.data());
-        });
-        setAllTeams(newAllTeams);
-      });
-    return () => unsubscribe();
-  }, []);
-
-  return allTeams
-}
-
-// send game request to other team
-export const sendGameRequest = () => {
-
-  // create a game request
-  const createGameRequest = (myTeamId, gameRequest, opponentTeamId) => {
-    try {
-      firestore()
-        .collection("teams")
-        .doc(myTeamId)
-        .collection("gameRequest")
-        .add({
-          ...gameRequest,
-          gameStatus: "pending", // Add a gameStatus field with value "pending"
-          gameRequestedTo: opponentTeamId, // Add an empty gameRequestedTo field
-          gameRequestId: "" // Add an empty gameRequestId field
-        })
-        .then((doc) => {
-          console.log("Game request sent! with ID: ", doc.id);
-          // Update the gameRequestId field with the newly generated document ID
-          doc.update({ gameRequestId: doc.id });
+          // add myTeam to opponent
+          firestore()
+            .collection("teams")
+            .doc(opponentId)
+            .collection("opponent")
+            .doc(teamId)
+            .set(team)
+            .then(() => {
+              console.log("Opponent added successfully!")
+            }
+            )
+            .catch(error => console.log(error, "error"))
         })
         .catch(error => console.log(error, "error"))
     } catch (error) {
@@ -451,49 +417,104 @@ export const sendGameRequest = () => {
     }
   }
 
-  const sendGameRequestToTeam = (opponentTeamId, gameRequest, myTeamId) => {
-    try {
-      firestore()
-        .collection("teams")
-        .doc(opponentTeamId)
-        .collection("gameRequest")
-        .add({
-          ...gameRequest,
-          gameStatus: "pending", // Add a gameStatus field with value "pending"
-          gameRequestedBy: myTeamId, // Add an empty gameRequestedBy field
-          playersGoing: [], // Add an empty playersGoing field
-          gameRequestId: "" // Add an empty gameRequestId field
-        })
-        .then((doc) => {
-          console.log("Game request sent! with ID: ", doc.id);
-          // Update the gameRequestId field with the newly generated document ID
-          doc.update({ gameRequestId: doc.id });
-        })
-        .catch(error => console.log(error, "error"))
-    } catch (error) {
-      console.log(error, "error")
-    }
-  }
-
-  // to fetch game requests sent to a team
-  const fetchGameRequest = (teamId) => {
-    const [gameRequest, setGameRequest] = useState([])
+  const fetchOpponentTeams = () => {
+    const [teams, setTeams] = useState([])
     useEffect(() => {
       const subscribe = firestore()
         .collection("teams")
-        .doc(teamId)
-        .collection("gameRequest")
         .onSnapshot((querySnapShot) => {
-          const gameRequest = []
+          const teams = []
           querySnapShot.forEach((doc) => {
-            gameRequest.push(doc.data())
+            if (doc.data().teamAdmin !== auth().currentUser.uid) {
+              teams.push(doc.data())
+            }
           })
-          setGameRequest(gameRequest)
+          setTeams(teams)
         })
       return () => subscribe()
     }, [])
-    return gameRequest
+    return teams
   }
 
-  return { createGameRequest, sendGameRequestToTeam, fetchGameRequest }
+  return { addOpponent, fetchOpponentTeams }
 }
+
+
+
+
+
+
+
+// // send game request to other team
+// export const sendGameRequest = () => {
+
+//   // create a game request
+//   const createGameRequest = (myTeamId, gameRequest, opponentTeamId) => {
+//     try {
+//       firestore()
+//         .collection("teams")
+//         .doc(myTeamId)
+//         .collection("gameRequest")
+//         .add({
+//           ...gameRequest,
+//           gameStatus: "pending", // Add a gameStatus field with value "pending"
+//           gameRequestedTo: opponentTeamId, // Add an empty gameRequestedTo field
+//           gameRequestId: "" // Add an empty gameRequestId field
+//         })
+//         .then((doc) => {
+//           console.log("Game request sent! with ID: ", doc.id);
+//           // Update the gameRequestId field with the newly generated document ID
+//           doc.update({ gameRequestId: doc.id });
+//         })
+//         .catch(error => console.log(error, "error"))
+//     } catch (error) {
+//       console.log(error, "error")
+//     }
+//   }
+
+//   const sendGameRequestToTeam = (opponentTeamId, gameRequest, myTeamId) => {
+//     try {
+//       firestore()
+//         .collection("teams")
+//         .doc(opponentTeamId)
+//         .collection("gameRequest")
+//         .add({
+//           ...gameRequest,
+//           gameStatus: "pending", // Add a gameStatus field with value "pending"
+//           gameRequestedBy: myTeamId, // Add an empty gameRequestedBy field
+//           playersGoing: [], // Add an empty playersGoing field
+//           gameRequestId: "" // Add an empty gameRequestId field
+//         })
+//         .then((doc) => {
+//           console.log("Game request sent! with ID: ", doc.id);
+//           // Update the gameRequestId field with the newly generated document ID
+//           doc.update({ gameRequestId: doc.id });
+//         })
+//         .catch(error => console.log(error, "error"))
+//     } catch (error) {
+//       console.log(error, "error")
+//     }
+//   }
+
+//   // to fetch game requests sent to a team
+//   const fetchGameRequest = (teamId) => {
+//     const [gameRequest, setGameRequest] = useState([])
+//     useEffect(() => {
+//       const subscribe = firestore()
+//         .collection("teams")
+//         .doc(teamId)
+//         .collection("gameRequest")
+//         .onSnapshot((querySnapShot) => {
+//           const gameRequest = []
+//           querySnapShot.forEach((doc) => {
+//             gameRequest.push(doc.data())
+//           })
+//           setGameRequest(gameRequest)
+//         })
+//       return () => subscribe()
+//     }, [])
+//     return gameRequest
+//   }
+
+//   return { createGameRequest, sendGameRequestToTeam, fetchGameRequest }
+// }

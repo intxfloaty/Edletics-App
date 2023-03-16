@@ -1,34 +1,25 @@
 import { StyleSheet, Text, View, ScrollView, Pressable } from 'react-native'
 import React from 'react'
-import { createAndFetchGame, sendGameRequest } from '../../firebase/firebase'
+import { addAndFetchOpponent } from '../../firebase/firebase'
 import { useSelector } from 'react-redux'
 import CustomButton from '../../components/CustomButton'
 import { useNavigation } from '@react-navigation/native';
 
 const TeamChat = () => {
   const currentTeam = useSelector(state => state.currentTeam)
-  const { fetchGameRequest } = sendGameRequest()
-  const { createNewGameFromGameRequest } = createAndFetchGame()
-  const gameRequest = fetchGameRequest(currentTeam?.teamId)
+  const { addOpponent, fetchOpponentTeams } = addAndFetchOpponent()
+  const teams = fetchOpponentTeams()
   const navigation = useNavigation()
 
   return (
     <View style={styles.parent}>
       <ScrollView showsVerticalScrollIndicator={false}>
-        {gameRequest.map((game, index) => {
+        {teams?.map((team, index) => {
           return (
-            <Pressable key={index} style={styles.newGameContainer}>
-              <Text style={styles.text}>{game.numOfPlayers}-{game.format} - {game.mode}</Text>
-              <Text style={styles.text}>{game.location}</Text>
-              <Text style={styles.text}>{game.date}</Text>
-              <Text style={styles.text}>{game.gameId}</Text>
-              <View style={styles.buttonContainer}>
-                <CustomButton text="Add Players" type="TERTIORY" onPress={() => {
-                  createNewGameFromGameRequest(currentTeam?.teamId, game.gameId, game)
-                  navigation.goBack("TeamScreen")
-                }} />
-                <CustomButton text="Decline" type="TERTIORY" />
-              </View>
+            <Pressable key={index} style={styles.newGameContainer} onPress={() => {
+              addOpponent(currentTeam?.teamId, currentTeam, team.teamId, team)
+            }}>
+              <Text style={styles.text}>{team.teamName}</Text>
             </Pressable>
           )
         })}

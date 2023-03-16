@@ -6,7 +6,8 @@ import { useSelector } from 'react-redux';
 import { updateNewGameSquad } from '../../firebase/firebase'
 import CustomButton from '../../components/CustomButton';
 import { useNavigation } from '@react-navigation/native';
-import SelectOpponentModal from '../../components/SelectOpponentModal';
+import SelectOpponentModal from '../../components/CreateGameModal';
+import CreateGameModal from '../../components/CreateGameModal';
 
 const GameDetails = ({ route }) => {
   const { squad } = route.params
@@ -14,9 +15,10 @@ const GameDetails = ({ route }) => {
   const { playerDetails } = usePlayerDetails(user?.phoneNumber)
   const { updateNewGameSquadList } = updateNewGameSquad()
   const currentTeam = useSelector(state => state.currentTeam)
-  const currentGame = useSelector(state => state.currentGame)
+  // const currentGame = useSelector(state => state.currentGame)
   const navigation = useNavigation()
   const [modalVisible, setModalVisible] = useState(false);
+  const [joinSquad, setJoinSquad] = useState(false)
 
   const toggleModal = () => {
     setModalVisible(!modalVisible);
@@ -37,32 +39,47 @@ const GameDetails = ({ route }) => {
           navigation.goBack("TeamBulletin")
         }} />
 
-      <Text style={styles.text}>{squad?.numOfPlayers}-{squad?.format} - {squad?.mode}</Text>
-      <Text style={styles.text}>{squad?.location}</Text>
-      <Text style={styles.text}>{squad?.date}</Text>
-      <Text style={styles.text}>{squad?.squadId}</Text>
+      <Text style={styles.text}>Mode : {squad?.mode}</Text>
+      <Text style={styles.text}>Format : {squad?.format}</Text>
+      <Text style={styles.text}>Players: {squad?.numOfPlayers}</Text>
+      <Text style={styles.text}> Location: {squad?.location}</Text>
+      <Text style={styles.text}>Date : {squad?.date}</Text>
 
       {squad?.playersList?.map((player, index) => {
         console.log(player)
         return (
-          <Text key={index} style={styles.listItem}>{player}</Text>
+          <Text key={index} style={styles.listItem}> Player: {player}</Text>
         )
       })}
 
 
-      <SelectOpponentModal
+      <CreateGameModal
         toggleModal={toggleModal}
         handleBackdropPress={handleBackdropPress}
         modalVisible={modalVisible}
         currentTeam={currentTeam}
-        currentGame={currentGame} />
+        squad={squad} />
 
 
       <View style={styles.btn}>
-        {!(squad?.playersList?.includes(`${playerDetails?.fullName}`)) &&
+        {!(squad?.playersList?.includes(`${playerDetails?.fullName}`)) //so that players can join only once
+          && !joinSquad &&
           <CustomButton text="Join Squad" type="TERTIORY" onPress={() => {
             updateNewGameSquadList(currentTeam?.teamId, squad?.squadId, playerDetails?.fullName)
+            setJoinSquad(true)
           }} />}
+      </View>
+
+
+      <View style={styles.btn}>
+        {(currentTeam?.teamAdminName === playerDetails?.fullName) // so that only teamAdmins can create game
+          && (squad?.playersList?.length == squad?.squadSize) && // so that game can be created only when squad is full
+          <CustomButton
+            text="Create Game"
+            type="SECONDARY"
+            onPress={() => {
+              setModalVisible(true)
+            }} />}
       </View>
     </View>
   )

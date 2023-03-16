@@ -20,7 +20,7 @@ const CreateSquad = () => {
     mode: "Rated",
     location: "",
     date: "",
-    numOfPlayers: 3,
+    squadSize: 1,
   })
   const navigation = useNavigation()
 
@@ -84,9 +84,9 @@ const CreateSquad = () => {
           <Text style={styles.label}>Number of Players</Text>
           <CustomModal
             options={numberOfPlayers}
-            selectedValue={squad.numOfPlayers}
+            selectedValue={squad.squadSize}
             handleOptionPress={(optionValue) => {
-              setSquad({ ...squad, numOfPlayers: optionValue })
+              setSquad({ ...squad, squadSize: optionValue })
             }} />
         </View>
         <View style={styles.locationContainer}>

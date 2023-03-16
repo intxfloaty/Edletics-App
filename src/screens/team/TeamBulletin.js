@@ -7,9 +7,9 @@ import { userAuthState, usePlayerDetails, createSquad, updateNewGameSquad } from
 import { selectMyCurrentGame } from '../../redux/actions/actions';
 
 const TeamBulletin = () => {
-  const dispatch = useDispatch()
+  // const dispatch = useDispatch()
   const currentTeam = useSelector(state => state.currentTeam)
-  const currentGame = useSelector(state => state.currentGame)
+  // const currentGame = useSelector(state => state.currentGame)
   const { user } = userAuthState();
   const { playerDetails } = usePlayerDetails(user?.phoneNumber)
   const { fetchSquad } = createSquad()
@@ -40,7 +40,7 @@ const TeamBulletin = () => {
                       deleteNewGameSquad(currentTeam?.teamId, squad.squadId)
                     }} />
                 }
-                <Text style={styles.text}>{squad.numOfPlayers}-{squad.format} - {squad.mode}</Text>
+                <Text style={styles.text}>{squad.squadSize}-{squad.format} - {squad.mode}</Text>
                 <Text style={styles.text}>{squad.location}</Text>
                 <Text style={styles.text}>{squad.date}</Text>
                 <Text style={styles.text}>{squad.squadId}</Text>

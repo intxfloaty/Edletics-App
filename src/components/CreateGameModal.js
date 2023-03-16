@@ -1,10 +1,11 @@
 import { Pressable, ScrollView, StyleSheet, Text, View, Modal, TouchableHighlight, TouchableWithoutFeedback } from 'react-native'
 import React, { useState } from 'react'
 import Icon from 'react-native-vector-icons/Ionicons';
-import { fetchAllTeams, sendGameRequest } from '../firebase/firebase';
+import { fetchSquadReadyTeams, sendGameRequest } from '../firebase/firebase';
 
-const CustomModal = ({ modalVisible, toggleModal, handleBackdropPress, currentTeam, currentGame }) => {
-  const allTeams = fetchAllTeams(currentTeam?.teamAdminId)
+const CreateGameModal = ({ modalVisible, toggleModal, handleBackdropPress, currentTeam, squad }) => {
+  // const allTeams = fetchSquadReadyTeams()
+  // console.log(allTeams, "allTeams")
   const { createGameRequest, sendGameRequestToTeam } = sendGameRequest()
 
   return (
@@ -20,23 +21,36 @@ const CustomModal = ({ modalVisible, toggleModal, handleBackdropPress, currentTe
             <View style={styles.modalContainer}>
               <Icon
                 name="arrow-back"
-                size={40}
+                size={25}
                 style={styles.arrowBackIcon}
-                color={"black"}
+                color={"white"}
                 onPress={() => {
                   toggleModal()
                 }} />
-              {allTeams.map((team, index) => {
+
+              <View style={styles.gameDetails}>
+                <Text style={styles.text}>Mode : {squad?.mode}</Text>
+                <Text style={styles.text}>Format : {squad?.format}</Text>
+                <Text style={styles.text}>Players: {squad?.numOfPlayers}</Text>
+                <Text style={styles.text}> Location: {squad?.location}</Text>
+                <Text style={styles.text}>Date : {squad?.date}</Text>
+              </View>
+
+                <Text style={styles.opponent}>Select Opponent</Text>
+
+
+              {/* {allTeams?.map((team, index) => {
                 return (
                   <Pressable key={index} style={styles.teamList} onPress={() => {
-                    createGameRequest(currentTeam?.teamId, currentGame, team?.teamId)
-                    sendGameRequestToTeam(team?.teamId, currentGame, currentTeam?.teamId)
+                    console.log(team.teamName, "team")
+                    // createGameRequest(currentTeam?.teamId, currentGame, team?.teamId)
+                    // sendGameRequestToTeam(team?.teamId, currentGame, currentTeam?.teamId)
                   }}>
-                    <Text style={styles.teamName}>{team.teamName}</Text>
+                    <Text style={styles.teamName}> Team: {team.teamName}</Text>
                   </Pressable>
                 )
               })
-              }
+              } */}
             </View>
           </View>
         </TouchableWithoutFeedback>
@@ -45,7 +59,7 @@ const CustomModal = ({ modalVisible, toggleModal, handleBackdropPress, currentTe
   )
 }
 
-export default CustomModal
+export default CreateGameModal
 
 const styles = StyleSheet.create({
   modalBackdrop: {
@@ -58,7 +72,7 @@ const styles = StyleSheet.create({
     position: "absolute",
     width: "100%",
     height: "100%",
-    backgroundColor: '#ffffff',
+    backgroundColor: '#101112',
     borderRadius: 5,
     padding: 10,
   },
@@ -67,9 +81,24 @@ const styles = StyleSheet.create({
     top: 5,
     left: 5
   },
+  gameDetails: {
+    marginVertical: 10,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  text: {
+    color: "white",
+    fontSize: 20,
+    marginVertical: 2
+  },
+  opponent: {
+    color: "blue",
+    fontSize: 20,
+    marginVertical: 20,
+    textAlign: "center"
+  },
+
   teamList: {
-    marginTop: 50,
-    backgroundColor: 'white',
     borderRadius: 10,
     marginVertical: 10,
     alignItems: "center",
@@ -77,6 +106,6 @@ const styles = StyleSheet.create({
   },
   teamName: {
     fontSize: 20,
-    color: "black",
+    color: "white",
   }
 })
