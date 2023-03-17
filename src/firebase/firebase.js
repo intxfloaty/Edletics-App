@@ -410,79 +410,104 @@ export const addAndFetchOpponent = () => {
 
 
 
+// send game request to other team
+export const sendAndFetchGameRequest = () => {
 
+  const sendGameRequestToOpponent = (teamId, opponentId, game) => {
+    try {
+      firestore()
+        .collection("teams")
+        .doc(opponentId)
+        .collection("gameRequest")
+        .doc(teamId)
+        .set({
+          ...game,
+          gameRequestId: teamId,
+          gameRequestStatus: "pending"
+        })
+        .then(() => {
+          console.log("Game Request sent successfully!")
+        })
+        .catch(error => console.log(error, "error"))
+    } catch (error) {
+      console.log(error, "error")
+    }
+  }
 
+  // fetch game request sent to me
+  const fetchGameRequest = (teamId) => {
+    const [gameRequest, setGameRequest] = useState([])
+    useEffect(() => {
+      const subscribe = firestore()
+        .collection("teams")
+        .doc(teamId)
+        .collection("gameRequest")
+        .onSnapshot((querySnapShot) => {
+          const gameRequest = []
+          querySnapShot.forEach((doc) => {
+            gameRequest.push(doc.data())
+          })
+          setGameRequest(gameRequest)
+        })
+      return () => subscribe()
+    }, [])
+    return gameRequest
+  }
+  return { sendGameRequestToOpponent, fetchGameRequest }
+}
 
-// // send game request to other team
-// export const sendGameRequest = () => {
+// to update the game request status
+export const updateGameRequestStatus = () => {
 
-//   // create a game request
-//   const createGameRequest = (myTeamId, gameRequest, opponentTeamId) => {
-//     try {
-//       firestore()
-//         .collection("teams")
-//         .doc(myTeamId)
-//         .collection("gameRequest")
-//         .add({
-//           ...gameRequest,
-//           gameStatus: "pending", // Add a gameStatus field with value "pending"
-//           gameRequestedTo: opponentTeamId, // Add an empty gameRequestedTo field
-//           gameRequestId: "" // Add an empty gameRequestId field
-//         })
-//         .then((doc) => {
-//           console.log("Game request sent! with ID: ", doc.id);
-//           // Update the gameRequestId field with the newly generated document ID
-//           doc.update({ gameRequestId: doc.id });
-//         })
-//         .catch(error => console.log(error, "error"))
-//     } catch (error) {
-//       console.log(error, "error")
-//     }
-//   }
+  const acceptGameRequest = (teamId, opponentId) => {
+    try {
+      firestore()
+        .collection("teams")
+        .doc(teamId)
+        .collection("gameRequest")
+        .doc(opponentId)
+        .update({
+          gameRequestStatus: "accepted"
+        })
+        .then(() => {
+          console.log("Game Request accepted successfully!")
+          // create the game request doc in opponent
+          firestore()
+            .collection("teams")
+            .doc(opponentId)
+            .collection("gameRequest")
+            .doc(teamId)
+            .set({
+              gameRequestStatus: "accepted"
+            })
+            .then(() => {
+              console.log("Game Request accepted successfully!")
+            }
+            )
+            .catch(error => console.log(error, "error"))
 
-//   const sendGameRequestToTeam = (opponentTeamId, gameRequest, myTeamId) => {
-//     try {
-//       firestore()
-//         .collection("teams")
-//         .doc(opponentTeamId)
-//         .collection("gameRequest")
-//         .add({
-//           ...gameRequest,
-//           gameStatus: "pending", // Add a gameStatus field with value "pending"
-//           gameRequestedBy: myTeamId, // Add an empty gameRequestedBy field
-//           playersGoing: [], // Add an empty playersGoing field
-//           gameRequestId: "" // Add an empty gameRequestId field
-//         })
-//         .then((doc) => {
-//           console.log("Game request sent! with ID: ", doc.id);
-//           // Update the gameRequestId field with the newly generated document ID
-//           doc.update({ gameRequestId: doc.id });
-//         })
-//         .catch(error => console.log(error, "error"))
-//     } catch (error) {
-//       console.log(error, "error")
-//     }
-//   }
+        })
+        .catch(error => console.log(error, "error"))
+    } catch (error) {
+      console.log(error, "error")
+    }
+  }
 
-//   // to fetch game requests sent to a team
-//   const fetchGameRequest = (teamId) => {
-//     const [gameRequest, setGameRequest] = useState([])
-//     useEffect(() => {
-//       const subscribe = firestore()
-//         .collection("teams")
-//         .doc(teamId)
-//         .collection("gameRequest")
-//         .onSnapshot((querySnapShot) => {
-//           const gameRequest = []
-//           querySnapShot.forEach((doc) => {
-//             gameRequest.push(doc.data())
-//           })
-//           setGameRequest(gameRequest)
-//         })
-//       return () => subscribe()
-//     }, [])
-//     return gameRequest
-//   }
-
-//   return { createGameRequest, sendGameRequestToTeam, fetchGameRequest }
-// }
+  const declineGameRequest = (teamId, opponentId) => {
+    try {
+      firestore()
+        .collection("teams")
+        .doc(teamId)
+        .collection("gameRequest")
+        .doc(opponentId)
+        .delete()
+        .then(() => {
+          console.log("Game Request declined successfully!")
+        })
+        .catch(error => console.log(error, "error"))
+    } catch (error) {
+      console.log(error, "error")
+    }
+  }
+  return { acceptGameRequest, declineGameRequest }
+}

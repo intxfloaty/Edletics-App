@@ -1,11 +1,12 @@
 import { Pressable, ScrollView, StyleSheet, Text, View, Modal, TouchableHighlight, TouchableWithoutFeedback } from 'react-native'
 import React, { useState } from 'react'
 import Icon from 'react-native-vector-icons/Ionicons';
-import { addAndFetchOpponent } from '../firebase/firebase';
+import { addAndFetchOpponent, sendAndFetchGameRequest } from '../firebase/firebase';
 
 const CreateGameModal = ({ modalVisible, toggleModal, handleBackdropPress, currentTeam, squad }) => {
   const { fetchMyOpponentWithSquadReady } = addAndFetchOpponent()
   const opponent = fetchMyOpponentWithSquadReady(currentTeam?.teamId)
+  const { sendGameRequestToOpponent } = sendAndFetchGameRequest()
   console.log(opponent, "opponent")
 
   return (
@@ -38,13 +39,12 @@ const CreateGameModal = ({ modalVisible, toggleModal, handleBackdropPress, curre
 
               <Text style={styles.opponent}>Select Opponent</Text>
 
-              {opponent?.map((team, index) => {
+              {opponent?.map((opponent, index) => {
                 return (
                   <Pressable key={index} style={styles.teamList} onPress={() => {
-                    console.log(team.teamName, "team")
-
+                    sendGameRequestToOpponent(currentTeam?.teamId, opponent?.teamId, squad)
                   }}>
-                    <Text style={styles.teamName}> Team: {team?.teamName}</Text>
+                    <Text style={styles.teamName}> Team: {opponent?.teamName}</Text>
                   </Pressable>
                 )
               })
