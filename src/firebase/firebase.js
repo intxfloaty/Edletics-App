@@ -189,7 +189,7 @@ export const addAndFetchPlayers = () => {
 }
 
 
-// to create squad for games and tournaments
+// to update team with squad for games and tournaments
 export const createSquad = () => {
 
   const createSquadForGame = (teamId, squad) => {
@@ -197,16 +197,9 @@ export const createSquad = () => {
       firestore()
         .collection("teams")
         .doc(teamId)
-        .collection("newGameSquad")
-        .add({
-          ...squad,
-          status: "inProgress",
-          squadId: "",
-        })
+        .update({ squad: squad })
         .then((docRef) => {
-          console.log("Squad added with ID: ", docRef.id);
-          // Update the squadId field with the newly generated document ID
-          docRef.update({ squadId: docRef.id });
+          console.log("Team updated with Squad!");
         })
         .catch((error) => {
           console.error("Error adding squad: ", error);
@@ -218,24 +211,19 @@ export const createSquad = () => {
 
   // to fetch the squad created
   const fetchSquad = (teamId) => {
-    const [newSquad, setNewSquad] = useState([])
+    const [squad, setSquad] = useState({})
     useEffect(() => {
       const subscribe = firestore()
         .collection("teams")
         .doc(teamId)
-        .collection("newGameSquad")
         .onSnapshot((querySnapShot) => {
-          const newSquad = []
-          querySnapShot?.forEach((doc) => {
-            newSquad.push(doc.data())
-          })
-          setNewSquad(newSquad)
+          setSquad(querySnapShot.data().squad)
         }, (error) => {
           console.log(error, "error5")
         })
       return () => subscribe()
     }, [])
-    return newSquad
+    return squad
   }
 
   return { createSquadForGame, fetchSquad }
@@ -313,76 +301,34 @@ export const createAndFetchGame = () => {
 
 
 //  function to update the squad with players 
-export const updateNewGameSquad = () => {
-  const updateNewGameSquadList = (teamId, squadId, player) => {
+export const updateGameSquad = () => {
+  const updateGameSquadList = (teamId, player) => {
     try {
       firestore()
         .collection("teams")
         .doc(teamId)
-        .collection("newGameSquad")
-        .doc(squadId)
         .update({
-          playersList: firestore.FieldValue.arrayUnion(`${player}`)
+          "squad.playerList": { player }
         })
-        .then(() => {
+        .then((doc) => {
           console.log("Players List updated successfully!")
+          const teamRef = firestore().collection("teams").doc(teamId)
 
-          // Fetch the updated document
-          firestore()
-            .collection("teams")
-            .doc(teamId)
-            .collection("newGameSquad")
-            .doc(squadId)
-            .get()
-            .then((doc) => {
-              console.log("Updated doc:", doc.data())
-              if (doc.data().playersList.length == doc.data().squadSize) {
-                firestore()
-                  .collection("teams")
-                  .doc(teamId)
-                  .collection("newGameSquad")
-                  .doc(squadId)
-                  .update({
-                    status: "ready"
-                  })
-                  .then(() => {
-                    console.log("Squad status updated successfully!")
-                  })
-                  .catch((error) => console.log(error, "error"))
-              }
-            })
-            .catch((error) => console.log(error, "error"))
+          teamRef.get().then((doc) => {
+            if (Object.keys(doc.data()?.squad.playerList === doc.data()?.squad.squadSize)) {
+              teamRef.update({
+                "squad.status": "Ready"
+              }).then(() => console.log("squad is ready"))
+                .catch(error => console.log(error, "statusError"))
+            }
+          })
         })
         .catch(error => console.log(error, "error"))
     } catch (error) {
       console.log(error, "error")
     }
   }
-
-
-  // to delete a game
-  const deleteNewGameSquad = (teamId, squadId) => {
-    try {
-      firestore()
-        .collection("teams")
-        .doc(teamId)
-        .collection("newGameSquad")
-        .doc(squadId)
-        .delete()
-        .then(() => {
-          console.log("Game deleted successfully!")
-        })
-        .catch(error => console.log(error, "error"))
-    } catch (error) {
-      console.log(error, "error")
-    }
-  }
-
-  return {
-    updateNewGameSquadList,
-    deleteNewGameSquad,
-    // fetchPlayersGoing,
-  }
+  return { updateGameSquadList }
 }
 
 // to update the team with opponent
@@ -436,7 +382,29 @@ export const addAndFetchOpponent = () => {
     return teams
   }
 
-  return { addOpponent, fetchOpponentTeams }
+
+  // fetch opponents whose squad is ready
+  const fetchMyOpponentWithSquadReady = (teamId) => {
+    const [opponent, setOpponent] = useState([])
+    useEffect(() => {
+      const subscribe = firestore()
+        .collection("teams")
+        .doc(teamId)
+        .collection("opponent")
+        .where("squad.status", "==", "Ready")
+        .onSnapshot((querySnapShot) => {
+          const opponent = []
+          querySnapShot.forEach((doc) => {
+            opponent.push(doc.data())
+          })
+          setOpponent(opponent)
+        })
+      return () => subscribe()
+    }, [])
+    return opponent
+  }
+
+  return { addOpponent, fetchOpponentTeams, fetchMyOpponentWithSquadReady }
 }
 
 

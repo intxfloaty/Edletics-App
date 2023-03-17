@@ -21,6 +21,7 @@ const CreateSquad = () => {
     location: "",
     date: "",
     squadSize: 1,
+    status: "InProgress"
   })
   const navigation = useNavigation()
 

@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react'
 import Icon from 'react-native-vector-icons/Ionicons';
 import { useNavigation } from '@react-navigation/native';
 import { useSelector, useDispatch } from 'react-redux';
-import { userAuthState, usePlayerDetails, createSquad, updateNewGameSquad } from '../../firebase/firebase';
+import { userAuthState, usePlayerDetails, createSquad, updateGameSquad } from '../../firebase/firebase';
 import { selectMyCurrentGame } from '../../redux/actions/actions';
 
 const TeamBulletin = () => {
@@ -13,8 +13,9 @@ const TeamBulletin = () => {
   const { user } = userAuthState();
   const { playerDetails } = usePlayerDetails(user?.phoneNumber)
   const { fetchSquad } = createSquad()
-  const { deleteNewGameSquad } = updateNewGameSquad()
-  const newSquad = fetchSquad(currentTeam?.teamId)
+  const { deleteNewGameSquad } = updateGameSquad()
+  const squad = fetchSquad(currentTeam?.teamId)
+  console.log(squad, "newSquad")
   const navigation = useNavigation()
 
   const onAddPressed = () => {
@@ -25,28 +26,25 @@ const TeamBulletin = () => {
     <>
       <View style={styles.parent}>
         <ScrollView showsVerticalScrollIndicator={false}>
-          {newSquad?.map((squad, index) => {
-            return (
-              <Pressable key={index} style={styles.newGameContainer} onPress={() => {
-                navigation.navigate("GameDetails", { squad: squad })
-              }}>
-                {currentTeam?.teamAdmin === playerDetails?.userId &&
-                  <Icon
-                    name="trash-outline"
-                    size={25}
-                    color={"black"}
-                    style={styles.trashIcon}
-                    onPress={() => {
-                      deleteNewGameSquad(currentTeam?.teamId, squad.squadId)
-                    }} />
-                }
-                <Text style={styles.text}>{squad.squadSize}-{squad.format} - {squad.mode}</Text>
-                <Text style={styles.text}>{squad.location}</Text>
-                <Text style={styles.text}>{squad.date}</Text>
-                <Text style={styles.text}>{squad.squadId}</Text>
-              </Pressable>
-            )
-          })}
+          {squad && <Pressable style={styles.newGameContainer} onPress={() => {
+            navigation.navigate("GameDetails", { squad: squad })
+          }}>
+            {currentTeam?.teamAdmin === playerDetails?.userId &&
+              <Icon
+                name="trash-outline"
+                size={25}
+                color={"black"}
+                style={styles.trashIcon}
+                onPress={() => {
+                  deleteNewGameSquad(currentTeam?.teamId, squad.squadId)
+                }} />
+            }
+            <Text style={styles.text}>{squad.squadSize}-{squad.format} - {squad.mode}</Text>
+            <Text style={styles.text}>{squad.location}</Text>
+            <Text style={styles.text}>{squad.date}</Text>
+            <Text style={styles.text}>{squad.squadId}</Text>
+          </Pressable>}
+
         </ScrollView>
         {currentTeam?.teamAdmin === playerDetails?.userId &&
           <Icon

@@ -1,12 +1,12 @@
 import { Pressable, ScrollView, StyleSheet, Text, View, Modal, TouchableHighlight, TouchableWithoutFeedback } from 'react-native'
 import React, { useState } from 'react'
 import Icon from 'react-native-vector-icons/Ionicons';
-import { fetchSquadReadyTeams, sendGameRequest } from '../firebase/firebase';
+import { addAndFetchOpponent } from '../firebase/firebase';
 
 const CreateGameModal = ({ modalVisible, toggleModal, handleBackdropPress, currentTeam, squad }) => {
-  // const allTeams = fetchSquadReadyTeams()
-  // console.log(allTeams, "allTeams")
-  const { createGameRequest, sendGameRequestToTeam } = sendGameRequest()
+  const { fetchMyOpponentWithSquadReady } = addAndFetchOpponent()
+  const opponent = fetchMyOpponentWithSquadReady(currentTeam?.teamId)
+  console.log(opponent, "opponent")
 
   return (
     <View>
@@ -36,21 +36,19 @@ const CreateGameModal = ({ modalVisible, toggleModal, handleBackdropPress, curre
                 <Text style={styles.text}>Date : {squad?.date}</Text>
               </View>
 
-                <Text style={styles.opponent}>Select Opponent</Text>
+              <Text style={styles.opponent}>Select Opponent</Text>
 
-
-              {/* {allTeams?.map((team, index) => {
+              {opponent?.map((team, index) => {
                 return (
                   <Pressable key={index} style={styles.teamList} onPress={() => {
                     console.log(team.teamName, "team")
-                    // createGameRequest(currentTeam?.teamId, currentGame, team?.teamId)
-                    // sendGameRequestToTeam(team?.teamId, currentGame, currentTeam?.teamId)
+
                   }}>
-                    <Text style={styles.teamName}> Team: {team.teamName}</Text>
+                    <Text style={styles.teamName}> Team: {team?.teamName}</Text>
                   </Pressable>
                 )
               })
-              } */}
+              }
             </View>
           </View>
         </TouchableWithoutFeedback>

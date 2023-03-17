@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react'
 import Icon from 'react-native-vector-icons/Ionicons';
 import { usePlayerDetails, userAuthState } from '../../firebase/firebase'
 import { useSelector } from 'react-redux';
-import { updateNewGameSquad } from '../../firebase/firebase'
+import { updateGameSquad } from '../../firebase/firebase'
 import CustomButton from '../../components/CustomButton';
 import { useNavigation } from '@react-navigation/native';
 import SelectOpponentModal from '../../components/CreateGameModal';
@@ -13,7 +13,7 @@ const GameDetails = ({ route }) => {
   const { squad } = route.params
   const { user } = userAuthState();
   const { playerDetails } = usePlayerDetails(user?.phoneNumber)
-  const { updateNewGameSquadList } = updateNewGameSquad()
+  const { updateGameSquadList } = updateGameSquad()
   const currentTeam = useSelector(state => state.currentTeam)
   // const currentGame = useSelector(state => state.currentGame)
   const navigation = useNavigation()
@@ -45,12 +45,9 @@ const GameDetails = ({ route }) => {
       <Text style={styles.text}> Location: {squad?.location}</Text>
       <Text style={styles.text}>Date : {squad?.date}</Text>
 
-      {squad?.playersList?.map((player, index) => {
-        console.log(player)
-        return (
-          <Text key={index} style={styles.listItem}> Player: {player}</Text>
-        )
-      })}
+      {squad?.playerList &&
+        <Text style={styles.listItem}> Player: {squad.playerList.player}</Text>
+      }
 
 
       <CreateGameModal
@@ -62,10 +59,10 @@ const GameDetails = ({ route }) => {
 
 
       <View style={styles.btn}>
-        {!(squad?.playersList?.includes(`${playerDetails?.fullName}`)) //so that players can join only once
+        {!(squad?.playerList?.player == playerDetails?.fullName) //so that players can join only once
           && !joinSquad &&
           <CustomButton text="Join Squad" type="TERTIORY" onPress={() => {
-            updateNewGameSquadList(currentTeam?.teamId, squad?.squadId, playerDetails?.fullName)
+            updateGameSquadList(currentTeam?.teamId, playerDetails?.fullName, squad)
             setJoinSquad(true)
           }} />}
       </View>
@@ -73,7 +70,7 @@ const GameDetails = ({ route }) => {
 
       <View style={styles.btn}>
         {(currentTeam?.teamAdminName === playerDetails?.fullName) // so that only teamAdmins can create game
-          && (squad?.playersList?.length == squad?.squadSize) && // so that game can be created only when squad is full
+          &&  //TODO: so that game can be created only when squad is full
           <CustomButton
             text="Create Game"
             type="SECONDARY"
