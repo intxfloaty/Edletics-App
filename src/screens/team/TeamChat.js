@@ -1,14 +1,16 @@
 import { StyleSheet, Text, View, ScrollView, Pressable } from 'react-native'
 import React from 'react'
-import { addAndFetchOpponent, sendAndFetchGameRequest, updateGameRequestStatus } from '../../firebase/firebase'
+import { userAuthState, usePlayerDetails, addAndFetchOpponent, sendAndFetchGameRequest, updateGameRequestStatus } from '../../firebase/firebase'
 import { useSelector } from 'react-redux'
 import CustomButton from '../../components/CustomButton'
 import { useNavigation } from '@react-navigation/native';
 
 const TeamChat = () => {
+  const { user } = userAuthState();
+  const { playerDetails } = usePlayerDetails(user?.phoneNumber)
   const currentTeam = useSelector(state => state.currentTeam)
   const { addOpponent, fetchOpponentTeams } = addAndFetchOpponent()
-  const teams = fetchOpponentTeams()
+  const teams = fetchOpponentTeams(currentTeam)
   const { fetchGameRequest } = sendAndFetchGameRequest()
   const gameRequest = fetchGameRequest(currentTeam?.teamId)
   const { acceptGameRequest, declineGameRequest } = updateGameRequestStatus()
@@ -37,22 +39,23 @@ const TeamChat = () => {
               <Text style={styles.text}>{request.format}</Text>
               <Text style={styles.text}>{request.location}</Text>
               <Text style={styles.text}>{request.mode}</Text>
-              <View style={styles.buttonContainer}>
-                <CustomButton
-                  text="Accept"
-                  type="TERTIORY"
-                  onPress={() => {
-                    acceptGameRequest(currentTeam?.teamId, request?.gameRequestId)
-                  }}
-                />
-                <CustomButton
-                  text="Decline"
-                  type="TERTIORY"
-                  onPress={() => {
-                    declineGameRequest(currentTeam?.teamId, request?.gameRequestId)
-                  }}
-                />
-              </View>
+              {currentTeam?.teamAdmin === playerDetails?.userId &&
+                <View style={styles.buttonContainer}>
+                  <CustomButton
+                    text="Accept"
+                    type="TERTIORY"
+                    onPress={() => {
+                      acceptGameRequest(currentTeam?.teamId, request?.gameRequestId)
+                    }}
+                  />
+                  <CustomButton
+                    text="Decline"
+                    type="TERTIORY"
+                    onPress={() => {
+                      declineGameRequest(currentTeam?.teamId, request?.gameRequestId)
+                    }}
+                  />
+                </View>}
             </Pressable>
           )
         })}

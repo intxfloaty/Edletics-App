@@ -363,7 +363,7 @@ export const addAndFetchOpponent = () => {
     }
   }
 
-  const fetchOpponentTeams = () => {
+  const fetchOpponentTeams = (currentTeam) => {
     const [teams, setTeams] = useState([])
     useEffect(() => {
       const subscribe = firestore()
@@ -371,7 +371,7 @@ export const addAndFetchOpponent = () => {
         .onSnapshot((querySnapShot) => {
           const teams = []
           querySnapShot.forEach((doc) => {
-            if (doc.data().teamAdmin !== auth().currentUser.uid) {
+            if (doc.data().teamAdmin !== currentTeam?.teamAdmin) {
               teams.push(doc.data())
             }
           })
