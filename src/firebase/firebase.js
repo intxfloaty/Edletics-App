@@ -97,18 +97,18 @@ export const createAndFetchTeam = (teamInfo, playerDetails) => {
 
   const fetchTeamDetails = (setMyTeams) => {
     useEffect(() => {
-      firestore()
+      subscribe = firestore()
         .collection("players")
         .doc(`${playerDetails?.phoneNumber}`)
         .collection("myTeams")
-        .get()
-        .then((querySnapShot) => {
+        .onSnapshot((querySnapShot) => {
           const newTeams = []
           querySnapShot.forEach((doc) => {
             newTeams.push(doc.data())
           })
           setMyTeams(newTeams)
         })
+      return () => subscribe()
     }, [playerDetails, numberOfTeams])
   }
 

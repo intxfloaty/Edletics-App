@@ -8,6 +8,7 @@ import CustomButton from '../../components/CustomButton';
 import { useNavigation } from '@react-navigation/native';
 import SelectOpponentModal from '../../components/CreateGameModal';
 import CreateGameModal from '../../components/CreateGameModal';
+import { sendAndFetchGameRequest } from '../../firebase/firebase'
 
 const GameDetails = ({ route }) => {
   const { squad } = route.params
@@ -19,6 +20,8 @@ const GameDetails = ({ route }) => {
   const navigation = useNavigation()
   const [modalVisible, setModalVisible] = useState(false);
   const [joinSquad, setJoinSquad] = useState(false)
+  const { fetchGameRequest } = sendAndFetchGameRequest()
+  const gameRequest = fetchGameRequest(currentTeam?.teamId)
 
   const toggleModal = () => {
     setModalVisible(!modalVisible);
@@ -39,11 +42,24 @@ const GameDetails = ({ route }) => {
           navigation.goBack("TeamBulletin")
         }} />
 
-      <Text style={styles.text}>Mode : {squad?.mode}</Text>
-      <Text style={styles.text}>Format : {squad?.format}</Text>
-      <Text style={styles.text}>Players: {squad?.numOfPlayers}</Text>
-      <Text style={styles.text}> Location: {squad?.location}</Text>
-      <Text style={styles.text}>Date : {squad?.date}</Text>
+      {gameRequest?.map((item, index) => {
+        return (
+          <View key={index}>
+            {item?.gameRequestStatus === "accepted" &&
+              <>
+                <Text style={styles.text}>Game On!</Text>
+                <Text style={styles.text}>Mode : {item?.mode}</Text>
+                <Text style={styles.text}>Format : {item?.format}</Text>
+                <Text style={styles.text}> Location: {item?.location}</Text>
+                <Text style={styles.text}>Date : {item?.date}</Text>
+                <Text style={styles.text}>Opponent : {item?.opponentName}</Text>
+              </>
+            }
+          </View>
+        )
+      })
+      }
+
 
       {squad?.playerList &&
         <Text style={styles.listItem}> Player: {squad.playerList.player}</Text>
