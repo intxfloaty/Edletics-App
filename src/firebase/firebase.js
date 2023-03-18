@@ -459,7 +459,7 @@ export const sendAndFetchGameRequest = () => {
 // to update the game request status
 export const updateGameRequestStatus = () => {
 
-  const acceptGameRequest = (teamId, opponentId) => {
+  const acceptGameRequest = (teamId, opponentId, game) => {
     try {
       firestore()
         .collection("teams")
@@ -478,7 +478,9 @@ export const updateGameRequestStatus = () => {
             .collection("gameRequest")
             .doc(teamId)
             .set({
-              gameRequestStatus: "accepted"
+              ...game,
+              gameRequestStatus: "accepted",
+              gameRequestId: teamId
             })
             .then(() => {
               console.log("Game Request accepted successfully!")

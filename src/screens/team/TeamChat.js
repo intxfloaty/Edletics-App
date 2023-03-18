@@ -45,7 +45,7 @@ const TeamChat = () => {
                     text="Accept"
                     type="TERTIORY"
                     onPress={() => {
-                      acceptGameRequest(currentTeam?.teamId, request?.gameRequestId)
+                      acceptGameRequest(currentTeam?.teamId, request?.gameRequestId, request)
                     }}
                   />
                   <CustomButton
