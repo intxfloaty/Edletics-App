@@ -1,21 +1,16 @@
-import { Pressable, StyleSheet, Text, View, ScrollView } from 'react-native'
+import { TouchableHighlight, StyleSheet, Text, View, ScrollView } from 'react-native'
 import React, { useState, useEffect } from 'react'
 import Icon from 'react-native-vector-icons/Ionicons';
 import { useNavigation } from '@react-navigation/native';
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { userAuthState, usePlayerDetails, createSquad, updateGameSquad } from '../../firebase/firebase';
-import { selectMyCurrentGame } from '../../redux/actions/actions';
 
 const TeamBulletin = () => {
-  // const dispatch = useDispatch()
   const currentTeam = useSelector(state => state.currentTeam)
-  // const currentGame = useSelector(state => state.currentGame)
   const { user } = userAuthState();
   const { playerDetails } = usePlayerDetails(user?.phoneNumber)
   const { fetchSquad } = createSquad()
-  const { deleteNewGameSquad } = updateGameSquad()
   const squad = fetchSquad(currentTeam?.teamId)
-  console.log(squad, "newSquad")
   const navigation = useNavigation()
 
   const onAddPressed = () => {
@@ -26,24 +21,24 @@ const TeamBulletin = () => {
     <>
       <View style={styles.parent}>
         <ScrollView showsVerticalScrollIndicator={false}>
-          {squad && <Pressable style={styles.newGameContainer} onPress={() => {
-            navigation.navigate("GameDetails", { squad: squad })
-          }}>
-            {currentTeam?.teamAdmin === playerDetails?.userId &&
-              <Icon
-                name="trash-outline"
-                size={25}
-                color={"black"}
-                style={styles.trashIcon}
-                onPress={() => {
-                  deleteNewGameSquad(currentTeam?.teamId, squad.squadId)
-                }} />
-            }
-            <Text style={styles.text}>{squad.squadSize}-{squad.format} - {squad.mode}</Text>
-            <Text style={styles.text}>{squad.location}</Text>
-            <Text style={styles.text}>{squad.date}</Text>
-            <Text style={styles.text}>{squad.squadId}</Text>
-          </Pressable>}
+          <View style={styles.headingText}>
+            {/* <Text style={styles.headingText}>Join Squad</Text> */}
+          </View>
+          {squad &&
+            <TouchableHighlight
+              underlayColor="#4a4a4a"
+              style={styles.newGameContainer}
+              onPress={() => {
+                navigation.navigate("GameDetails", { squad: squad })
+              }}>
+              <>
+                <Text style={styles.text}>Mode : {squad.mode}</Text>
+                <Text style={styles.text}>Squad Size : {squad.squadSize}</Text>
+                <Text style={styles.text}>Location : {squad.location}</Text>
+                <Text style={styles.text}>Date : {squad.date}</Text>
+              </>
+            </TouchableHighlight>
+          }
 
         </ScrollView>
         {currentTeam?.teamAdmin === playerDetails?.userId &&
@@ -68,33 +63,31 @@ const styles = StyleSheet.create({
     backgroundColor: "#101112",
     padding: 10,
   },
-  text: {
-    color: "black",
+  headingText: {
+    color: "white",
     fontSize: 20,
-    marginVertical: 2
+    alignItems: "center",
+    justifyContent: "center",
   },
-  addIcon: {
-    position: "absolute",
-    bottom: 5,
-    right: 2,
-    padding: 10,
+  text: {
+    color: "white",
+    fontSize: 20,
+    marginVertical: 2,
+    alignItems: "center",
+    justifyContent: "center",
   },
   newGameContainer: {
-    backgroundColor: 'white',
+    backgroundColor: '#202224',
     minHeight: 150,
     borderRadius: 10,
     marginVertical: 10,
     alignItems: "center",
     justifyContent: "center",
   },
-  gameControllerIcon: {
+  addIcon: {
     position: "absolute",
-    top: 5,
-    left: 5,
-  },
-  trashIcon: {
-    position: "absolute",
-    top: 5,
-    right: 5,
+    bottom: 5,
+    right: 2,
+    padding: 10,
   },
 })
