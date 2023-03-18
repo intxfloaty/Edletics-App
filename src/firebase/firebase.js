@@ -413,7 +413,7 @@ export const addAndFetchOpponent = () => {
 // send game request to other team
 export const sendAndFetchGameRequest = () => {
 
-  const sendGameRequestToOpponent = (teamId, opponentId, game) => {
+  const sendGameRequestToOpponent = (teamId, opponentId, opponentName, game) => {
     try {
       firestore()
         .collection("teams")
@@ -423,6 +423,7 @@ export const sendAndFetchGameRequest = () => {
         .set({
           ...game,
           gameRequestId: teamId,
+          opponentName: opponentName,
           gameRequestStatus: "pending"
         })
         .then(() => {
@@ -459,7 +460,7 @@ export const sendAndFetchGameRequest = () => {
 // to update the game request status
 export const updateGameRequestStatus = () => {
 
-  const acceptGameRequest = (teamId, opponentId, game) => {
+  const acceptGameRequest = (teamId, opponentId, opponentName, game) => {
     try {
       firestore()
         .collection("teams")
@@ -479,6 +480,7 @@ export const updateGameRequestStatus = () => {
             .doc(teamId)
             .set({
               ...game,
+              opponentName: opponentName,
               gameRequestStatus: "accepted",
               gameRequestId: teamId
             })

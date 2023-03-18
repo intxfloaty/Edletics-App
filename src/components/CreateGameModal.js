@@ -42,7 +42,7 @@ const CreateGameModal = ({ modalVisible, toggleModal, handleBackdropPress, curre
               {opponent?.map((opponent, index) => {
                 return (
                   <Pressable key={index} style={styles.teamList} onPress={() => {
-                    sendGameRequestToOpponent(currentTeam?.teamId, opponent?.teamId, squad)
+                    sendGameRequestToOpponent(currentTeam?.teamId, opponent?.teamId, currentTeam?.teamName, squad)
                   }}>
                     <Text style={styles.teamName}> Team: {opponent?.teamName}</Text>
                   </Pressable>
