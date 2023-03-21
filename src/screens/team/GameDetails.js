@@ -96,16 +96,18 @@ const GameDetails = () => {
         </View>}
 
 
-      <View style={styles.btn}>
-        {(currentTeam?.teamAdminName === playerDetails?.fullName) // so that only teamAdmins can create game
-          &&  //TODO: so that game can be created only when squad is full
+      {(currentTeam?.teamAdminName === playerDetails?.fullName) // so that only teamAdmins can create game
+        && (squad?.status === "Ready") // so that game can be created  only when squad is ready
+        && (gameRequest?.length === 0) // so that game can be created only when there is no game request
+        &&
+        <View style={styles.btn}>
           <CustomButton
             text="Create Game"
             type="SECONDARY"
             onPress={() => {
               setModalVisible(true)
-            }} />}
-      </View>
+            }} />
+        </View>}
     </View>
   )
 }
