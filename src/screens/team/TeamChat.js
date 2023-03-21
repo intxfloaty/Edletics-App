@@ -1,8 +1,9 @@
-import { StyleSheet, Text, View, ScrollView, Pressable } from 'react-native'
-import React from 'react'
+import { StyleSheet, Text, View, ScrollView, Pressable, TouchableOpacity } from 'react-native'
+import React, { useEffect, useCallback, useState, useLayoutEffect } from 'react';
 import { userAuthState, usePlayerDetails, addAndFetchOpponent, sendAndFetchGameRequest, updateGameRequestStatus } from '../../firebase/firebase'
 import { useSelector } from 'react-redux'
 import CustomButton from '../../components/CustomButton'
+import { GiftedChat } from 'react-native-gifted-chat';
 import { useNavigation } from '@react-navigation/native';
 
 const TeamChat = () => {
@@ -14,11 +15,42 @@ const TeamChat = () => {
   const { fetchGameRequest } = sendAndFetchGameRequest()
   const gameRequest = fetchGameRequest(currentTeam?.teamId)
   const { acceptGameRequest, declineGameRequest } = updateGameRequestStatus()
-  console.log(gameRequest, "gameRequest")
+  const [messages, setMessages] = useState([]);
+
+
+  useEffect(() => {
+    setMessages([
+      {
+        _id: 1,
+        text: 'Hello developer',
+        createdAt: new Date(),
+        user: {
+          _id: 2,
+          name: 'React Native',
+          avatar: 'https://placeimg.com/140/140/any',
+        },
+      },
+    ])
+  }, [])
+
+  const onSend = useCallback((messages = []) => {
+    setMessages(previousMessages => GiftedChat.append(previousMessages, messages))
+  }, [])
 
   return (
     <View style={styles.parent}>
-      <ScrollView showsVerticalScrollIndicator={false}>
+
+      <GiftedChat
+        messages={messages}
+        onSend={messages => onSend(messages)}
+        user={{
+          _id: 1,
+        }}
+      />
+
+
+
+      {/* <ScrollView showsVerticalScrollIndicator={false}>
         <Text style={styles.text}>Opponents</Text>
         {teams?.map((team, index) => {
           return (
@@ -59,7 +91,7 @@ const TeamChat = () => {
             </Pressable>
           )
         })}
-      </ScrollView>
+      </ScrollView> */}
     </View>
   )
 }
