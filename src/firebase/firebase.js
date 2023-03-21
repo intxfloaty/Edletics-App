@@ -333,6 +333,7 @@ export const updateGameSquad = () => {
 
 // to update the team with opponent
 export const addAndFetchOpponent = () => {
+
   const addOpponent = (teamId, team, opponentId, opponent) => {
     try {
       firestore()
@@ -391,11 +392,15 @@ export const addAndFetchOpponent = () => {
         .collection("teams")
         .doc(teamId)
         .collection("opponent")
-        .where("squad.status", "==", "Ready")
         .onSnapshot((querySnapShot) => {
           const opponent = []
           querySnapShot.forEach((doc) => {
-            opponent.push(doc.data())
+            const opponentRef = firestore().collection("teams").doc(doc.id)
+            opponentRef.get().then((doc) => {
+              if (doc.data()?.squad.status === "Ready") {
+                opponent.push(doc.data())
+              }
+            })
           })
           setOpponent(opponent)
         })
