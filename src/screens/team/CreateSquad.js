@@ -3,14 +3,14 @@ import React, { useState } from 'react'
 import CustomModal from '../../components/CustomModal'
 import CustomButton from '../../components/CustomButton'
 import CustomInput from '../../components/CustomInput'
-import { createSquad } from '../../firebase/firebase'
+import { createAndFetchSquad } from '../../firebase/firebase'
 import { useSelector } from 'react-redux';
 import { useNavigation } from '@react-navigation/native';
 import { DateTimePickerAndroid } from '@react-native-community/datetimepicker';
 
 const CreateSquad = () => {
   const currentTeam = useSelector(state => state.currentTeam)
-  const { createSquadForGame } = createSquad()
+  const { createSquadForGame } = createAndFetchSquad()
   const formatOptions = ["5v5"]
   const modeOptions = ["Rated", "Friendly"]
   const locationOptions = ["MRIS Turf", "Kicksal", "Jasola Sports Complex", "Addidas base chhatarpur"]

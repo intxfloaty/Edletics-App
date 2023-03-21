@@ -190,7 +190,7 @@ export const addAndFetchPlayers = () => {
 
 
 // to update team with squad for games and tournaments
-export const createSquad = () => {
+export const createAndFetchSquad = () => {
 
   const createSquadForGame = (teamId, squad) => {
     try {
@@ -217,12 +217,12 @@ export const createSquad = () => {
         .collection("teams")
         .doc(teamId)
         .onSnapshot((querySnapShot) => {
-          setSquad(querySnapShot.data().squad)
+          setSquad(querySnapShot.data()?.squad)
         }, (error) => {
           console.log(error, "error5")
         })
       return () => subscribe()
-    }, [])
+    }, [teamId])
     return squad
   }
 
@@ -308,7 +308,7 @@ export const updateGameSquad = () => {
         .collection("teams")
         .doc(teamId)
         .update({
-          "squad.playerList": { player }
+          'squad.playerList': firestore.FieldValue.arrayUnion({ name: player }),
         })
         .then((doc) => {
           console.log("Players List updated successfully!")

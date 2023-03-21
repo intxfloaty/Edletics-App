@@ -3,13 +3,13 @@ import React, { useState, useEffect } from 'react'
 import Icon from 'react-native-vector-icons/Ionicons';
 import { useNavigation } from '@react-navigation/native';
 import { useSelector } from 'react-redux';
-import { userAuthState, usePlayerDetails, createSquad, updateGameSquad } from '../../firebase/firebase';
+import { userAuthState, usePlayerDetails, createAndFetchSquad } from '../../firebase/firebase';
 
 const TeamBulletin = () => {
   const currentTeam = useSelector(state => state.currentTeam)
   const { user } = userAuthState();
   const { playerDetails } = usePlayerDetails(user?.phoneNumber)
-  const { fetchSquad } = createSquad()
+  const { fetchSquad } = createAndFetchSquad()
   const squad = fetchSquad(currentTeam?.teamId)
   const navigation = useNavigation()
 
@@ -29,7 +29,7 @@ const TeamBulletin = () => {
               underlayColor="#4a4a4a"
               style={styles.newGameContainer}
               onPress={() => {
-                navigation.navigate("GameDetails", { squad: squad })
+                navigation.navigate("GameDetails")
               }}>
               <>
                 <Text style={styles.text}>Mode : {squad.mode}</Text>

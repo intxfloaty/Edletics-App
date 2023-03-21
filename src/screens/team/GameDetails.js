@@ -1,25 +1,22 @@
 import { StyleSheet, Text, View } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import Icon from 'react-native-vector-icons/Ionicons';
-import { usePlayerDetails, userAuthState } from '../../firebase/firebase'
+import { usePlayerDetails, userAuthState, sendAndFetchGameRequest, createAndFetchSquad } from '../../firebase/firebase'
 import { useSelector } from 'react-redux';
 import { updateGameSquad } from '../../firebase/firebase'
 import CustomButton from '../../components/CustomButton';
 import { useNavigation } from '@react-navigation/native';
-import SelectOpponentModal from '../../components/CreateGameModal';
 import CreateGameModal from '../../components/CreateGameModal';
-import { sendAndFetchGameRequest } from '../../firebase/firebase'
 
-const GameDetails = ({ route }) => {
-  const { squad } = route.params
+const GameDetails = () => {
   const { user } = userAuthState();
+  const currentTeam = useSelector(state => state.currentTeam)
+  const { fetchSquad } = createAndFetchSquad()
+  const squad = fetchSquad(currentTeam?.teamId)
   const { playerDetails } = usePlayerDetails(user?.phoneNumber)
   const { updateGameSquadList } = updateGameSquad()
-  const currentTeam = useSelector(state => state.currentTeam)
-  // const currentGame = useSelector(state => state.currentGame)
   const navigation = useNavigation()
   const [modalVisible, setModalVisible] = useState(false);
-  const [joinSquad, setJoinSquad] = useState(false)
   const { fetchGameRequest } = sendAndFetchGameRequest()
   const gameRequest = fetchGameRequest(currentTeam?.teamId)
 
@@ -42,6 +39,28 @@ const GameDetails = ({ route }) => {
           navigation.goBack("TeamBulletin")
         }} />
 
+      {/* players going for the game*/}
+      <View style={styles.playersGoingContainer}>
+        <Text style={styles.text}>Going:</Text>
+        {squad?.playerList?.map((player, index) => {
+          return (
+            <View key={index} style={styles.playersGoingList}>
+              <Text style={styles.listItem}>{player.name}</Text>
+              <Icon
+                name="checkmark-circle-outline"
+                size={25}
+                style={styles.checkmarkIcon}
+                color={"white"}
+                onPress={() => {
+                  navigation.goBack("TeamBulletin")
+                }} />
+            </View>
+          )
+        })
+        }
+      </View>
+      {/* end */}
+
       {gameRequest?.map((item, index) => {
         return (
           <View key={index}>
@@ -50,7 +69,7 @@ const GameDetails = ({ route }) => {
                 <Text style={styles.text}>Game On!</Text>
                 <Text style={styles.text}>Mode : {item?.mode}</Text>
                 <Text style={styles.text}>Format : {item?.format}</Text>
-                <Text style={styles.text}> Location: {item?.location}</Text>
+                <Text style={styles.text}>Location: {item?.location}</Text>
                 <Text style={styles.text}>Date : {item?.date}</Text>
                 <Text style={styles.text}>Opponent : {item?.opponentName}</Text>
               </>
@@ -60,12 +79,6 @@ const GameDetails = ({ route }) => {
       })
       }
 
-
-      {squad?.playerList &&
-        <Text style={styles.listItem}> Player: {squad.playerList.player}</Text>
-      }
-
-
       <CreateGameModal
         toggleModal={toggleModal}
         handleBackdropPress={handleBackdropPress}
@@ -74,14 +87,13 @@ const GameDetails = ({ route }) => {
         squad={squad} />
 
 
-      <View style={styles.btn}>
-        {!(squad?.playerList?.player == playerDetails?.fullName) //so that players can join only once
-          && !joinSquad &&
+      {!(squad?.playerList?.some((player) => player.name === playerDetails?.fullName))
+        &&
+        <View style={styles.btn}>
           <CustomButton text="Join Squad" type="TERTIORY" onPress={() => {
-            updateGameSquadList(currentTeam?.teamId, playerDetails?.fullName, squad)
-            setJoinSquad(true)
-          }} />}
-      </View>
+            updateGameSquadList(currentTeam?.teamId, playerDetails?.fullName)
+          }} />
+        </View>}
 
 
       <View style={styles.btn}>
@@ -104,18 +116,39 @@ const styles = StyleSheet.create({
   parent: {
     minHeight: "100%",
     backgroundColor: "#101112",
-    alignItems: "center",
-    justifyContent: "center"
+    padding: 20,
   },
   arrowBackIcon: {
     position: "absolute",
     top: 5,
-    left: 5
+    left: 5,
+    zIndex: 1,
+  },
+  playersGoingContainer: {
+    // backgroundColor: "#1E1F20",
+    marginVertical: 20,
+    display: "flex",
+    flexDirection: "column",
+    // alignItems: "center",
+    // justifyContent: "center",
+    marginTop: 50,
+  },
+  playersGoingList: {
+    display: "flex",
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
   },
   text: {
     color: "white",
     fontSize: 20,
     marginVertical: 2
+  },
+  checkmarkIcon: {
+    // position: "absolute",
+    // right: 10,
+    // top: 10,
+    zIndex: 1,
   },
   btn: {
     display: "flex",
