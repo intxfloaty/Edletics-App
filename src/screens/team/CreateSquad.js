@@ -15,7 +15,6 @@ const CreateSquad = () => {
   const modeOptions = ["Rated", "Friendly"]
   const locationOptions = ["MRIS Turf", "Kicksal", "Jasola Sports Complex", "Addidas base chhatarpur"]
   const numberOfPlayers = ["1", "3", "5", "6", "7", "8", "9", "10", "11"]
-  // const [mode, setMode] = useState("date");
   const [squad, setSquad] = useState({
     format: "5v5",
     mode: "Rated",
@@ -29,21 +28,25 @@ const CreateSquad = () => {
 
   // function to date and time of practice
   const onDateChange = (event, selectedDate) => {
-      const currentDate = selectedDate.toLocaleString().replace(", 4:45:30 AM", " ");
-      setSquad({ ...squad, date: currentDate });
+    if (selectedDate !== undefined) {
+      const selectedDateObject = new Date(selectedDate);
+      const formattedDate = selectedDateObject.toLocaleDateString();
+      setSquad({ ...squad, date: formattedDate });
+    }
   };
 
   const onTimeChange = (event, selectedTime) => {
-    const currentTime = selectedTime.toLocaleString().replace("8/22/2020, ", "")
-    console.log(currentTime, "currentTime")
-    setSquad({ ...squad, time: currentTime });
+    if (selectedTime !== undefined) {
+      const selectedTimeObject = new Date(selectedTime);
+      const formattedTime = selectedTimeObject.toLocaleTimeString();
+      setSquad({ ...squad, time: formattedTime });
+    }
   };
-
 
 
   const showMode = (currentMode) => {
     DateTimePickerAndroid.open({
-      value: new Date(1598051730000),
+      value: new Date(),
       onChange: currentMode === "date" ? onDateChange : onTimeChange,
       mode: currentMode,
       is24Hour: true,
