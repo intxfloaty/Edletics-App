@@ -520,3 +520,60 @@ export const updateGameRequestStatus = () => {
   }
   return { acceptGameRequest, declineGameRequest }
 }
+
+
+
+// to store the messages in firestore
+export const useMessages = (teamId) => {
+  const [messages, setMessages] = useState([]);
+
+  const sendMessage = (text, uid) => {
+    if (!teamId) return;
+
+    firestore()
+      .collection('messages')
+      .doc(teamId)
+      .collection('teamMessages')
+      .add({
+        text: text,
+        uid: uid,
+        createdAt: firestore.FieldValue.serverTimestamp(),
+      })
+      .then(() => {
+        console.log('Message sent successfully!');
+      })
+      .catch((error) => console.log(error, 'error sending message'));
+  };
+
+  useEffect(() => {
+    if (!teamId) return;
+
+    const unsubscribe = firestore()
+      .collection('messages')
+      .doc(teamId)
+      .collection('teamMessages')
+      .orderBy('createdAt', 'desc')
+      .onSnapshot(
+        (querySnapshot) => {
+          const messageDocs = querySnapshot.docs.map((doc) => ({
+            _id: doc.id,
+            text: doc.data().text,
+            createdAt: doc.data().createdAt ? doc.data().createdAt.toDate() : new Date(),
+            user: {
+              _id: doc.data().uid,
+              // name: 'User ' + doc.data().uid, // Replace this with the actual user name
+              // avatar: 'https://placeimg.com/140/140/any',
+            },
+          }));
+          setMessages(messageDocs);
+        },
+        (error) => {
+          console.log(error, 'error');
+        },
+      );
+
+    return () => unsubscribe();
+  }, [teamId]);
+
+  return { messages, sendMessage }
+}
