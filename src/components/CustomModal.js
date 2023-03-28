@@ -1,4 +1,4 @@
-import { Pressable, ScrollView, StyleSheet, Text, View, Modal, TouchableHighlight, TouchableWithoutFeedback } from 'react-native'
+import { StyleSheet, Text, View, Modal, TouchableHighlight, TouchableWithoutFeedback } from 'react-native'
 import React, { useState } from 'react'
 
 const CustomModal = ({ options, handleOptionPress, selectedValue }) => {
@@ -58,6 +58,7 @@ const styles = StyleSheet.create({
   selectedValueText: {
     fontSize: 16,
     fontWeight: 'bold',
+    color: 'black',
   },
   modalBackdrop: {
     flex: 1,
@@ -78,5 +79,6 @@ const styles = StyleSheet.create({
   },
   optionText: {
     fontSize: 16,
+    color: "blue"
   },
 })
