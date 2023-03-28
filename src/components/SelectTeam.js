@@ -1,57 +1,41 @@
-import { StyleSheet, Text, View, Modal, Image, ScrollView, Pressable } from 'react-native'
+import { StyleSheet, Text, View, Modal, Image, TouchableHighlight, Pressable } from 'react-native'
 import React, { useState } from 'react'
 import { useNavigation } from "@react-navigation/native"
 import { useSelector, useDispatch } from 'react-redux';
 import { selectMyCurrentTeam } from '../redux/actions/actions';
 import ImagePicker from 'react-native-image-crop-picker';
 import Icon from 'react-native-vector-icons/Ionicons';
+import { Avatar } from 'react-native-paper';
+
 
 const SelectTeam = ({ myTeams }) => {
   const navigation = useNavigation()
   const currentTeam = useSelector(state => state.currentTeam)
   const dispatch = useDispatch()
-  const [image, setImage] = useState(null);
-  const [selectedItem, setSelectedItem] = useState(null);
 
-  // function to select profile image
-  const choseFromLibrary = () => {
-    ImagePicker.openPicker({
-      width: 300,
-      height: 400,
-      cropping: true
-    }).then(image => {
-      console.log(image);
-      setImage(image.path)
-    });
-  }
-
+ 
   return (
     <View style={styles.parent}>
       {myTeams?.map((myTeam, index) => {
         return (
-          <Pressable style={styles.teamContainer}
+          <TouchableHighlight
+            underlayColor="#4a4a4a"
+            style={styles.teamContainer}
             onPress={() => {
-              console.log(myTeam, "my")
               dispatch(selectMyCurrentTeam(myTeam))
               if (currentTeam.teamId) {
                 navigation.navigate("TeamScreen")
               }
             }} key={index}>
-            <Image source={{
-              uri: selectedItem === myTeam ? image : null,
-            }} style={styles.profileImage} />
-            <Text style={styles.teamName}>{myTeam?.teamName}</Text>
-            <Icon
-              name="camera-outline"
-              size={30}
-              style={styles.camera}
-              color={"black"}
-              onPress={() => {
-                setSelectedItem(myTeam)
-                choseFromLibrary();
-              }}
-            />
-          </Pressable>
+            <>
+              <Avatar.Text size={40} label="MT" style={styles.avatar} color="white" />
+              <View style={styles.textContainer}>
+                <Text style={styles.text}>{myTeam?.teamName}</Text>
+                <Text style={styles.subText}>Rating</Text>
+              </View>
+              <Icon name="chevron-forward-outline" size={20} style={styles.arrowIcon} color="white" />
+            </>
+          </TouchableHighlight>
         )
       })
       }
@@ -63,34 +47,40 @@ export default SelectTeam
 
 const styles = StyleSheet.create({
   parent: {
-    height: "100%",
-    display: "flex",
-    flexDirection: "row",
+    flex: 1,
+    height: '100%',
+    padding: 10,
+    backgroundColor: '#101112',
   },
   teamContainer: {
-    backgroundColor: '#0A99FF',
-    maxHeight: 600,
-    maxWidth: 350,
+    marginTop: 15,
+    backgroundColor: '#1e1e1e',
     borderRadius: 10,
-    alignItems: 'center',
+    minHeight: "10%",
+    width: "100%",
+    display: "flex",
+    alignItems: "center",
     justifyContent: "center",
-    marginHorizontal: 20,
   },
-  profileImage: {
-    height: 600,
-    width: 350,
-    borderWidth: 1,
-  },
-  teamName: {
-    fontSize: 26,
-    color: "black",
+  avatar: {
     position: "absolute",
-    top: 0
+    left: 10,
   },
-  camera: {
+  textContainer: {
+    display: "flex",
     position: "absolute",
-    top: 0,
-    right: 0,
-    padding: 5
+    left: 70
   },
+  text: {
+    color: "white",
+    fontSize: 20,
+  },
+  subText: {
+    fontSize: 16,
+    color: "gray"
+  },
+  arrowIcon : {
+    position: "absolute",
+    right: 10,
+  }
 })
