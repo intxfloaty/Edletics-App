@@ -15,31 +15,47 @@ const CreateSquad = () => {
   const modeOptions = ["Rated", "Friendly"]
   const locationOptions = ["MRIS Turf", "Kicksal", "Jasola Sports Complex", "Addidas base chhatarpur"]
   const numberOfPlayers = ["1", "3", "5", "6", "7", "8", "9", "10", "11"]
+  // const [mode, setMode] = useState("date");
   const [squad, setSquad] = useState({
     format: "5v5",
     mode: "Rated",
     location: "",
     date: "",
+    time: "",
     squadSize: 1,
     status: "InProgress"
   })
   const navigation = useNavigation()
 
   // function to date and time of practice
-  const showDatepicker = () => {
-    const onChange = (event, selectedDate) => {
-      const currentDate = selectedDate.toLocaleString()
+  const onDateChange = (event, selectedDate) => {
+      const currentDate = selectedDate.toLocaleString().replace(", 4:45:30 AM", " ");
       setSquad({ ...squad, date: currentDate });
-    };
-    const showMode = (currentMode) => {
-      DateTimePickerAndroid.open({
-        value: new Date(1598051730000),
-        onChange,
-        mode: currentMode,
-        is24Hour: true,
-      });
-    };
+  };
+
+  const onTimeChange = (event, selectedTime) => {
+    const currentTime = selectedTime.toLocaleString().replace("8/22/2020, ", "")
+    console.log(currentTime, "currentTime")
+    setSquad({ ...squad, time: currentTime });
+  };
+
+
+
+  const showMode = (currentMode) => {
+    DateTimePickerAndroid.open({
+      value: new Date(1598051730000),
+      onChange: currentMode === "date" ? onDateChange : onTimeChange,
+      mode: currentMode,
+      is24Hour: true,
+    });
+  };
+
+  const showDatepicker = () => {
     showMode('date');
+  };
+
+  const showTimepicker = () => {
+    showMode('time');
   };
 
 
@@ -101,11 +117,18 @@ const CreateSquad = () => {
           />
         </View>
         <View style={styles.dateContainer}>
-          <Text style={styles.locationText}>Date and Time</Text>
+          <Text style={styles.locationText}>Date </Text>
           <CustomInput
             onPressIn={showDatepicker}
             showSoftInputOnFocus={false}
             value={squad.date} />
+        </View>
+        <View style={styles.dateContainer}>
+          <Text style={styles.locationText}>Time</Text>
+          <CustomInput
+            onPressIn={showTimepicker}
+            showSoftInputOnFocus={false}
+            value={squad.time} />
         </View>
         <View style={styles.btnContainer}>
           <CustomButton

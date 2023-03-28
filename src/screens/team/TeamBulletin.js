@@ -36,6 +36,7 @@ const TeamBulletin = () => {
                 <Text style={styles.text}>Squad Size : {squad.squadSize}</Text>
                 <Text style={styles.text}>Location : {squad.location}</Text>
                 <Text style={styles.text}>Date : {squad.date}</Text>
+                <Text style={styles.text}>Time : {squad.time}</Text>
               </>
             </TouchableHighlight>
           }
