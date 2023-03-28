@@ -531,7 +531,7 @@ export const useMessages = (teamId) => {
     if (!teamId) return;
 
     firestore()
-      .collection('messages')
+      .collection('teams')
       .doc(teamId)
       .collection('teamMessages')
       .add({
@@ -549,7 +549,7 @@ export const useMessages = (teamId) => {
     if (!teamId) return;
 
     const unsubscribe = firestore()
-      .collection('messages')
+      .collection('teams')
       .doc(teamId)
       .collection('teamMessages')
       .orderBy('createdAt', 'desc')
