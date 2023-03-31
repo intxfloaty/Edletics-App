@@ -61,6 +61,7 @@ export const createAndFetchTeam = (teamInfo, playerDetails) => {
       .doc(`${teamInfo.teamName}_${playerDetails?.phoneNumber}`)
       .set({
         teamName: teamInfo.teamName,
+        teamFormat: teamInfo.teamFormat,
         teamLocation: teamInfo.teamLocation,
         teamId: (`${teamInfo.teamName}_${playerDetails?.phoneNumber}`),
         teamAdminName: playerDetails?.fullName,
@@ -79,6 +80,7 @@ export const createAndFetchTeam = (teamInfo, playerDetails) => {
           .doc(`${teamInfo.teamName}_${playerDetails?.phoneNumber}`)
           .set({
             teamName: teamInfo.teamName,
+            teamFormat: teamInfo.teamFormat,
             teamLocation: teamInfo.teamLocation,
             teamId: (`${teamInfo.teamName}_${playerDetails?.phoneNumber}`),
             teamAdminName: playerDetails?.fullName,
@@ -364,24 +366,25 @@ export const addAndFetchOpponent = () => {
     }
   }
 
-  const fetchOpponentTeams = (currentTeam) => {
-    const [teams, setTeams] = useState([])
+  const fetchOpponentTeams = (currentTeamAdmin) => {
+    const [opponentTeams, setOpponentTeams] = useState([]);
     useEffect(() => {
-      const subscribe = firestore()
-        .collection("teams")
-        .onSnapshot((querySnapShot) => {
-          const teams = []
-          querySnapShot.forEach((doc) => {
-            if (doc.data().teamAdmin !== currentTeam?.teamAdmin) {
-              teams.push(doc.data())
-            }
-          })
-          setTeams(teams)
-        })
-      return () => subscribe()
-    }, [])
-    return teams
-  }
+        const subscribe = firestore()
+          .collection("teams")
+          .where("teamAdmin", "!=", {currentTeamAdmin})
+          .onSnapshot((querySnapShot) => {
+            const teams = [];
+            querySnapShot.forEach((doc) => {
+              if (doc.data().teamAdmin !== currentTeamAdmin) {
+                teams.push(doc.data());
+              }
+            });
+            setOpponentTeams(teams);
+          });
+        return () => subscribe();
+    }, []);
+    return opponentTeams;
+  };
 
 
   // fetch opponents whose squad is ready

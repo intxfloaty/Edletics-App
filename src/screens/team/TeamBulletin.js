@@ -84,6 +84,7 @@ const styles = StyleSheet.create({
     marginVertical: 10,
     alignItems: "center",
     justifyContent: "center",
+    boxShadow: "0px 0px 10px 0px rgba(0,0,0,0.75)",
   },
   addIcon: {
     position: "absolute",

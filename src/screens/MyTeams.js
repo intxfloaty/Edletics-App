@@ -11,6 +11,7 @@ const MyTeams = () => {
   const [shareLinkModal, setShareLinkModal] = useState(false)
   const [teamInfo, setTeamInfo] = useState({
     teamName: "",
+    teamFormat:"",
     teamLocation: "",
   })
   const { createTeam, fetchTeamDetails } = createAndFetchTeam(teamInfo, playerDetails)
@@ -36,14 +37,12 @@ const MyTeams = () => {
 
       <View style={styles.tabContainer}>
         <TouchableHighlight
-          underlayColor="#4a4a4a"
           onPress={() => setActiveTab('myTeams')}
           style={activeTab === 'myTeams' ? styles.activeTab : styles.inactiveTab}
         >
           <Text style={styles.tabText}>My Teams</Text>
         </TouchableHighlight>
         <TouchableHighlight
-          underlayColor="#4a4a4a"
           onPress={() => setActiveTab('opponent')}
           style={activeTab === 'opponent' ? styles.activeTab : styles.inactiveTab}
         >
@@ -57,12 +56,12 @@ const MyTeams = () => {
       {/* </ScrollView> */}
 
 
-      {/* <CreateTeam
+      <CreateTeam
         teamInfo={teamInfo}
         setTeamInfo={setTeamInfo}
         shareLinkModal={shareLinkModal}
         setShareLinkModal={setShareLinkModal}
-        onContinuePressed={onContinuePressed} /> */}
+        onContinuePressed={onContinuePressed} />
     </View>
   )
 }
@@ -85,7 +84,11 @@ const styles = StyleSheet.create({
   },
   activeTab: {
     paddingHorizontal: 20,
-    backgroundColor: "#1e1e1e",
+    height: 40,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 10,
+    backgroundColor: "blue",
   },
   inactiveTab: {
     paddingHorizontal: 20,

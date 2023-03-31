@@ -33,6 +33,5 @@ const styles = StyleSheet.create({
     backgroundColor: "#202224",
   },
   container_activity: {
-
   },
 })

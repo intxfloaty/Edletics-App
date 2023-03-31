@@ -23,11 +23,15 @@ const CreateTeam = ({ teamInfo, setTeamInfo, shareLinkModal, setShareLinkModal, 
           }}>
           <View style={styles.centeredView}>
             <View style={styles.modalView}>
-              <Text style={styles.teamName}>Team Name:</Text>
+              <Text style={styles.teamName}>Name:</Text>
               <CustomInput
                 value={teamInfo.teamName}
                 setValue={(text) => setTeamInfo({ ...teamInfo, teamName: text })} />
-              <Text style={styles.teamName}>Team Location:</Text>
+                <Text style={styles.teamName}>Format:</Text>
+              <CustomInput
+                value={teamInfo.teamFormat}
+                setValue={(text) => setTeamInfo({ ...teamInfo, teamFormat: text })} />
+              <Text style={styles.teamName}>Location:</Text>
               <CustomInput
                 value={teamInfo.teamLocation}
                 setValue={(text) => setTeamInfo({ ...teamInfo, teamLocation: text })} />

@@ -32,6 +32,7 @@ const SelectTeam = ({ myTeams }) => {
               <View style={styles.textContainer}>
                 <Text style={styles.text}>{myTeam?.teamName}</Text>
                 <Text style={styles.subText}>Rating</Text>
+                <Text style={styles.subText}>5v5</Text>
               </View>
               <Icon name="chevron-forward-outline" size={20} style={styles.arrowIcon} color="white" />
             </>

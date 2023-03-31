@@ -40,20 +40,25 @@ const PlayerDetailsForm = () => {
   }
 
   // function to select date of birth
-  const showDatepicker = () => {
-    const onChange = (event, selectedDate) => {
-      const currentDate = selectedDate.toLocaleString().replace(", 4:45:30 AM", " ");
-      setDate(currentDate);
-    };
-    const showMode = (currentMode) => {
-      DateTimePickerAndroid.open({
-        value: new Date(1598051730000),
-        onChange,
-        mode: currentMode,
-        is24Hour: true,
-      });
-    };
+  // function to date and time of practice
+  const onDateChange = (event, selectedDate) => {
+    if (selectedDate !== undefined) {
+      const selectedDateObject = new Date(selectedDate);
+      const formattedDate = selectedDateObject.toLocaleDateString();
+      setDate(formattedDate);
+    }
+  };
 
+  const showMode = (currentMode) => {
+    DateTimePickerAndroid.open({
+      value: new Date(),
+      onChange: currentMode === "date" ? onDateChange : onTimeChange,
+      mode: currentMode,
+      is24Hour: true,
+    });
+  };
+
+  const showDatepicker = () => {
     showMode('date');
   };
 
@@ -111,7 +116,7 @@ const PlayerDetailsForm = () => {
           emailAddress: emailAddress,
           location: location,
           phoneNumber: user.phoneNumber,
-          userId:user.uid
+          userId: user.uid
         })
         .then(() => {
           console.log("Player Profile added!")
