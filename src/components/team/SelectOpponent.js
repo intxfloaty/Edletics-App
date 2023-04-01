@@ -13,7 +13,7 @@ const SelectOpponent = () => {
   const currentTeam = useSelector(state => state.currentTeam)
   const { addOpponent, fetchOpponentTeams } = addAndFetchOpponent()
   const opponentTeams = fetchOpponentTeams();
-  const myOpponentsList = useOpponentsChatList(user?.phoneNumber)
+  const myOpponentsList = useOpponentsChatList(currentTeam?.teamId)
   console.log(myOpponentsList, "myOpponentsList")
   const { fetchGameRequest } = sendAndFetchGameRequest()
   const gameRequest = fetchGameRequest(currentTeam?.teamId)
@@ -40,7 +40,7 @@ const SelectOpponent = () => {
   const fetchSearchedTeams = (searchText) => {
     const fetchedTeams = opponentTeams?.filter((team) => {
       return (
-        team?.teamAdmin === user?.uid &&
+        team?.teamAdmin !== user?.uid && //TODO: replace === with !==
         team?.teamName.toLowerCase() === searchText.toLowerCase()
       );
     });
@@ -59,26 +59,24 @@ const SelectOpponent = () => {
           color="white"
           onPress={openSearchModal} />
       </View>
-      <View style={styles.opponentsList}>
-        {myOpponentsList?.map((team, index) => (
-          <TouchableHighlight
-            underlayColor="#4a4a4a"
-            style={styles.opponentTeamContainer}
-            key={index}
-            onPress={() => {
-              navigation.navigate('OpponentChat', { opponentTeam: team })
-            }}>
-            <>
-              <Avatar.Text size={40} label="MT" style={styles.avatar} color="white" />
-              <View style={styles.textContainer}>
-                <Text style={styles.text}>{team.teamName} </Text>
-                <Text style={styles.subText}>Rating</Text>
-              </View>
-              <Icon name="chevron-forward-outline" size={20} style={styles.arrowIcon} color="white" />
-            </>
-          </TouchableHighlight>
-        ))}
-      </View>
+      {myOpponentsList?.map((team, index) => (
+        <TouchableHighlight
+          underlayColor="#4a4a4a"
+          style={styles.opponentTeamContainer}
+          key={index}
+          onPress={() => {
+            navigation.navigate('OpponentChat', { opponentTeam: team })
+          }}>
+          <>
+            <Avatar.Text size={40} label="MT" style={styles.avatar} color="white" />
+            <View style={styles.textContainer}>
+              <Text style={styles.text}>{team.teamName} </Text>
+              <Text style={styles.subText}>Rating</Text>
+            </View>
+            <Icon name="chevron-forward-outline" size={20} style={styles.arrowIcon} color="white" />
+          </>
+        </TouchableHighlight>
+      ))}
 
       {/* Add a Modal component */}
       <Modal

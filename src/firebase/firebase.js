@@ -581,45 +581,76 @@ export const useMessages = (teamId) => {
 
 
 // to store and fetch messages of opponents
-export const useOpponentMessages = (playerId, opponentTeam) => {
+export const useOpponentMessages = (opponentTeam, currentTeam) => {
   const [messages, setMessages] = useState([]);
   const opponentTeamId = opponentTeam.teamId
+  const myTeamId = currentTeam.teamId
 
   const sendMessage = (text, uid) => {
+    const messageObj = {
+      text: text,
+      uid: uid,
+      createdAt: firestore.FieldValue.serverTimestamp(),
+    };
+
+    // Send message to my opponentMessages collection
     firestore()
-      .collection('players')
-      .doc(playerId)
-      .collection('opponentTeams')
+      .collection('teams')
+      .doc(myTeamId)
+      .collection('myOpponentTeams')
       .doc(opponentTeamId)
-      .set(opponentTeam)
+      .collection('opponentMessages')
+      .add(messageObj)
       .then(() => {
-        console.log('opponent team added successfully!');
-        // send message to opponent team
+        console.log('Message sent to my opponentMessages collection successfully!');
+
+        // add opponent to myOpponentTeams collection
         firestore()
-          .collection('players')
-          .doc(playerId)
-          .collection('opponentTeams')
+          .collection('teams')
+          .doc(myTeamId)
+          .collection('myOpponentTeams')
           .doc(opponentTeamId)
-          .collection('opponentMessages')
-          .add({
-            text: text,
-            uid: uid,
-            createdAt: firestore.FieldValue.serverTimestamp(),
-          })
+          .set(opponentTeam)
           .then(() => {
-            console.log('Message sent successfully!');
+            console.log('Opponent added to myOpponentTeams collection successfully!');
           })
-          .catch((error) => console.log(error, 'error sending message'));
+          .catch((error) => console.log(error, 'error adding opponent to myOpponentTeams collection'));
       })
-      .catch((error) => console.log(error, 'error adding opponent team'));
+      .catch((error) => console.log(error, 'error adding message to my opponentMessages collection'));
+
+    // Send message to the opponent's opponentMessages collection
+    firestore()
+      .collection('teams')
+      .doc(opponentTeamId)
+      .collection('myOpponentTeams')
+      .doc(myTeamId)
+      .collection('opponentMessages')
+      .add(messageObj)
+      .then(() => {
+        console.log('Message sent to the opponent\'s opponentMessages collection successfully!');
+
+        // add opponent to myOpponentTeams collection
+        firestore()
+          .collection('teams')
+          .doc(opponentTeamId)
+          .collection('myOpponentTeams')
+          .doc(myTeamId)
+          .set(currentTeam)
+          .then(() => {
+            console.log('Opponent added to the opponent\'s myOpponentTeams collection successfully!');
+          })
+          .catch((error) => console.log(error, 'error adding opponent to the opponent\'s myOpponentTeams collection'));
+      })
+      .catch((error) => console.log(error, 'error adding message to the opponent\'s opponentMessages collection'));
   };
+
 
 
   useEffect(() => {
     const unsubscribe = firestore()
-      .collection('players')
-      .doc(playerId)
-      .collection('opponentTeams')
+      .collection('teams')
+      .doc(myTeamId)
+      .collection('myOpponentTeams')
       .doc(opponentTeamId)
       .collection('opponentMessages')
       .orderBy('createdAt', 'desc')
@@ -643,30 +674,30 @@ export const useOpponentMessages = (playerId, opponentTeam) => {
       );
 
     return () => unsubscribe();
-  }, [playerId]);
+  }, [myTeamId]);
 
   return { messages, sendMessage }
 }
 
 
 // fetch list of opponents a team has had chat with
-export const useOpponentsChatList = (playerId) => {
+export const useOpponentsChatList = (myTeamId) => {
   const [myOpponentsList, setmyOpponentsList] = useState([])
 
   useEffect(() => {
     const unsubscribe = firestore()
-      .collection("players")
-      .doc(playerId)
-      .collection("opponentTeams")
+      .collection("teams")
+      .doc(myTeamId)
+      .collection("myOpponentTeams")
       .onSnapshot((querySnapShot) => {
         const opponents = []
-        querySnapShot.forEach((doc) => {
+        querySnapShot?.forEach((doc) => {
           opponents.push(doc.data())
         })
         setmyOpponentsList(opponents)
       })
     return () => unsubscribe()
-  }, [playerId])
+  }, [myTeamId])
 
   return myOpponentsList
 }

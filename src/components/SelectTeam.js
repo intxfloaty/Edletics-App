@@ -8,12 +8,12 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import { Avatar } from 'react-native-paper';
 
 
-const SelectTeam = ({ myTeams }) => {
+const SelectTeam = ({ myTeams, closeModal }) => {
   const navigation = useNavigation()
   const currentTeam = useSelector(state => state.currentTeam)
   const dispatch = useDispatch()
 
- 
+
   return (
     <View style={styles.parent}>
       {myTeams?.map((myTeam, index) => {
@@ -23,9 +23,7 @@ const SelectTeam = ({ myTeams }) => {
             style={styles.teamContainer}
             onPress={() => {
               dispatch(selectMyCurrentTeam(myTeam))
-              if (currentTeam.teamId) {
-                navigation.navigate("TeamScreen")
-              }
+              closeModal()
             }} key={index}>
             <>
               <Avatar.Text size={40} label="MT" style={styles.avatar} color="white" />
@@ -80,7 +78,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: "gray"
   },
-  arrowIcon : {
+  arrowIcon: {
     position: "absolute",
     right: 10,
   }

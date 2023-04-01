@@ -15,7 +15,7 @@ const OpponentChat = ({ route }) => {
   const { fetchGameRequest } = sendAndFetchGameRequest()
   const gameRequest = fetchGameRequest(currentTeam?.teamId)
   const { acceptGameRequest, declineGameRequest } = updateGameRequestStatus()
-  const { messages, sendMessage } = useOpponentMessages(user?.phoneNumber, opponentTeam);
+  const { messages, sendMessage } = useOpponentMessages(opponentTeam, currentTeam);
   const [chatMessages, setChatMessages] = useState([]);
 
   useLayoutEffect(() => {
