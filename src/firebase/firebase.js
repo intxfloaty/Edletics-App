@@ -366,22 +366,19 @@ export const addAndFetchOpponent = () => {
     }
   }
 
-  const fetchOpponentTeams = (currentTeamAdmin) => {
+  const fetchOpponentTeams = () => {
     const [opponentTeams, setOpponentTeams] = useState([]);
     useEffect(() => {
-        const subscribe = firestore()
-          .collection("teams")
-          .where("teamAdmin", "!=", {currentTeamAdmin})
-          .onSnapshot((querySnapShot) => {
-            const teams = [];
-            querySnapShot.forEach((doc) => {
-              if (doc.data().teamAdmin !== currentTeamAdmin) {
-                teams.push(doc.data());
-              }
-            });
-            setOpponentTeams(teams);
+      const subscribe = firestore()
+        .collection("teams")
+        .onSnapshot((querySnapShot) => {
+          const teams = [];
+          querySnapShot.forEach((doc) => {
+            teams.push(doc.data());
           });
-        return () => subscribe();
+          setOpponentTeams(teams);
+        });
+      return () => subscribe();
     }, []);
     return opponentTeams;
   };
@@ -526,7 +523,7 @@ export const updateGameRequestStatus = () => {
 
 
 
-// to store the messages in firestore
+// to store and fetch messages from firestore
 export const useMessages = (teamId) => {
   const [messages, setMessages] = useState([]);
 
@@ -579,4 +576,97 @@ export const useMessages = (teamId) => {
   }, [teamId]);
 
   return { messages, sendMessage }
+}
+
+
+
+// to store and fetch messages of opponents
+export const useOpponentMessages = (playerId, opponentTeam) => {
+  const [messages, setMessages] = useState([]);
+  const opponentTeamId = opponentTeam.teamId
+
+  const sendMessage = (text, uid) => {
+    firestore()
+      .collection('players')
+      .doc(playerId)
+      .collection('opponentTeams')
+      .doc(opponentTeamId)
+      .set(opponentTeam)
+      .then(() => {
+        console.log('opponent team added successfully!');
+        // send message to opponent team
+        firestore()
+          .collection('players')
+          .doc(playerId)
+          .collection('opponentTeams')
+          .doc(opponentTeamId)
+          .collection('opponentMessages')
+          .add({
+            text: text,
+            uid: uid,
+            createdAt: firestore.FieldValue.serverTimestamp(),
+          })
+          .then(() => {
+            console.log('Message sent successfully!');
+          })
+          .catch((error) => console.log(error, 'error sending message'));
+      })
+      .catch((error) => console.log(error, 'error adding opponent team'));
+  };
+
+
+  useEffect(() => {
+    const unsubscribe = firestore()
+      .collection('players')
+      .doc(playerId)
+      .collection('opponentTeams')
+      .doc(opponentTeamId)
+      .collection('opponentMessages')
+      .orderBy('createdAt', 'desc')
+      .onSnapshot(
+        (querySnapshot) => {
+          const messageDocs = querySnapshot.docs.map((doc) => ({
+            _id: doc.id,
+            text: doc.data().text,
+            createdAt: doc.data().createdAt ? doc.data().createdAt.toDate() : new Date(),
+            user: {
+              _id: doc.data().uid,
+              // name: 'User ' + doc.data().uid, // Replace this with the actual user name
+              // avatar: 'https://placeimg.com/140/140/any',
+            },
+          }));
+          setMessages(messageDocs);
+        },
+        (error) => {
+          console.log(error, 'error');
+        },
+      );
+
+    return () => unsubscribe();
+  }, [playerId]);
+
+  return { messages, sendMessage }
+}
+
+
+// fetch list of opponents a team has had chat with
+export const useOpponentsChatList = (playerId) => {
+  const [myOpponentsList, setmyOpponentsList] = useState([])
+
+  useEffect(() => {
+    const unsubscribe = firestore()
+      .collection("players")
+      .doc(playerId)
+      .collection("opponentTeams")
+      .onSnapshot((querySnapShot) => {
+        const opponents = []
+        querySnapShot.forEach((doc) => {
+          opponents.push(doc.data())
+        })
+        setmyOpponentsList(opponents)
+      })
+    return () => unsubscribe()
+  }, [playerId])
+
+  return myOpponentsList
 }

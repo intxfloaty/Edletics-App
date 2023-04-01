@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, Modal, Image, ScrollView, Pressable, TouchableHighlight } from 'react-native'
+import { StyleSheet, Text, View, TouchableHighlight } from 'react-native'
 import React, { useState, useEffect } from 'react'
 import { userAuthState, usePlayerDetails, createAndFetchTeam } from '../firebase/firebase';
 import CreateTeam from '../components/CreateTeam';
@@ -11,13 +11,12 @@ const MyTeams = () => {
   const [shareLinkModal, setShareLinkModal] = useState(false)
   const [teamInfo, setTeamInfo] = useState({
     teamName: "",
-    teamFormat:"",
+    teamFormat: "",
     teamLocation: "",
   })
   const { createTeam, fetchTeamDetails } = createAndFetchTeam(teamInfo, playerDetails)
   const [myTeams, setMyTeams] = useState([])
   const [activeTab, setActiveTab] = useState('myTeams')
-
 
 
   fetchTeamDetails(setMyTeams);
@@ -51,8 +50,8 @@ const MyTeams = () => {
       </View>
 
       {/* <ScrollView showsVerticalScrollIndicator={false}> */}
-        {activeTab === 'myTeams' && <SelectTeam myTeams={myTeams} />}
-        {activeTab === 'opponent' && <SelectOpponent />}
+      {activeTab === 'myTeams' && <SelectTeam myTeams={myTeams} />}
+      {activeTab === 'opponent' && <SelectOpponent />}
       {/* </ScrollView> */}
 
 

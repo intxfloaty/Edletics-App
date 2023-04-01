@@ -1,10 +1,12 @@
-import { StyleSheet, Text, View, ScrollView, Pressable, TouchableOpacity } from 'react-native'
+import { StyleSheet, View, } from 'react-native'
 import React, { useEffect, useCallback, useState, useLayoutEffect } from 'react';
-import { userAuthState, usePlayerDetails, addAndFetchOpponent, sendAndFetchGameRequest, updateGameRequestStatus, useMessages } from '../../firebase/firebase'
+import { userAuthState, usePlayerDetails, addAndFetchOpponent, sendAndFetchGameRequest, updateGameRequestStatus, useOpponentMessages } from '../../firebase/firebase'
 import { useSelector } from 'react-redux'
 import { GiftedChat } from 'react-native-gifted-chat';
 
-const TeamChat = () => {
+const OpponentChat = ({ route }) => {
+  const { opponentTeam } = route.params
+  console.log(opponentTeam?.teamId, "opponentTeam")
   const { user } = userAuthState();
   const { playerDetails } = usePlayerDetails(user?.phoneNumber)
   const currentTeam = useSelector(state => state.currentTeam)
@@ -13,9 +15,8 @@ const TeamChat = () => {
   const { fetchGameRequest } = sendAndFetchGameRequest()
   const gameRequest = fetchGameRequest(currentTeam?.teamId)
   const { acceptGameRequest, declineGameRequest } = updateGameRequestStatus()
-  const { messages, sendMessage } = useMessages(currentTeam?.teamId);
+  const { messages, sendMessage } = useOpponentMessages(user?.phoneNumber, opponentTeam);
   const [chatMessages, setChatMessages] = useState([]);
-
 
   useLayoutEffect(() => {
     setChatMessages(
@@ -48,7 +49,7 @@ const TeamChat = () => {
   );
 }
 
-export default TeamChat
+export default OpponentChat
 
 const styles = StyleSheet.create({
   parent: {
@@ -75,7 +76,3 @@ const styles = StyleSheet.create({
     marginTop: 10
   }
 })
-
-
-
-

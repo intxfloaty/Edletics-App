@@ -3,23 +3,25 @@ import React, { useState, useEffect } from 'react'
 import Icon from 'react-native-vector-icons/Ionicons';
 import { Avatar } from 'react-native-paper';
 import { useSelector } from 'react-redux'
-import { userAuthState, usePlayerDetails, addAndFetchOpponent, sendAndFetchGameRequest, updateGameRequestStatus, useMessages } from '../../firebase/firebase'
+import { useNavigation } from '@react-navigation/native';
+import { userAuthState, usePlayerDetails, addAndFetchOpponent, sendAndFetchGameRequest, updateGameRequestStatus, useOpponentsChatList } from '../../firebase/firebase'
 
 
-const SelectOpponent = () => { 
+const SelectOpponent = () => {
   const { user } = userAuthState();
-  console.log(user, "user")
   const { playerDetails } = usePlayerDetails(user?.phoneNumber)
   const currentTeam = useSelector(state => state.currentTeam)
   const { addOpponent, fetchOpponentTeams } = addAndFetchOpponent()
-  const opponentTeams = fetchOpponentTeams(user?.uid || '');
-  console.log(opponentTeams, "opponentTeams")
+  const opponentTeams = fetchOpponentTeams();
+  const myOpponentsList = useOpponentsChatList(user?.phoneNumber)
+  console.log(myOpponentsList, "myOpponentsList")
   const { fetchGameRequest } = sendAndFetchGameRequest()
   const gameRequest = fetchGameRequest(currentTeam?.teamId)
   const { acceptGameRequest, declineGameRequest } = updateGameRequestStatus()
   const [modalVisible, setModalVisible] = useState(false)
   const [searchText, setSearchText] = useState('')
   const [filteredTeams, setFilteredTeams] = useState([])
+  const navigation = useNavigation();
 
   const openSearchModal = () => {
     setModalVisible(true)
@@ -30,19 +32,21 @@ const SelectOpponent = () => {
   }
 
   useEffect(() => {
-    if(searchText !== ""){
-
-      fetchSearchedTeams()
+    if (searchText !== "") {
+      fetchSearchedTeams(searchText);
     }
-  }, [searchText])
+  }, [searchText]);
 
-  const fetchSearchedTeams = () => {
-    const fetchedTeams = opponentTeams?.filter(team => {
-      // console.log(team, "team")
-      return team?.teamName.toLowerCase().includes(searchText.toLowerCase())
-    })
-    setFilteredTeams(fetchedTeams)
-  }
+  const fetchSearchedTeams = (searchText) => {
+    const fetchedTeams = opponentTeams?.filter((team) => {
+      return (
+        team?.teamAdmin === user?.uid &&
+        team?.teamName.toLowerCase() === searchText.toLowerCase()
+      );
+    });
+    setFilteredTeams(fetchedTeams);
+  };
+
 
   return (
     <View style={styles.parent}>
@@ -54,6 +58,26 @@ const SelectOpponent = () => {
           style={styles.searchIcon}
           color="white"
           onPress={openSearchModal} />
+      </View>
+      <View style={styles.opponentsList}>
+        {myOpponentsList?.map((team, index) => (
+          <TouchableHighlight
+            underlayColor="#4a4a4a"
+            style={styles.opponentTeamContainer}
+            key={index}
+            onPress={() => {
+              navigation.navigate('OpponentChat', { opponentTeam: team })
+            }}>
+            <>
+              <Avatar.Text size={40} label="MT" style={styles.avatar} color="white" />
+              <View style={styles.textContainer}>
+                <Text style={styles.text}>{team.teamName} </Text>
+                <Text style={styles.subText}>Rating</Text>
+              </View>
+              <Icon name="chevron-forward-outline" size={20} style={styles.arrowIcon} color="white" />
+            </>
+          </TouchableHighlight>
+        ))}
       </View>
 
       {/* Add a Modal component */}
@@ -80,13 +104,12 @@ const SelectOpponent = () => {
               style={styles.opponentTeamContainer}
               key={index}
               onPress={() => {
-                addOpponent(currentTeam?.teamId, currentTeam, team.teamId, team);
-                closeModal();
+                navigation.navigate('OpponentChat', { opponentTeam: team })
               }}>
               <>
                 <Avatar.Text size={40} label="MT" style={styles.avatar} color="white" />
                 <View style={styles.textContainer}>
-                  <Text style={styles.text}>{team.teamName} Fc</Text>
+                  <Text style={styles.text}>{team.teamName} </Text>
                   <Text style={styles.subText}>Rating</Text>
                 </View>
                 <Icon name="chevron-forward-outline" size={20} style={styles.arrowIcon} color="white" />
@@ -222,7 +245,7 @@ export default SelectOpponent
 
 
 
- {/* {filteredTeams?.map((team, index) => {
+{/* {filteredTeams?.map((team, index) => {
         return (
           <TouchableHighlight
             underlayColor="#4a4a4a"
@@ -237,7 +260,7 @@ export default SelectOpponent
         )
       })} */}
 
-      {/* <Text style={styles.text}>Game Requests</Text>
+{/* <Text style={styles.text}>Game Requests</Text>
         {gameRequest?.map((request, index) => {
           return (
             <Pressable key={index} style={styles.newGameContainer} onPress={() => {
