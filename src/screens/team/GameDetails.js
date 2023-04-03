@@ -6,7 +6,6 @@ import { useSelector } from 'react-redux';
 import { updateGameSquad } from '../../firebase/firebase'
 import CustomButton from '../../components/CustomButton';
 import { useNavigation } from '@react-navigation/native';
-import CreateGameModal from '../../components/CreateGameModal';
 
 const GameDetails = () => {
   const { user } = userAuthState();
@@ -16,17 +15,9 @@ const GameDetails = () => {
   const { playerDetails } = usePlayerDetails(user?.phoneNumber)
   const { updateGameSquadList } = updateGameSquad()
   const navigation = useNavigation()
-  const [modalVisible, setModalVisible] = useState(false);
   const { fetchGameRequest } = sendAndFetchGameRequest()
   const gameRequest = fetchGameRequest(currentTeam?.teamId)
 
-  const toggleModal = () => {
-    setModalVisible(!modalVisible);
-  };
-
-  const handleBackdropPress = () => {
-    setModalVisible(false);
-  };
 
   return (
     <View style={styles.parent}>
@@ -79,34 +70,12 @@ const GameDetails = () => {
       })
       }
 
-      <CreateGameModal
-        toggleModal={toggleModal}
-        handleBackdropPress={handleBackdropPress}
-        modalVisible={modalVisible}
-        currentTeam={currentTeam}
-        squad={squad} />
-
-
       {!(squad?.playerList?.some((player) => player.name === playerDetails?.fullName))
         &&
         <View style={styles.btn}>
           <CustomButton text="Join Squad" type="TERTIORY" onPress={() => {
             updateGameSquadList(currentTeam?.teamId, playerDetails?.fullName)
           }} />
-        </View>}
-
-
-      {(currentTeam?.teamAdminName === playerDetails?.fullName) // so that only teamAdmins can create game
-        && (squad?.status === "Ready") // so that game can be created  only when squad is ready
-        && (gameRequest?.length === 0) // so that game can be created only when there is no game request
-        &&
-        <View style={styles.btn}>
-          <CustomButton
-            text="Create Game"
-            type="SECONDARY"
-            onPress={() => {
-              setModalVisible(true)
-            }} />
         </View>}
     </View>
   )

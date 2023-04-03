@@ -1,8 +1,9 @@
-import { StyleSheet, View, } from 'react-native'
+import { StyleSheet, View, Text } from 'react-native'
 import React, { useEffect, useCallback, useState, useLayoutEffect } from 'react';
 import { userAuthState, usePlayerDetails, addAndFetchOpponent, sendAndFetchGameRequest, updateGameRequestStatus, useOpponentMessages } from '../../firebase/firebase'
 import { useSelector } from 'react-redux'
 import { GiftedChat } from 'react-native-gifted-chat';
+import Icon from 'react-native-vector-icons/Ionicons';
 
 const OpponentChat = ({ route }) => {
   const { opponentTeam } = route.params
@@ -12,11 +13,17 @@ const OpponentChat = ({ route }) => {
   const currentTeam = useSelector(state => state.currentTeam)
   const { addOpponent, fetchOpponentTeams } = addAndFetchOpponent()
   const teams = fetchOpponentTeams(currentTeam)
-  const { fetchGameRequest } = sendAndFetchGameRequest()
+  const {sendGameRequestToOpponent, fetchGameRequest } = sendAndFetchGameRequest()
   const gameRequest = fetchGameRequest(currentTeam?.teamId)
   const { acceptGameRequest, declineGameRequest } = updateGameRequestStatus()
   const { messages, sendMessage } = useOpponentMessages(opponentTeam, currentTeam);
   const [chatMessages, setChatMessages] = useState([]);
+
+  const onFootballIconPressed = () => {
+    sendGameRequestToOpponent(currentTeam, opponentTeam)
+    const customMessage = `${opponentTeam?.teamName} sent you a game request!`; // Replace this with the desired custom message
+    sendMessage(customMessage, user?.uid);
+  };
 
   useLayoutEffect(() => {
     setChatMessages(
@@ -31,6 +38,7 @@ const OpponentChat = ({ route }) => {
     );
   }, [messages]);
 
+
   const onSend = useCallback((messages = []) => {
     const message = messages[0];
     sendMessage(message.text, user?.uid);
@@ -38,6 +46,15 @@ const OpponentChat = ({ route }) => {
 
   return (
     <View style={styles.parent}>
+      <View style={styles.chatHeaderBox}>
+        <Text style={styles.text}>{opponentTeam?.teamName}</Text>
+        <Icon 
+          name="football-outline"
+          size={30}
+          color="white"
+          onPress={onFootballIconPressed}
+        />
+      </View>
       <GiftedChat
         messages={chatMessages}
         onSend={messages => onSend(messages)}
@@ -55,24 +72,17 @@ const styles = StyleSheet.create({
   parent: {
     height: "100%",
     backgroundColor: "#101112",
+  },
+  chatHeaderBox: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    backgroundColor: "#2f3136",
     padding: 10,
   },
-  newGameContainer: {
-    backgroundColor: 'white',
-    minHeight: 150,
-    borderRadius: 10,
-    marginVertical: 10,
-    alignItems: "center",
-    justifyContent: "center",
-  },
   text: {
-    color: "blue",
+    color: "white",
     fontSize: 20,
     marginVertical: 2
   },
-  buttonContainer: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    marginTop: 10
-  }
 })

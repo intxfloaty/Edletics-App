@@ -383,33 +383,7 @@ export const addAndFetchOpponent = () => {
     return opponentTeams;
   };
 
-
-  // fetch opponents whose squad is ready
-  const fetchMyOpponentWithSquadReady = (teamId) => {
-    const [opponent, setOpponent] = useState([])
-    useEffect(() => {
-      const subscribe = firestore()
-        .collection("teams")
-        .doc(teamId)
-        .collection("opponent")
-        .onSnapshot((querySnapShot) => {
-          const opponent = []
-          querySnapShot.forEach((doc) => {
-            const opponentRef = firestore().collection("teams").doc(doc.id)
-            opponentRef.get().then((doc) => {
-              if (doc.data()?.squad.status === "Ready") {
-                opponent.push(doc.data())
-              }
-            })
-          })
-          setOpponent(opponent)
-        })
-      return () => subscribe()
-    }, [])
-    return opponent
-  }
-
-  return { addOpponent, fetchOpponentTeams, fetchMyOpponentWithSquadReady }
+  return { addOpponent, fetchOpponentTeams }
 }
 
 
@@ -418,7 +392,10 @@ export const addAndFetchOpponent = () => {
 // send game request to other team
 export const sendAndFetchGameRequest = () => {
 
-  const sendGameRequestToOpponent = (teamId, opponentId, opponentName, game) => {
+  const sendGameRequestToOpponent = (currentTeam, opponentTeam) => {
+    const teamId = currentTeam?.teamId
+    const opponentId = opponentTeam?.teamId
+    const opponentName = opponentTeam?.teamName
     try {
       firestore()
         .collection("teams")
@@ -426,7 +403,6 @@ export const sendAndFetchGameRequest = () => {
         .collection("gameRequest")
         .doc(teamId)
         .set({
-          ...game,
           gameRequestId: teamId,
           opponentName: opponentName,
           gameRequestStatus: "pending"
