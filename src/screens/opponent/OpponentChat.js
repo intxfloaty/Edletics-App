@@ -252,7 +252,7 @@ const OpponentChat = ({ route }) => {
                       text="Accept"
                       type="TERTIORY"
                       onPress={() => {
-                        acceptGameRequest(currentTeam?.teamId, opponentTeam?.teamId, currentTeam?.teamName, request)
+                        acceptGameRequest(currentTeam, opponentTeam, request)
                       }}
                     />
                     <CustomButton
