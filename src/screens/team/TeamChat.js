@@ -1,18 +1,13 @@
-import { StyleSheet, Text, View, ScrollView, Pressable, TouchableOpacity } from 'react-native'
-import React, { useEffect, useCallback, useState, useLayoutEffect } from 'react';
-import { userAuthState, usePlayerDetails, addAndFetchOpponent, sendAndFetchGameRequest, updateGameRequestStatus, useMessages } from '../../firebase/firebase'
+import { StyleSheet, View, } from 'react-native'
+import React, { useCallback, useState, useLayoutEffect } from 'react';
+import { userAuthState, usePlayerDetails, useMessages } from '../../firebase/firebase'
 import { useSelector } from 'react-redux'
 import { GiftedChat } from 'react-native-gifted-chat';
 
 const TeamChat = () => {
   const { user } = userAuthState();
-  const { playerDetails } = usePlayerDetails(user?.phoneNumber)
+  // const { playerDetails } = usePlayerDetails(user?.phoneNumber)
   const currentTeam = useSelector(state => state.currentTeam)
-  const { addOpponent, fetchOpponentTeams } = addAndFetchOpponent()
-  const teams = fetchOpponentTeams(currentTeam)
-  const { fetchGameRequest } = sendAndFetchGameRequest()
-  const gameRequest = fetchGameRequest(currentTeam?.teamId)
-  const { acceptGameRequest, declineGameRequest } = updateGameRequestStatus()
   const { messages, sendMessage } = useMessages(currentTeam?.teamId);
   const [chatMessages, setChatMessages] = useState([]);
 

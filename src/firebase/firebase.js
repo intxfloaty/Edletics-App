@@ -392,7 +392,7 @@ export const addAndFetchOpponent = () => {
 // send game request to other team
 export const sendAndFetchGameRequest = () => {
 
-  const sendGameRequestToOpponent = (currentTeam, opponentTeam) => {
+  const sendGameRequestToOpponent = (currentTeam, opponentTeam, game) => {
     const teamId = currentTeam?.teamId
     const opponentId = opponentTeam?.teamId
     const opponentName = opponentTeam?.teamName
@@ -400,15 +400,19 @@ export const sendAndFetchGameRequest = () => {
       firestore()
         .collection("teams")
         .doc(opponentId)
-        .collection("gameRequest")
+        .collection("myOpponentTeams")
         .doc(teamId)
-        .set({
+        .collection("gameRequest")
+        .add({
+          ...game,
           gameRequestId: teamId,
           opponentName: opponentName,
           gameRequestStatus: "pending"
         })
-        .then(() => {
+        .then((doc) => {
           console.log("Game Request sent successfully!")
+          // update the doc with the gameRequestId
+          doc.update({ gameRequestId: doc.id });
         })
         .catch(error => console.log(error, "error"))
     } catch (error) {
@@ -417,12 +421,14 @@ export const sendAndFetchGameRequest = () => {
   }
 
   // fetch game request sent to me
-  const fetchGameRequest = (teamId) => {
+  const fetchGameRequest = (teamId, opponentId) => {
     const [gameRequest, setGameRequest] = useState([])
     useEffect(() => {
       const subscribe = firestore()
         .collection("teams")
         .doc(teamId)
+        .collection("myOpponentTeams")
+        .doc(opponentId)
         .collection("gameRequest")
         .onSnapshot((querySnapShot) => {
           const gameRequest = []
@@ -442,12 +448,16 @@ export const sendAndFetchGameRequest = () => {
 export const updateGameRequestStatus = () => {
 
   const acceptGameRequest = (teamId, opponentId, opponentName, game) => {
+
+    const gameRequestId = game?.gameRequestId
     try {
       firestore()
         .collection("teams")
         .doc(teamId)
-        .collection("gameRequest")
+        .collection("myOpponentTeams")
         .doc(opponentId)
+        .collection("gameRequest")
+        .doc(gameRequestId)
         .update({
           gameRequestStatus: "accepted"
         })
@@ -457,24 +467,25 @@ export const updateGameRequestStatus = () => {
           firestore()
             .collection("teams")
             .doc(opponentId)
-            .collection("gameRequest")
+            .collection("myOpponentTeams")
             .doc(teamId)
+            .collection("gameRequest")
+            .doc(gameRequestId)
             .set({
               ...game,
               opponentName: opponentName,
               gameRequestStatus: "accepted",
-              gameRequestId: teamId
             })
             .then(() => {
               console.log("Game Request accepted successfully!")
             }
             )
-            .catch(error => console.log(error, "error"))
+            .catch(error => console.log(error, "error1"))
 
         })
-        .catch(error => console.log(error, "error"))
+        .catch(error => console.log(error, "error2"))
     } catch (error) {
-      console.log(error, "error")
+      console.log(error, "error3")
     }
   }
 

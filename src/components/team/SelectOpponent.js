@@ -1,23 +1,19 @@
-import { StyleSheet, Text, TextInput, View, TouchableHighlight, Modal, ScrollView } from 'react-native'
+import { StyleSheet, Text, TextInput, View, TouchableHighlight, Modal, } from 'react-native'
 import React, { useState, useEffect } from 'react'
 import Icon from 'react-native-vector-icons/Ionicons';
 import { Avatar } from 'react-native-paper';
 import { useSelector } from 'react-redux'
 import { useNavigation } from '@react-navigation/native';
-import { userAuthState, usePlayerDetails, addAndFetchOpponent, sendAndFetchGameRequest, updateGameRequestStatus, useOpponentsChatList } from '../../firebase/firebase'
+import { userAuthState, addAndFetchOpponent, useOpponentsChatList } from '../../firebase/firebase'
 
 
 const SelectOpponent = () => {
   const { user } = userAuthState();
-  const { playerDetails } = usePlayerDetails(user?.phoneNumber)
+  // const { playerDetails } = usePlayerDetails(user?.phoneNumber)
   const currentTeam = useSelector(state => state.currentTeam)
-  const { addOpponent, fetchOpponentTeams } = addAndFetchOpponent()
+  const { fetchOpponentTeams } = addAndFetchOpponent()
   const opponentTeams = fetchOpponentTeams();
   const myOpponentsList = useOpponentsChatList(currentTeam?.teamId)
-  console.log(myOpponentsList, "myOpponentsList")
-  const { fetchGameRequest } = sendAndFetchGameRequest()
-  const gameRequest = fetchGameRequest(currentTeam?.teamId)
-  const { acceptGameRequest, declineGameRequest } = updateGameRequestStatus()
   const [modalVisible, setModalVisible] = useState(false)
   const [searchText, setSearchText] = useState('')
   const [filteredTeams, setFilteredTeams] = useState([])
@@ -237,53 +233,4 @@ const styles = StyleSheet.create({
   },
 })
 
-
-
 export default SelectOpponent
-
-
-
-{/* {filteredTeams?.map((team, index) => {
-        return (
-          <TouchableHighlight
-            underlayColor="#4a4a4a"
-            style={styles.opponentTeamContainer}
-            key={index}
-            onPress={() => {
-              addOpponent(currentTeam?.teamId, currentTeam, team.teamId, team)
-            }}>
-            <>
-              
-          </TouchableHighlight>
-        )
-      })} */}
-
-{/* <Text style={styles.text}>Game Requests</Text>
-        {gameRequest?.map((request, index) => {
-          return (
-            <Pressable key={index} style={styles.newGameContainer} onPress={() => {
-            }}>
-              <Text style={styles.text}>{request.date}</Text>
-              <Text style={styles.text}>{request.format}</Text>
-              <Text style={styles.text}>{request.location}</Text>
-              <Text style={styles.text}>{request.mode}</Text>
-              {currentTeam?.teamAdmin === playerDetails?.userId &&
-                <View style={styles.buttonContainer}>
-                  <CustomButton
-                    text="Accept"
-                    type="TERTIORY"
-                    onPress={() => {
-                      acceptGameRequest(currentTeam?.teamId, request?.gameRequestId, currentTeam?.teamName, request)
-                    }}
-                  />
-                  <CustomButton
-                    text="Decline"
-                    type="TERTIORY"
-                    onPress={() => {
-                      declineGameRequest(currentTeam?.teamId, request?.gameRequestId)
-                    }}
-                  />
-                </View>}
-            </Pressable>
-          )
-        })} */}
