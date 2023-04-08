@@ -500,7 +500,8 @@ export const updateGameRequestStatus = () => {
         .collection("teams")
         .doc(teamId)
         .update({
-          "squad.game": game
+          "squad.game": game,
+          "squad.game.opponentName": opponentName
         })
         .then(() => console.log("Game is Fixed!"))
         .catch(error => console.log(error, "statusError"))
@@ -514,7 +515,8 @@ export const updateGameRequestStatus = () => {
         .collection("teams")
         .doc(opponentId)
         .update({
-          "squad.game": game
+          "squad.game": game,
+          "squad.game.opponentName": myTeamName
         })
         .then(() => console.log("Game is Fixed!"))
         .catch(error => console.log(error, "statusError"))
