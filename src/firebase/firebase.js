@@ -232,76 +232,6 @@ export const createAndFetchSquad = () => {
 }
 
 
-// to create new games and fetch new games created
-export const createAndFetchGame = () => {
-
-  // to create a new game and add it as a sub-collection to teams
-  const createNewGame = (teamId, game) => {
-    try {
-      firestore()
-        .collection("teams")
-        .doc(teamId)
-        .collection("newGame")
-        .add({
-          ...game,
-          gameId: "" // Add an empty gameId field
-        })
-        .then((doc) => {
-          console.log("New game created! with ID: ", doc.id);
-          // Update the gameId field with the newly generated document ID
-          doc.update({ gameId: doc.id });
-        })
-        .catch(error => console.log(error, "error"))
-    } catch (error) {
-      console.log(error, "error")
-    }
-  }
-
-  const createNewGameFromGameRequest = (teamId, gameId, game) => {
-    try {
-      firestore()
-        .collection("teams")
-        .doc(teamId)
-        .collection("newGame")
-        .doc(gameId)
-        .set({ ...game }
-          // gameId: "" // Add an empty gameId field
-        )
-        .then((doc) => {
-          console.log("New game created! with ID: ", doc.id);
-          // Update the gameId field with the newly generated document ID
-          // doc.update({ gameId: doc.id });
-        })
-        .catch(error => console.log(error, "error"))
-    } catch (error) {
-      console.log(error, "error")
-    }
-  }
-
-  // to fetch the games created
-  const fetchNewGame = (teamId) => {
-    const [newGame, setNewGame] = useState([])
-    useEffect(() => {
-      const subscribe = firestore()
-        .collection("teams")
-        .doc(teamId)
-        .collection("newGame")
-        .onSnapshot((querySnapShot) => {
-          const newGame = []
-          querySnapShot.forEach((doc) => {
-            newGame.push(doc.data())
-          })
-          setNewGame(newGame)
-        })
-      return () => subscribe()
-    }, [])
-    return newGame
-  }
-
-  return { createNewGame, fetchNewGame, createNewGameFromGameRequest }
-}
-
-
 //  function to update the squad with players 
 export const updateGameSquad = () => {
   const updateGameSquadList = (teamId, player) => {
@@ -723,4 +653,24 @@ export const useOpponentsChatList = (myTeamId) => {
   }, [myTeamId])
 
   return myOpponentsList
+}
+
+// check if the squad is ready for the opponent
+export const useCheckSquad = (teamId) => {
+  const [isSquadReady, setIsSquadReady] = useState(false)
+
+  useEffect(() => {
+    const unsubscribe = firestore()
+      .collection("teams")
+      .doc(teamId)
+      .onSnapshot((doc) => {
+        const squad = doc.data().squad
+        if (squad?.status === "Ready") {
+          setIsSquadReady(true)
+        }
+      })
+    return () => unsubscribe()
+  }, [teamId])
+
+  return isSquadReady
 }

@@ -4,7 +4,8 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import { Avatar } from 'react-native-paper';
 import { useSelector } from 'react-redux'
 import { useNavigation } from '@react-navigation/native';
-import { userAuthState, addAndFetchOpponent, useOpponentsChatList } from '../../firebase/firebase'
+import { userAuthState, addAndFetchOpponent, useOpponentsChatList, useCheckSquad } from '../../firebase/firebase'
+import OpponentTeam from './OpponentTeam';
 
 
 const SelectOpponent = () => {
@@ -55,24 +56,11 @@ const SelectOpponent = () => {
           color="white"
           onPress={openSearchModal} />
       </View>
-      {myOpponentsList?.map((team, index) => (
-        <TouchableHighlight
-          underlayColor="#4a4a4a"
-          style={styles.opponentTeamContainer}
-          key={index}
-          onPress={() => {
-            navigation.navigate('OpponentChat', { opponentTeam: team })
-          }}>
-          <>
-            <Avatar.Text size={40} label="MT" style={styles.avatar} color="white" />
-            <View style={styles.textContainer}>
-              <Text style={styles.text}>{team.teamName} </Text>
-              <Text style={styles.subText}>Rating</Text>
-            </View>
-            <Icon name="chevron-forward-outline" size={20} style={styles.arrowIcon} color="white" />
-          </>
-        </TouchableHighlight>
-      ))}
+      {
+        myOpponentsList?.map((team, index) => (
+          <OpponentTeam key={index} team={team} navigation={navigation} />
+        ))
+      }
 
       {/* Add a Modal component */}
       <Modal
@@ -144,6 +132,18 @@ const styles = StyleSheet.create({
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
+  },
+  opponentTeamContainerReady: {
+    marginTop: 10,
+    backgroundColor: '#1e1e1e',
+    borderRadius: 10,
+    minHeight: "10%",
+    width: "100%",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    borderWidth: 2,
+    borderColor: 'green'
   },
   avatar: {
     position: "absolute",

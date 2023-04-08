@@ -1,6 +1,15 @@
 import { StyleSheet, View, Text, Modal, TouchableHighlight, Pressable, ScrollView } from 'react-native'
 import React, { useEffect, useCallback, useState, useLayoutEffect } from 'react';
-import { userAuthState, usePlayerDetails, addAndFetchOpponent, sendAndFetchGameRequest, updateGameRequestStatus, useOpponentMessages, updateGameSquad } from '../../firebase/firebase'
+import {
+  userAuthState,
+  usePlayerDetails,
+  addAndFetchOpponent,
+  sendAndFetchGameRequest,
+  updateGameRequestStatus,
+  useOpponentMessages,
+  updateGameSquad,
+  useCheckSquad
+} from '../../firebase/firebase'
 import { useSelector } from 'react-redux'
 import { GiftedChat } from 'react-native-gifted-chat';
 import CustomButton from '../../components/CustomButton';
@@ -12,9 +21,11 @@ import { DateTimePickerAndroid } from '@react-native-community/datetimepicker';
 
 const OpponentChat = ({ route }) => {
   const { opponentTeam } = route.params
+  const { isSquadReady } = route.params
   const { user } = userAuthState();
   const { playerDetails } = usePlayerDetails(user?.phoneNumber)
   const currentTeam = useSelector(state => state.currentTeam)
+  const isMySquadReady = useCheckSquad(currentTeam?.teamId)
   const { addOpponent, fetchOpponentTeams } = addAndFetchOpponent()
   const teams = fetchOpponentTeams(currentTeam)
   const { sendGameRequestToOpponent, fetchGameRequest } = sendAndFetchGameRequest()
@@ -123,12 +134,12 @@ const OpponentChat = ({ route }) => {
       <View style={styles.chatHeaderBox}>
         <Text style={styles.text}>{opponentTeam?.teamName}</Text>
         <View style={styles.iconContainer}>
-          <Icon
+          {isMySquadReady && isSquadReady && <Icon
             name="add-outline"
             size={30}
             color="white"
             onPress={onAddIconPressed}
-          />
+          />}
           <Icon
             name="football-outline"
             size={30}
