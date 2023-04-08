@@ -60,6 +60,7 @@ const GameDetails = () => {
             <Text style={styles.text}>Format : {squad?.game?.format}</Text>
             <Text style={styles.text}>Location: {squad?.game?.location}</Text>
             <Text style={styles.text}>Date : {squad?.game?.date}</Text>
+            <Text style={styles.text}>Time : {squad?.game?.time}</Text>
             <Text style={styles.text}>Opponent : {squad?.game?.opponentName}</Text>
           </>
         </View>
