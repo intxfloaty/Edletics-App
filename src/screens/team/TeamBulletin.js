@@ -1,4 +1,4 @@
-import { TouchableHighlight, StyleSheet, Text, View, ScrollView } from 'react-native'
+import { TouchableHighlight, StyleSheet, Text, View, ScrollView, TouchableOpacity } from 'react-native'
 import React, { useState, useEffect } from 'react'
 import Icon from 'react-native-vector-icons/Ionicons';
 import { useNavigation } from '@react-navigation/native';
@@ -25,8 +25,8 @@ const TeamBulletin = () => {
             {/* <Text style={styles.headingText}>Join Squad</Text> */}
           </View>
           {squad &&
-            <TouchableHighlight
-              underlayColor="#4a4a4a"
+            <TouchableOpacity
+              // underlayColor="#4a4a4a"
               style={styles.newGameContainer}
               onPress={() => {
                 navigation.navigate("GameDetails")
@@ -38,7 +38,7 @@ const TeamBulletin = () => {
                 <Text style={styles.text}>Date : {squad.date}</Text>
                 <Text style={styles.text}>Time : {squad.time}</Text>
               </>
-            </TouchableHighlight>
+            </TouchableOpacity>
           }
 
         </ScrollView>

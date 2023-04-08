@@ -557,7 +557,7 @@ export const useOpponentMessages = (opponentTeam, currentTeam) => {
       .then(() => {
         console.log('Message sent to my opponentMessages collection successfully!');
 
-        // add opponent to myOpponentTeams collection
+        // add opponent to myOpponentTeams collection  //TODO: we do not need to add opponent to myOpponentTeams collection every time we send a message
         firestore()
           .collection('teams')
           .doc(myTeamId)
