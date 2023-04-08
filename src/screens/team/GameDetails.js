@@ -16,7 +16,7 @@ const GameDetails = () => {
   const { updateGameSquadList } = updateGameSquad()
   const navigation = useNavigation()
   const { fetchGameRequest } = sendAndFetchGameRequest()
-  const gameRequest = fetchGameRequest(currentTeam?.teamId)
+  const gameRequest = fetchGameRequest(currentTeam?.teamId,)
 
 
   return (
@@ -52,23 +52,19 @@ const GameDetails = () => {
       </View>
       {/* end */}
 
-      {gameRequest?.map((item, index) => {
-        return (
-          <View key={index}>
-            {item?.gameRequestStatus === "accepted" &&
-              <>
-                <Text style={styles.text}>Game On!</Text>
-                <Text style={styles.text}>Mode : {item?.mode}</Text>
-                <Text style={styles.text}>Format : {item?.format}</Text>
-                <Text style={styles.text}>Location: {item?.location}</Text>
-                <Text style={styles.text}>Date : {item?.date}</Text>
-                <Text style={styles.text}>Opponent : {item?.opponentName}</Text>
-              </>
-            }
-          </View>
-        )
-      })
+      {squad?.game &&
+        <View>
+          <>
+            <Text style={styles.text}>Game On!</Text>
+            <Text style={styles.text}>Mode : {squad?.game?.mode}</Text>
+            <Text style={styles.text}>Format : {squad?.game?.format}</Text>
+            <Text style={styles.text}>Location: {squad?.game?.location}</Text>
+            <Text style={styles.text}>Date : {squad?.game?.date}</Text>
+            <Text style={styles.text}>Opponent : {squad?.game?.opponentName}</Text>
+          </>
+        </View>
       }
+
 
       {!(squad?.playerList?.some((player) => player.name === playerDetails?.fullName))
         &&

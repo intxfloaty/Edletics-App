@@ -492,6 +492,35 @@ export const updateGameRequestStatus = () => {
     } catch (error) {
       console.log(error, "error3")
     }
+
+
+    // update the squad object for my team
+    try {
+      firestore()
+        .collection("teams")
+        .doc(teamId)
+        .update({
+          "squad.game": game
+        })
+        .then(() => console.log("Game is Fixed!"))
+        .catch(error => console.log(error, "statusError"))
+    } catch (error) {
+      console.log(error, "statusError")
+    }
+
+    // update the squad object for opponent team
+    try {
+      firestore()
+        .collection("teams")
+        .doc(opponentId)
+        .update({
+          "squad.game": game
+        })
+        .then(() => console.log("Game is Fixed!"))
+        .catch(error => console.log(error, "statusError"))
+    } catch (error) {
+      console.log(error, "statusError")
+    }
   }
 
   const declineGameRequest = (teamId, opponentId) => {

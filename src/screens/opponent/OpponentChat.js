@@ -1,6 +1,6 @@
 import { StyleSheet, View, Text, Modal, TouchableHighlight, Pressable, ScrollView } from 'react-native'
 import React, { useEffect, useCallback, useState, useLayoutEffect } from 'react';
-import { userAuthState, usePlayerDetails, addAndFetchOpponent, sendAndFetchGameRequest, updateGameRequestStatus, useOpponentMessages } from '../../firebase/firebase'
+import { userAuthState, usePlayerDetails, addAndFetchOpponent, sendAndFetchGameRequest, updateGameRequestStatus, useOpponentMessages, updateGameSquad } from '../../firebase/firebase'
 import { useSelector } from 'react-redux'
 import { GiftedChat } from 'react-native-gifted-chat';
 import CustomButton from '../../components/CustomButton';
@@ -253,6 +253,7 @@ const OpponentChat = ({ route }) => {
                       type="TERTIORY"
                       onPress={() => {
                         acceptGameRequest(currentTeam, opponentTeam, request)
+                        updateGameSquad(currentTeam, opponentTeam, request)
                       }}
                     />
                     <CustomButton
