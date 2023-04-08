@@ -49,6 +49,7 @@ const OpponentChat = ({ route }) => {
     status: "InProgress"
   })
 
+
   // function to date and time of practice
   const onDateChange = (event, selectedDate) => {
     if (selectedDate !== undefined) {
@@ -101,9 +102,6 @@ const OpponentChat = ({ route }) => {
 
   const onAddIconPressed = () => {
     openGameRequestModal()
-    // 
-    // const customMessage = `${opponentTeam?.teamName} sent you a game request!`; // Replace this with the desired custom message
-    // sendMessage(customMessage, user?.uid);
   };
 
   const onFootballIconPressed = () => {
@@ -134,12 +132,13 @@ const OpponentChat = ({ route }) => {
       <View style={styles.chatHeaderBox}>
         <Text style={styles.text}>{opponentTeam?.teamName}</Text>
         <View style={styles.iconContainer}>
-          {isMySquadReady && isSquadReady && <Icon
-            name="add-outline"
-            size={30}
-            color="white"
-            onPress={onAddIconPressed}
-          />}
+          {isMySquadReady && isSquadReady && !(gameRequest?.length != 0) &&
+            <Icon
+              name="add-outline"
+              size={30}
+              color="white"
+              onPress={onAddIconPressed}
+            />}
           <Icon
             name="football-outline"
             size={30}
@@ -223,7 +222,12 @@ const OpponentChat = ({ route }) => {
             <View style={styles.btnContainer}>
               <CustomButton
                 text="Send Request"
-                onPress={() => sendGameRequestToOpponent(currentTeam, opponentTeam, game)}
+                onPress={() => {
+                  sendGameRequestToOpponent(currentTeam, opponentTeam, game)
+                  const customMessage = `${opponentTeam?.teamName} sent you a game request!`; // Replace this with the desired custom message
+                  sendMessage(customMessage, user?.uid);
+                  closeGameRequestModal()
+                }}
                 type="SECONDARY"
               />
             </View>
