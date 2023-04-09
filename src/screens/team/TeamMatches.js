@@ -94,7 +94,7 @@ const styles = StyleSheet.create({
   },
   teamContainer: {
     flex: 1,
-    alignItems: 'flex-start',
+    alignItems: 'center', 
   },
   matchText: {
     fontSize: 16,

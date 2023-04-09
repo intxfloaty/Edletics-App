@@ -1,4 +1,4 @@
-import { TouchableHighlight, StyleSheet, Text, View, ScrollView, TouchableOpacity } from 'react-native'
+import { StyleSheet, Text, View, ScrollView, TouchableOpacity } from 'react-native'
 import React, { useState, useEffect } from 'react'
 import Icon from 'react-native-vector-icons/Ionicons';
 import { useNavigation } from '@react-navigation/native';
@@ -21,26 +21,35 @@ const TeamBulletin = () => {
     <>
       <View style={styles.parent}>
         <ScrollView showsVerticalScrollIndicator={false}>
-          <View style={styles.headingText}>
-            {/* <Text style={styles.headingText}>Join Squad</Text> */}
-          </View>
           {squad &&
             <TouchableOpacity
-              // underlayColor="#4a4a4a"
               style={styles.newGameContainer}
               onPress={() => {
                 navigation.navigate("GameDetails")
               }}>
-              <>
-                <Text style={styles.text}>Mode : {squad.mode}</Text>
-                <Text style={styles.text}>Squad Size : {squad.squadSize}</Text>
-                <Text style={styles.text}>Location : {squad.location}</Text>
-                <Text style={styles.text}>Date : {squad.date}</Text>
-                <Text style={styles.text}>Time : {squad.time}</Text>
-              </>
+              <View style={styles.section}>
+                <View style={styles.gameDetails}>
+                  <View style={styles.dateTime}>
+                    <Text style={styles.matchDate}>{squad.date}</Text>
+                    <Text style={styles.matchTime}>{squad.time}</Text>
+                  </View>
+                  <View style={styles.divider}></View>
+                  <View style={styles.teamNames}>
+                    <Text style={styles.matchText}>{currentTeam?.teamName}</Text>
+                    <Text style={styles.matchDate}>vs</Text>
+                    <Text style={styles.matchText}>TBD</Text>
+                  </View>
+                  <View style={styles.divider}></View>
+                  <View style={styles.formatDetails}>
+                    <Text style={styles.matchDate}>{squad?.mode}</Text>
+                    <Text style={styles.matchDate}>{squad?.format}</Text>
+                    <Text style={styles.matchDate}>{squad?.location}</Text>
+                  </View>
+
+                </View>
+              </View>
             </TouchableOpacity>
           }
-
         </ScrollView>
         {currentTeam?.teamAdmin === playerDetails?.userId &&
           <Icon
@@ -64,32 +73,69 @@ const styles = StyleSheet.create({
     backgroundColor: "#101112",
     padding: 10,
   },
-  headingText: {
-    color: "white",
-    fontSize: 20,
-    alignItems: "center",
-    justifyContent: "center",
-  },
   text: {
-    color: "white",
+    color: '#B2B2B2',
     fontSize: 20,
     marginVertical: 2,
-    alignItems: "center",
-    justifyContent: "center",
+  },
+  whiteText: {
+    color: 'white',
   },
   newGameContainer: {
     backgroundColor: '#202224',
-    minHeight: 150,
     borderRadius: 10,
     marginVertical: 10,
+    paddingHorizontal: 15,
+    paddingTop: 10,
+  },
+  lineupRequest: {
+    color: "white",
+    fontSize: 16,
+    alignSelf: "center",
+  },
+  section: {
+    marginBottom: 10,
+  },
+  gameDetails: {
+    flexDirection: "row",
+    justifyContent: "flex-start",
     alignItems: "center",
-    justifyContent: "center",
-    boxShadow: "0px 0px 10px 0px rgba(0,0,0,0.75)",
+  },
+  matchDate: {
+    fontSize: 14,
+    color: '#B2B2B2',
+  },
+  matchTime: {
+    fontSize: 12,
+    color: '#B2B2B2',
+  },
+  teamNames: {
+    flexDirection: "column",
+    alignItems: "center",
+  },
+  divider: {
+    width: 1,
+    backgroundColor: '#B2B2B2',
+    height: '60%',
+    marginHorizontal: 15,
+  },
+  dateTime: {
+    marginLeft: 10,
+  },
+  matchText: {
+    fontSize: 18,
+    color: '#FFFFFF',
   },
   addIcon: {
     position: "absolute",
     bottom: 5,
     right: 2,
     padding: 10,
+  },
+  formatDetails: {
+    flexDirection: "column",
+    alignItems: "center",
+    justifyContent: "center",
+    marginLeft: 10,
   },
 })
