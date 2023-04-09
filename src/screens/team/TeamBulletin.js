@@ -27,27 +27,22 @@ const TeamBulletin = () => {
               onPress={() => {
                 navigation.navigate("GameDetails")
               }}>
-              <View style={styles.section}>
-                <View style={styles.gameDetails}>
-                  <View style={styles.dateTime}>
-                    <Text style={styles.matchDate}>{squad.date}</Text>
-                    <Text style={styles.matchTime}>{squad.time}</Text>
-                  </View>
-                  <View style={styles.divider}></View>
-                  <View style={styles.teamNames}>
-                    <Text style={styles.matchText}>{currentTeam?.teamName}</Text>
-                    <Text style={styles.matchDate}>vs</Text>
-                    <Text style={styles.matchText}>TBD</Text>
-                    <Text style={styles.matchDate}>{squad?.location}</Text>
-                  </View>
-                  <View style={styles.divider}></View>
-                  <View style={styles.formatDetails}>
-                    <Text style={styles.matchDate}>{squad?.mode}</Text>
-                    <Text style={styles.matchDate}>{squad?.format}</Text>
-                    
-                  </View>
-
+              <View style={styles.upperSection}>
+                <View style={styles.teamNames}>
+                  <Text style={styles.matchText}>{currentTeam?.teamName}</Text>
+                  <Text style={styles.text}> vs </Text>
+                  <Text style={styles.matchText}>TBD</Text>
                 </View>
+                <View style={styles.divider} />
+                <View style={styles.format}>
+                  <Text style={styles.matchDate}>{squad?.mode}</Text>
+                  <Text style={styles.matchDate}>{squad?.format}</Text>
+                </View>
+              </View>
+              <View style={styles.details}>
+                <Text style={styles.matchDate}>{squad.date}</Text>
+                <Text style={styles.matchDate}>{squad?.startTime} - {squad?.endTime}</Text>
+                <Text style={styles.matchDate}>{squad?.location}</Text>
               </View>
             </TouchableOpacity>
           }
@@ -76,67 +71,54 @@ const styles = StyleSheet.create({
   },
   text: {
     color: '#B2B2B2',
-    fontSize: 20,
+    fontSize: 16,
     marginVertical: 2,
-  },
-  whiteText: {
-    color: 'white',
   },
   newGameContainer: {
     backgroundColor: '#202224',
     borderRadius: 10,
     marginVertical: 10,
     paddingHorizontal: 15,
-    paddingTop: 10,
+    padding: 10,
   },
-  lineupRequest: {
-    color: "white",
-    fontSize: 16,
-    alignSelf: "center",
-  },
-  section: {
-    marginBottom: 10,
-  },
-  gameDetails: {
+  upperSection: {
     flexDirection: "row",
-    justifyContent: "flex-start",
+    justifyContent: "space-around",
     alignItems: "center",
-  },
-  matchDate: {
-    fontSize: 14,
-    color: '#B2B2B2',
-  },
-  matchTime: {
-    fontSize: 12,
-    color: '#B2B2B2',
+    marginBottom: 10,
   },
   teamNames: {
     flexDirection: "column",
+    justifyContent: "center",
     alignItems: "center",
+    marginBottom: 10,
   },
   divider: {
+    height: "60%",
     width: 1,
     backgroundColor: '#B2B2B2',
-    height: '60%',
-    marginHorizontal: 15,
   },
-  dateTime: {
-    marginLeft: 10,
+  format: {
+    flexDirection: "column",
+    justifyContent: "space-evenly",
+    alignItems: "center",
   },
   matchText: {
-    fontSize: 18,
+    fontSize: 20,
     color: '#FFFFFF',
+  },
+  matchDate: {
+    fontSize: 16,
+    color: '#FFFFFF',
+  },
+  details: {
+    flexDirection: "column",
+    alignItems: "center",
   },
   addIcon: {
     position: "absolute",
     bottom: 5,
     right: 2,
     padding: 10,
-  },
-  formatDetails: {
-    flexDirection: "column",
-    alignItems: "center",
-    justifyContent: "center",
-    marginLeft: 10,
   },
 })

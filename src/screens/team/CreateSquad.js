@@ -20,46 +20,68 @@ const CreateSquad = () => {
     mode: "Rated",
     location: "",
     date: "",
-    time: "",
+    startTime: "",
+    endTime: "",
     squadSize: 1,
     status: "InProgress"
-  })
-  const navigation = useNavigation()
+  });
+  const [dateError, setDateError] = useState("");
+  const navigation = useNavigation();
 
   // function to date and time of practice
   const onDateChange = (event, selectedDate) => {
     if (selectedDate !== undefined) {
       const selectedDateObject = new Date(selectedDate);
-      const formattedDate = selectedDateObject.toLocaleDateString();
-      setSquad({ ...squad, date: formattedDate });
+      const currentDateObject = new Date();
+      // Set the time portion of the current date to 0 to compare only the date part
+      currentDateObject.setHours(0, 0, 0, 0);
+
+      if (selectedDateObject >= currentDateObject) {
+        const formattedDate = new Intl.DateTimeFormat('en-GB', {
+          day: '2-digit',
+          month: '2-digit',
+          year: 'numeric',
+        }).format(selectedDateObject);
+        setSquad({ ...squad, date: formattedDate });
+        setDateError("");
+      } else {
+        // You can display an error message or alert to inform the user that past dates are not allowed
+        setDateError('Invalid Date, past dates are not valid.');
+        setSquad({ ...squad, date: "" });
+      }
     }
   };
 
-  const onTimeChange = (event, selectedTime) => {
+  const onTimeChange = (type, event, selectedTime) => {
     if (selectedTime !== undefined) {
       const selectedTimeObject = new Date(selectedTime);
-      const formattedTime = selectedTimeObject.toLocaleTimeString();
-      setSquad({ ...squad, time: formattedTime });
+      const formattedTime = new Intl.DateTimeFormat('default', {
+        hour: '2-digit',
+        minute: '2-digit',
+        hour12: true,
+      }).format(selectedTimeObject);
+      setSquad({ ...squad, [type]: formattedTime });
     }
   };
 
-
-  const showMode = (currentMode) => {
+  const showMode = (currentMode, type) => {
     DateTimePickerAndroid.open({
       value: new Date(),
-      onChange: currentMode === "date" ? onDateChange : onTimeChange,
+      onChange: (event, selectedTime) =>
+        currentMode === "date" ? onDateChange(event, selectedTime) : onTimeChange(type, event, selectedTime),
       mode: currentMode,
-      is24Hour: true,
+      is24Hour: true
     });
   };
 
   const showDatepicker = () => {
-    showMode('date');
+    showMode("date");
   };
 
-  const showTimepicker = () => {
-    showMode('time');
+  const showTimepicker = (type) => {
+    showMode("time", type);
   };
+
 
 
   // function to check if the value of all keys in an object are not empty.
@@ -125,14 +147,22 @@ const CreateSquad = () => {
             onPressIn={showDatepicker}
             showSoftInputOnFocus={false}
             value={squad.date} />
+          {dateError.length != 0 && <Text style={{ color: "red" }}>{dateError}</Text>}
         </View>
         <View style={styles.dateContainer}>
-          <Text style={styles.locationText}>Time</Text>
+          <Text style={styles.locationText}>Time Range:</Text>
+          <Text style={styles.locationText}>Start</Text>
           <CustomInput
-            onPressIn={showTimepicker}
+            onPressIn={() => showTimepicker("startTime")}
             showSoftInputOnFocus={false}
-            value={squad.time} />
+            value={squad.startTime} />
+          <Text style={styles.locationText}>End</Text>
+          <CustomInput
+            onPressIn={() => showTimepicker("endTime")}
+            showSoftInputOnFocus={false}
+            value={squad.endTime} />
         </View>
+
         <View style={styles.btnContainer}>
           <CustomButton
             text=" Create Squad"
