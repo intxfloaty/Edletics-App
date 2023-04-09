@@ -38,12 +38,13 @@ const TeamBulletin = () => {
                     <Text style={styles.matchText}>{currentTeam?.teamName}</Text>
                     <Text style={styles.matchDate}>vs</Text>
                     <Text style={styles.matchText}>TBD</Text>
+                    <Text style={styles.matchDate}>{squad?.location}</Text>
                   </View>
                   <View style={styles.divider}></View>
                   <View style={styles.formatDetails}>
                     <Text style={styles.matchDate}>{squad?.mode}</Text>
                     <Text style={styles.matchDate}>{squad?.format}</Text>
-                    <Text style={styles.matchDate}>{squad?.location}</Text>
+                    
                   </View>
 
                 </View>
