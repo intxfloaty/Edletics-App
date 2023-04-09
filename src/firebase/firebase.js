@@ -532,80 +532,43 @@ export const useMessages = (teamId) => {
 }
 
 
-
-// to store and fetch messages of opponents
 export const useOpponentMessages = (opponentTeam, currentTeam) => {
   const [messages, setMessages] = useState([]);
-  const opponentTeamId = opponentTeam.teamId
-  const myTeamId = currentTeam.teamId
+  const opponentTeamId = opponentTeam.teamId;
+  const myTeamId = currentTeam.teamId;
 
-  const sendMessage = (text, uid) => {
-    const messageObj = {
-      text: text,
-      uid: uid,
-      createdAt: firestore.FieldValue.serverTimestamp(),
-    };
+  const createMessageObj = (text, uid) => ({
+    text,
+    uid,
+    createdAt: firestore.FieldValue.serverTimestamp(),
+  });
 
-    // Send message to my opponentMessages collection
-    firestore()
-      .collection('teams')
-      .doc(myTeamId)
-      .collection('myOpponentTeams')
-      .doc(opponentTeamId)
-      .collection('opponentMessages')
-      .add(messageObj)
-      .then(() => {
-        console.log('Message sent to my opponentMessages collection successfully!');
-
-        // add opponent to myOpponentTeams collection  //TODO: we do not need to add opponent to myOpponentTeams collection every time we send a message
-        firestore()
-          .collection('teams')
-          .doc(myTeamId)
-          .collection('myOpponentTeams')
-          .doc(opponentTeamId)
-          .set(opponentTeam)
-          .then(() => {
-            console.log('Opponent added to myOpponentTeams collection successfully!');
-          })
-          .catch((error) => console.log(error, 'error adding opponent to myOpponentTeams collection'));
-      })
-      .catch((error) => console.log(error, 'error adding message to my opponentMessages collection'));
-
-    // Send message to the opponent's opponentMessages collection
-    firestore()
-      .collection('teams')
-      .doc(opponentTeamId)
-      .collection('myOpponentTeams')
-      .doc(myTeamId)
-      .collection('opponentMessages')
-      .add(messageObj)
-      .then(() => {
-        console.log('Message sent to the opponent\'s opponentMessages collection successfully!');
-
-        // add opponent to myOpponentTeams collection
-        firestore()
-          .collection('teams')
-          .doc(opponentTeamId)
-          .collection('myOpponentTeams')
-          .doc(myTeamId)
-          .set(currentTeam)
-          .then(() => {
-            console.log('Opponent added to the opponent\'s myOpponentTeams collection successfully!');
-          })
-          .catch((error) => console.log(error, 'error adding opponent to the opponent\'s myOpponentTeams collection'));
-      })
-      .catch((error) => console.log(error, 'error adding message to the opponent\'s opponentMessages collection'));
+  const getMessageCollectionKey = (teamId1, teamId2) => {
+    return teamId1 < teamId2 ? `${teamId1}_${teamId2}` : `${teamId2}_${teamId1}`;
   };
 
+  const sendMessage = async (text, uid) => {
+    const messageObj = createMessageObj(text, uid);
+    const messageCollectionKey = getMessageCollectionKey(myTeamId, opponentTeamId);
 
+    try {
+      await firestore()
+        .collection('messages')
+        .doc(messageCollectionKey)
+        .collection('chats')
+        .add(messageObj);
+    } catch (error) {
+      console.error('Error sending message:', error);
+    }
+  };
 
   useEffect(() => {
+    const messageCollectionKey = getMessageCollectionKey(myTeamId, opponentTeamId);
+
     const unsubscribe = firestore()
-      .collection('teams')
-      .doc(myTeamId)
-      .collection('myOpponentTeams')
-      .doc(opponentTeamId)
-      .collection('opponentMessages')
+      .collection('messages')
+      .doc(messageCollectionKey)
+      .collection('chats')
       .orderBy('createdAt', 'desc')
       .onSnapshot(
         (querySnapshot) => {
@@ -615,22 +578,21 @@ export const useOpponentMessages = (opponentTeam, currentTeam) => {
             createdAt: doc.data().createdAt ? doc.data().createdAt.toDate() : new Date(),
             user: {
               _id: doc.data().uid,
-              // name: 'User ' + doc.data().uid, // Replace this with the actual user name
-              // avatar: 'https://placeimg.com/140/140/any',
             },
           }));
           setMessages(messageDocs);
         },
         (error) => {
-          console.log(error, 'error');
+          console.error('Error fetching messages:', error);
         },
       );
 
     return () => unsubscribe();
   }, [myTeamId]);
 
-  return { messages, sendMessage }
-}
+  return { messages, sendMessage };
+};
+
 
 
 // fetch list of opponents a team has had chat with

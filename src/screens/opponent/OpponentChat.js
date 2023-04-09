@@ -2,7 +2,6 @@ import { StyleSheet, View, Text } from 'react-native'
 import React, { useEffect, useCallback, useState, useLayoutEffect } from 'react';
 import {
   userAuthState,
-  addAndFetchOpponent,
   sendAndFetchGameRequest,
   useOpponentMessages,
   useCheckSquad
@@ -20,8 +19,6 @@ const OpponentChat = ({ route }) => {
   const { user } = userAuthState();
   const currentTeam = useSelector(state => state.currentTeam)
   const isMySquadReady = useCheckSquad(currentTeam?.teamId)
-  const { addOpponent, fetchOpponentTeams } = addAndFetchOpponent()
-  const teams = fetchOpponentTeams(currentTeam)
   const { sendGameRequestToOpponent, fetchGameRequest } = sendAndFetchGameRequest()
   const gameRequest = fetchGameRequest(currentTeam?.teamId, opponentTeam?.teamId)
   const { messages, sendMessage } = useOpponentMessages(opponentTeam, currentTeam);
@@ -67,7 +64,7 @@ const OpponentChat = ({ route }) => {
           _id: message?.user?._id,
           name: message?.user?.name,
           avatar: generateAvatarUrl(message?.user?.name),
-        },
+        }
       })),
     );
   }, [messages]);
@@ -106,6 +103,7 @@ const OpponentChat = ({ route }) => {
         user={{
           _id: user?.uid,
         }}
+        isTyping={true}
       />
 
 
