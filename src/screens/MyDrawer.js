@@ -15,23 +15,30 @@ import {
   DrawerItemList,
   DrawerItem
 } from '@react-navigation/drawer';
+import { userAuthState, usePlayerDetails } from '../firebase/firebase';
+import Icon from 'react-native-vector-icons/Ionicons';
 
-const Drawer = createDrawerNavigator();
 
-
-function CustomDrawerContent(props) {
-  return (
-    <DrawerContentScrollView {...props}>
-      {/* <View>
-        <Text style={{ color: "white", fontSize: 28, marginLeft: 20 }}>Pravesh</Text>
-        <Text style={{ color: "white", fontSize: 20, marginLeft: 20 }}>+919876543210</Text>
-      </View> */}
-      <DrawerItemList {...props} />
-    </DrawerContentScrollView>
-  );
-}
 
 const MyDrawer = () => {
+  const { user } = userAuthState();
+  const { playerDetails } = usePlayerDetails(user?.phoneNumber)
+
+
+  const Drawer = createDrawerNavigator();
+
+  function CustomDrawerContent(props) {
+    return (
+      <DrawerContentScrollView {...props}>
+        <View>
+          <Text style={styles.name}>{playerDetails?.fullName}</Text>
+          <Text style={styles.phoneNumber}>{playerDetails?.phoneNumber}</Text>
+        </View>
+        <View style={styles.divider} />
+        <DrawerItemList {...props} />
+      </DrawerContentScrollView>
+    );
+  }
 
   return (
     <Drawer.Navigator
@@ -41,25 +48,136 @@ const MyDrawer = () => {
         headerStyle: { backgroundColor: '#101112' },
         headerTintColor: 'white',
         drawerStyle: {
-          backgroundColor: '#202224',
+          backgroundColor: '#101112',
         },
-        drawerLabelStyle: { color: "white" }
+        drawerLabelStyle: { color: "white" , fontSize: 16}
       }}
       drawerContent={(props) => <CustomDrawerContent {...props} />}>
 
-      <Drawer.Screen name='Home' component={HomeScreen} />
-      <Drawer.Screen name='Profile' component={PlayerDetails} />
-      <Drawer.Screen name='Inbox' component={Inbox} />
+      <Drawer.Screen
+        options={{
+          drawerIcon: () => <Icon
+            name="home-outline"
+            size={25}
+            style={styles.chatIcon}
+            color={"white"} />
+        }}
+        name='Home'
+        component={HomeScreen} />
+
+      <Drawer.Screen
+        options={{
+          drawerIcon: () => <Icon
+            name="person-outline"
+            size={25}
+            style={styles.chatIcon}
+            color={"white"} />
+        }}
+        name='Profile'
+        component={PlayerDetails} />
+
+      <Drawer.Screen
+        options={{
+          drawerIcon: () => <Icon
+            name="chatbox-outline"
+            size={25}
+            style={styles.chatIcon}
+            color={"white"} />
+        }}
+        name='Inbox'
+        component={Inbox} />
+
       <Drawer.Screen options={{
-        headerShown: false
-      }} name="My Teams" component={MyTeams} />
-      <Drawer.Screen name='Tournaments' component={Tournament} />
-      <Drawer.Screen name='Leaderboard' component={Leaderboard} />
-      <Drawer.Screen name='Stats' component={Stats} />
-      <Drawer.Screen name='Edletics Academy' component={EdleticsAcademy} />
-      <Drawer.Screen name='Sign Out' component={SignOut} />
+        headerShown: false,
+        drawerIcon: () => <Icon
+          name="people-outline"
+          size={25}
+          style={styles.chatIcon}
+          color={"white"}
+        />
+      }}
+        name="My Teams"
+        component={MyTeams} />
+
+      <Drawer.Screen
+        options={{
+          drawerIcon: () => <Icon
+            name="trophy-outline"
+            size={25}
+            style={styles.chatIcon}
+            color={"white"} />
+        }}
+        name='Tournaments'
+        component={Tournament} />
+
+      <Drawer.Screen
+        options={{
+          drawerIcon: () => <Icon
+            name="podium-outline"
+            size={25}
+            style={styles.chatIcon}
+            color={"white"} />
+        }}
+        name='Leaderboard'
+        component={Leaderboard} />
+
+      <Drawer.Screen
+        options={{
+          drawerIcon: () => <Icon
+            name="stats-chart-outline"
+            size={25}
+            style={styles.chatIcon}
+            color={"white"} />
+        }}
+        name='Stats'
+        component={Stats} />
+
+      <Drawer.Screen
+        options={{
+          drawerIcon: () => <Icon
+            name="football-outline"
+            size={25}
+            style={styles.chatIcon}
+            color={"white"} />
+        }}
+        name='Edletics Academy'
+        component={EdleticsAcademy} />
+
+      <Drawer.Screen
+        options={{
+          drawerIcon: () => <Icon
+            name="log-out-outline"
+            size={25}
+            style={styles.chatIcon}
+            color={"white"} />
+        }}
+        name='Log Out'
+        component={SignOut} />
+
     </Drawer.Navigator>
   )
 }
 
 export default MyDrawer
+
+const styles = StyleSheet.create({
+  name: {
+    color: "white",
+    fontSize: 20,
+    marginLeft: 20,
+    marginTop: 20
+  },
+  phoneNumber: {
+    color: "white",
+    fontSize: 16,
+    marginLeft: 20,
+    marginTop: 10
+  },
+  divider: {
+    height: 1,
+    backgroundColor: "gray",
+    marginTop: 20,
+    marginBottom: 20,
+    marginHorizontal: 20
+  }
+})
