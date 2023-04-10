@@ -100,28 +100,6 @@ const MyTeams = () => {
             onContinuePressed={onContinuePressed} />
         </View>
       </Modal>
-
-
-
-      {/* <View style={styles.tabContainer}>
-        <TouchableHighlight
-          onPress={() => setActiveTab('myTeams')}
-          style={activeTab === 'myTeams' ? styles.activeTab : styles.inactiveTab}
-        >
-          <Text style={styles.tabText}>My Teams</Text>
-        </TouchableHighlight>
-        <TouchableHighlight
-          onPress={() => setActiveTab('opponent')}
-          style={activeTab === 'opponent' ? styles.activeTab : styles.inactiveTab}
-        >
-          <Text style={styles.tabText}>Opponent</Text>
-        </TouchableHighlight>
-      </View> */}
-
-      {/* {activeTab === 'myTeams' && <SelectTeam myTeams={myTeams} />}
-      {activeTab === 'opponent' && <SelectOpponent />} */}
-
-
     </View>
   )
 }

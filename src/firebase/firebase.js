@@ -1,6 +1,8 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import auth from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
 
 export const userAuthState = () => {
   const [initializing, setInitializing] = useState(true);
@@ -476,7 +478,7 @@ export const updateGameRequestStatus = () => {
 
 
 
-// to store and fetch messages from firestore
+// to store and fetch teamMessages from firestore
 export const useMessages = (teamId) => {
   const [messages, setMessages] = useState([]);
 
@@ -534,6 +536,8 @@ export const useMessages = (teamId) => {
 
 export const useOpponentMessages = (opponentTeam, currentTeam) => {
   const [messages, setMessages] = useState([]);
+
+
   const opponentTeamId = opponentTeam.teamId;
   const myTeamId = currentTeam.teamId;
 
@@ -547,11 +551,63 @@ export const useOpponentMessages = (opponentTeam, currentTeam) => {
     return teamId1 < teamId2 ? `${teamId1}_${teamId2}` : `${teamId2}_${teamId1}`;
   };
 
+  const teamIdsAddedKey = getMessageCollectionKey(myTeamId, opponentTeamId);
+
+  const checkTeamIdsAdded = async () => {
+    const value = await AsyncStorage.getItem(teamIdsAddedKey);
+    console.log(value)
+    return value
+  };
+
+  const setTeamIdsAdded = async () => {
+    try {
+      await AsyncStorage.setItem(teamIdsAddedKey, 'true');
+    } catch (error) {
+      console.log(error, 'error');
+    };
+  };
+
+  const addTeamsAsOpponents = async () => {
+    const opponentTeamRef = firestore().collection('teams').doc(opponentTeamId);
+    const myTeamRef = firestore().collection('teams').doc(myTeamId);
+
+    try {
+      await opponentTeamRef.collection('myOpponentTeams').doc(myTeamId).set(currentTeam);
+      await myTeamRef.collection('myOpponentTeams').doc(opponentTeamId).set(opponentTeam);
+    } catch (error) {
+      console.log(error, 'error');
+    }
+  };
+
+
   const sendMessage = async (text, uid) => {
     const messageObj = createMessageObj(text, uid);
     const messageCollectionKey = getMessageCollectionKey(myTeamId, opponentTeamId);
 
     try {
+      const docRef = firestore().collection('messages').doc(messageCollectionKey);
+
+      // Check if team IDs have been added
+      if (!(await checkTeamIdsAdded())) {
+        const docSnapshot = await docRef.get();
+
+        // Add team IDs and teams as opponents if they don't exist
+        if (!docSnapshot.exists) {
+          await docRef.set({
+            teamId1: myTeamId,
+            teamId2: opponentTeamId,
+          });
+          console.log('Team Ids added successfully!');
+
+          // Add the teams as each others opponents
+          await addTeamsAsOpponents();
+
+          // Set the value to 'true' in AsyncStorage
+          await setTeamIdsAdded();
+        }
+      }
+
+      // Send the message
       await firestore()
         .collection('messages')
         .doc(messageCollectionKey)
@@ -626,7 +682,7 @@ export const useCheckSquad = (teamId) => {
       .collection("teams")
       .doc(teamId)
       .onSnapshot((doc) => {
-        const squad = doc.data().squad
+        const squad = doc?.data()?.squad
         if (squad?.status === "Ready") {
           setIsSquadReady(true)
         }

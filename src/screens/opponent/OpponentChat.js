@@ -1,5 +1,5 @@
 import { StyleSheet, View, Text } from 'react-native'
-import React, { useEffect, useCallback, useState, useLayoutEffect } from 'react';
+import React, { useCallback, useState, useLayoutEffect } from 'react';
 import {
   userAuthState,
   sendAndFetchGameRequest,
@@ -51,11 +51,6 @@ const OpponentChat = ({ route }) => {
     openModal()
   };
 
-  const generateAvatarUrl = (teamName) => {
-    const name = encodeURIComponent(teamName?.trim());
-    return `https://ui-avatars.com/api/?name=${name}&background=random&size=128`;
-  };
-
   useLayoutEffect(() => {
     setChatMessages(
       messages.map((message) => ({
@@ -63,7 +58,6 @@ const OpponentChat = ({ route }) => {
         user: {
           _id: message?.user?._id,
           name: message?.user?.name,
-          avatar: generateAvatarUrl(message?.user?.name),
         }
       })),
     );
@@ -72,8 +66,7 @@ const OpponentChat = ({ route }) => {
 
   const onSend = useCallback((messages = []) => {
     const message = messages[0];
-    const teamName = currentTeam?.teamName;
-    sendMessage(message.text, user?.uid, teamName);
+    sendMessage(message.text, user?.uid);
   }, [user]);
 
 

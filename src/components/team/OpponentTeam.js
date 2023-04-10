@@ -2,7 +2,6 @@ import { StyleSheet, Text, TextInput, View, TouchableHighlight, Modal, } from 'r
 import React, { useState, useEffect } from 'react'
 import Icon from 'react-native-vector-icons/Ionicons';
 import { Avatar } from 'react-native-paper';
-import { useNavigation } from '@react-navigation/native';
 import { useCheckSquad } from '../../firebase/firebase'
 
 const OpponentTeam = ({ team, navigation }) => {
