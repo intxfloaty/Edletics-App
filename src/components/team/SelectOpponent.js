@@ -77,7 +77,6 @@ const SelectOpponent = () => {
               placeholderTextColor="#ccc"
               onChangeText={text => setSearchText(text)}
               value={searchText}
-              onFocus={openSearchModal}
             />
           </View>
           {filteredTeams?.map((team, index) => (
@@ -86,6 +85,7 @@ const SelectOpponent = () => {
               style={styles.opponentTeamContainer}
               key={index}
               onPress={() => {
+                closeModal();
                 navigation.navigate('OpponentChat', { opponentTeam: team })
               }}>
               <>
