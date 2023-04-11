@@ -59,10 +59,34 @@ const CreateTeam = ({ teamInfo, setTeamInfo, shareLinkModal, setShareLinkModal, 
                   setValue={(text) => setTeamInfo({ ...teamInfo, teamLocation: text })}
                 />
                 <CustomButton text="Continue" onPress={onContinuePressed} />
+                <Modal
+                  animationType="slide"
+                  transparent={true}
+                  visible={shareLinkModal}
+                  onRequestClose={() => {
+                    setShareLinkModal(!shareLinkModal);
+                    setCreateTeamModal(!createTeamModal)
+                  }}>
+                  <View style={styles.centeredView}>
+                    <View style={styles.modalView}>
+                      <Text style={styles.secondModalText}>Get the team onboard</Text>
+                      <Text style={styles.secondModalTextInfo}>It's easy to get everyone onboard, simply share the team invite link or team code with your team.</Text>
+                      <CustomButton text="Share link" onPress={() => setSecondModalVisible(!secondModalVisible)} />
+                      <View style={styles.Continue}>
+                        <CustomButton text="Continue" onPress={() => {
+                          setShareLinkModal(!shareLinkModal)
+                          setCreateTeamModal(!createTeamModal)
+                        }} />
+                      </View>
+                    </View>
+                  </View>
+                </Modal>
               </Animated.View>
             </View>
           </TouchableWithoutFeedback>
         </Modal>
+
+
       </View>
       {/* end of create team modal */}
     </View>
