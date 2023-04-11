@@ -6,6 +6,22 @@ import CustomInput from './CustomInput'
 const CreateTeam = ({ teamInfo, setTeamInfo, shareLinkModal, setShareLinkModal, onContinuePressed }) => {
   const [createTeamModal, setCreateTeamModal] = useState(false)
   const [modalOpacity] = useState(new Animated.Value(0));
+  const [inputsEmpty, setInputsEmpty] = useState(true);
+
+  useEffect(() => {
+    const checkInputs = () => {
+      if (
+        teamInfo.teamName.trim() === '' ||
+        teamInfo.teamFormat.trim() === '' ||
+        teamInfo.teamLocation.trim() === ''
+      ) {
+        setInputsEmpty(true);
+      } else {
+        setInputsEmpty(false);
+      }
+    };
+    checkInputs();
+  }, [teamInfo]);
 
   useEffect(() => {
     if (createTeamModal) {
@@ -41,47 +57,52 @@ const CreateTeam = ({ teamInfo, setTeamInfo, shareLinkModal, setShareLinkModal, 
           }}>
           <TouchableWithoutFeedback onPress={() => setCreateTeamModal(false)}>
             <View style={styles.centeredView}>
-              <Animated.View style={[styles.modalView, { opacity: modalOpacity }]}>
-                <Text style={styles.modalTitle}>Create New Team</Text>
-                <Text style={styles.teamName}>Name:</Text>
-                <CustomInput
-                  value={teamInfo.teamName}
-                  setValue={(text) => setTeamInfo({ ...teamInfo, teamName: text })}
-                />
-                <Text style={styles.teamName}>Format:</Text>
-                <CustomInput
-                  value={teamInfo.teamFormat}
-                  setValue={(text) => setTeamInfo({ ...teamInfo, teamFormat: text })}
-                />
-                <Text style={styles.teamName}>Location:</Text>
-                <CustomInput
-                  value={teamInfo.teamLocation}
-                  setValue={(text) => setTeamInfo({ ...teamInfo, teamLocation: text })}
-                />
-                <CustomButton text="Continue" onPress={onContinuePressed} />
-                <Modal
-                  animationType="slide"
-                  transparent={true}
-                  visible={shareLinkModal}
-                  onRequestClose={() => {
-                    setShareLinkModal(!shareLinkModal);
-                    setCreateTeamModal(!createTeamModal)
-                  }}>
-                  <View style={styles.centeredView}>
-                    <View style={styles.modalView}>
-                      <Text style={styles.secondModalText}>Get the team onboard</Text>
-                      <Text style={styles.secondModalTextInfo}>It's easy to get everyone onboard, simply share the team invite link or team code with your team.</Text>
-                      <CustomButton text="Share link" onPress={() => setSecondModalVisible(!secondModalVisible)} />
-                      <View style={styles.Continue}>
-                        <CustomButton text="Continue" onPress={() => {
-                          setShareLinkModal(!shareLinkModal)
-                          setCreateTeamModal(!createTeamModal)
-                        }} />
+              <TouchableWithoutFeedback onPress={() => { }}>
+                <Animated.View style={[styles.modalView, { opacity: modalOpacity }]}>
+                  <Text style={styles.modalTitle}>Create New Team</Text>
+                  <Text style={styles.teamName}>Name:</Text>
+                  <CustomInput
+                    value={teamInfo.teamName}
+                    setValue={(text) => setTeamInfo({ ...teamInfo, teamName: text })}
+                  />
+                  <Text style={styles.teamName}>Format:</Text>
+                  <CustomInput
+                    value={teamInfo.teamFormat}
+                    setValue={(text) => setTeamInfo({ ...teamInfo, teamFormat: text })}
+                  />
+                  <Text style={styles.teamName}>Location:</Text>
+                  <CustomInput
+                    value={teamInfo.teamLocation}
+                    setValue={(text) => setTeamInfo({ ...teamInfo, teamLocation: text })}
+                  />
+                  <CustomButton text="Continue" onPress={onContinuePressed} isDisabled={inputsEmpty} />
+                  <Modal
+                    animationType="slide"
+                    transparent={true}
+                    visible={shareLinkModal}
+                    onRequestClose={() => {
+                      setShareLinkModal(!shareLinkModal);
+                      setCreateTeamModal(!createTeamModal)
+                    }}>
+                    <View style={styles.centeredView}>
+                      <View style={styles.modalView}>
+                        <Text style={styles.secondModalText}>Get the team onboard</Text>
+                        <Text style={styles.secondModalTextInfo}>It's easy to get everyone onboard, simply share the team invite link or team code with your team.</Text>
+                        <CustomButton text="Share link" onPress={() => setSecondModalVisible(!secondModalVisible)} />
+                        <View style={styles.Continue}>
+                          <CustomButton
+                            text="Continue"
+                            onPress={() => {
+                              setShareLinkModal(!shareLinkModal)
+                              setCreateTeamModal(!createTeamModal)
+                            }}
+                          />
+                        </View>
                       </View>
                     </View>
-                  </View>
-                </Modal>
-              </Animated.View>
+                  </Modal>
+                </Animated.View>
+              </TouchableWithoutFeedback>
             </View>
           </TouchableWithoutFeedback>
         </Modal>

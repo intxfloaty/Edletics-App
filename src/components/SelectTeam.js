@@ -26,7 +26,6 @@ const SelectTeam = ({ myTeams, closeModal }) => {
               closeModal()
             }} key={index}>
             <>
-              <Avatar.Text size={40} label="MT" style={styles.avatar} color="white" />
               <View style={styles.textContainer}>
                 <Text style={styles.text}>{myTeam?.teamName}</Text>
                 <Text style={styles.subText}>Rating</Text>
