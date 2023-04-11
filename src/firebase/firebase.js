@@ -54,10 +54,10 @@ export const usePlayerDetails = (phoneNumber) => {
 
 
 // to create new teams and fetch team details
-export const createAndFetchTeam = (teamInfo, playerDetails) => {
+export const createAndFetchTeam = () => {
   const [numberOfTeams, setNumberOfTeams] = useState() //to keep a count whenever a new team is added
 
-  const createTeam = () => {
+  const createTeam = (teamInfo, playerDetails) => {
     firestore()
       .collection('teams')
       .doc(`${teamInfo.teamName}_${playerDetails?.phoneNumber}`)
@@ -99,7 +99,7 @@ export const createAndFetchTeam = (teamInfo, playerDetails) => {
       .catch(error => console.log(error, "can't create team"))
   }
 
-  const fetchTeamDetails = (setMyTeams) => {
+  const fetchTeamDetails = (playerDetails, setMyTeams) => {
     useEffect(() => {
       subscribe = firestore()
         .collection("players")

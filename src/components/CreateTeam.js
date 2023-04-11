@@ -2,26 +2,19 @@ import { StyleSheet, Text, View, Modal, Animated, TouchableWithoutFeedback } fro
 import React, { useState, useEffect } from 'react'
 import CustomButton from './CustomButton'
 import CustomInput from './CustomInput'
+import { createAndFetchTeam, usePlayerDetails } from '../firebase/firebase';
 
-const CreateTeam = ({ teamInfo, setTeamInfo, shareLinkModal, setShareLinkModal, onContinuePressed }) => {
+const CreateTeam = ({ shareLinkModal, setShareLinkModal }) => {
+  const [teamInfo, setTeamInfo] = useState({
+    teamName: "",
+    teamFormat: "",
+    teamLocation: "",
+  })
   const [createTeamModal, setCreateTeamModal] = useState(false)
   const [modalOpacity] = useState(new Animated.Value(0));
-  const [inputsEmpty, setInputsEmpty] = useState(true);
-
-  useEffect(() => {
-    const checkInputs = () => {
-      if (
-        teamInfo.teamName.trim() === '' ||
-        teamInfo.teamFormat.trim() === '' ||
-        teamInfo.teamLocation.trim() === ''
-      ) {
-        setInputsEmpty(true);
-      } else {
-        setInputsEmpty(false);
-      }
-    };
-    checkInputs();
-  }, [teamInfo]);
+  const [teamInfoError, setTeamInfoError] = useState({})
+  const { playerDetails } = usePlayerDetails()
+  const { createTeam } = createAndFetchTeam()
 
   useEffect(() => {
     if (createTeamModal) {
@@ -39,6 +32,41 @@ const CreateTeam = ({ teamInfo, setTeamInfo, shareLinkModal, setShareLinkModal, 
     }
   }, [createTeamModal]);
 
+  const validate = (teamInfo) => {
+    let error = {};
+    if (teamInfo?.teamName === "") {
+      error.teamName = 'Please enter the name of your team';
+    }
+    if (teamInfo?.teamFormat === "") {
+      error.format = 'Please select a format';
+    }
+    if (teamInfo?.teamLocation === "") {
+      error.location = 'Please enter the location of your team';
+    }
+    return error;
+  };
+
+  useEffect(() => {
+    if (Object.keys(teamInfoError).length !== 0) {
+      setTeamInfoError(validate(teamInfo));
+    }
+  }, [teamInfo]);
+
+
+  const onContinuePressed = () => {
+    const errors = validate(teamInfo);
+    if (Object.keys(errors).length === 0) {
+      createTeam(teamInfo, playerDetails);
+      setTeamInfo({
+        teamName: "",
+        teamLocation: "",
+      })
+      setShareLinkModal(true)
+    } else {
+      setTeamInfoError(errors);
+    }
+  }
+
 
   return (
     <View style={styles.parent}>
@@ -53,9 +81,23 @@ const CreateTeam = ({ teamInfo, setTeamInfo, shareLinkModal, setShareLinkModal, 
           transparent={true}
           visible={createTeamModal}
           onRequestClose={() => {
+            setTeamInfo({
+              teamName: "",
+              teamFormat: "",
+              teamLocation: "",
+            })
+            setTeamInfoError({})
             setCreateTeamModal(!createTeamModal);
           }}>
-          <TouchableWithoutFeedback onPress={() => setCreateTeamModal(false)}>
+          <TouchableWithoutFeedback onPress={() => {
+            setTeamInfo({
+              teamName: "",
+              teamFormat: "",
+              teamLocation: "",
+            })
+            setTeamInfoError({})
+            setCreateTeamModal(false)
+          }}>
             <View style={styles.centeredView}>
               <TouchableWithoutFeedback onPress={() => { }}>
                 <Animated.View style={[styles.modalView, { opacity: modalOpacity }]}>
@@ -65,17 +107,20 @@ const CreateTeam = ({ teamInfo, setTeamInfo, shareLinkModal, setShareLinkModal, 
                     value={teamInfo.teamName}
                     setValue={(text) => setTeamInfo({ ...teamInfo, teamName: text })}
                   />
+                  {teamInfoError?.teamName && <Text style={styles.errorText}>{teamInfoError?.teamName}</Text>}
                   <Text style={styles.teamName}>Format:</Text>
                   <CustomInput
                     value={teamInfo.teamFormat}
                     setValue={(text) => setTeamInfo({ ...teamInfo, teamFormat: text })}
                   />
+                  {teamInfoError?.format && <Text style={styles.errorText}>{teamInfoError?.format}</Text>}
                   <Text style={styles.teamName}>Location:</Text>
                   <CustomInput
                     value={teamInfo.teamLocation}
                     setValue={(text) => setTeamInfo({ ...teamInfo, teamLocation: text })}
                   />
-                  <CustomButton text="Continue" onPress={onContinuePressed} isDisabled={inputsEmpty} />
+                  {teamInfoError?.location && <Text style={styles.errorText}>{teamInfoError?.location}</Text>}
+                  <CustomButton text="Continue" onPress={onContinuePressed} />
                   <Modal
                     animationType="slide"
                     transparent={true}
@@ -86,9 +131,8 @@ const CreateTeam = ({ teamInfo, setTeamInfo, shareLinkModal, setShareLinkModal, 
                     }}>
                     <View style={styles.centeredView}>
                       <View style={styles.modalView}>
-                        <Text style={styles.secondModalText}>Get the team onboard</Text>
+                        <Text style={styles.secondModalText}>Your team has been created!</Text>
                         <Text style={styles.secondModalTextInfo}>It's easy to get everyone onboard, simply share the team invite link or team code with your team.</Text>
-                        <CustomButton text="Share link" onPress={() => setSecondModalVisible(!secondModalVisible)} />
                         <View style={styles.Continue}>
                           <CustomButton
                             text="Continue"
@@ -106,8 +150,6 @@ const CreateTeam = ({ teamInfo, setTeamInfo, shareLinkModal, setShareLinkModal, 
             </View>
           </TouchableWithoutFeedback>
         </Modal>
-
-
       </View>
       {/* end of create team modal */}
     </View>
@@ -158,5 +200,13 @@ const styles = StyleSheet.create({
     fontSize: 18,
     color: "white",
     alignSelf: "flex-start",
+  },
+  errorText: {
+    color: 'red',
+    fontSize: 16,
+    marginBottom: 10,
+    alignItems: 'center',
+    justifyContent: 'center',
+    textAlign: 'center',
   },
 });

@@ -14,12 +14,7 @@ const MyTeams = () => {
   const currentTeam = useSelector(state => state.currentTeam)
   console.log(currentTeam, "currentTeam")
   const [shareLinkModal, setShareLinkModal] = useState(false)
-  const [teamInfo, setTeamInfo] = useState({
-    teamName: "",
-    teamFormat: "",
-    teamLocation: "",
-  })
-  const { createTeam, fetchTeamDetails } = createAndFetchTeam(teamInfo, playerDetails)
+  const { fetchTeamDetails } = createAndFetchTeam()
   const [myTeams, setMyTeams] = useState([])
   const [modalVisible, setModalVisible] = useState(false)
   const navigation = useNavigation();
@@ -33,17 +28,8 @@ const MyTeams = () => {
   }
 
 
-  fetchTeamDetails(setMyTeams);
+  fetchTeamDetails(playerDetails, setMyTeams);
 
-  // to create new teams 
-  const onContinuePressed = () => {
-    createTeam();
-    setTeamInfo({
-      teamName: "",
-      teamLocation: "",
-    })
-    setShareLinkModal(true)
-  }
 
   const onChatIconPressed = () => {
     navigation.navigate("TeamChat")
@@ -55,11 +41,9 @@ const MyTeams = () => {
         <View style={styles.container}>
           <Text style={styles.noTeamText}>You are not part of any team. Please Join a team or create a new team!</Text>
           <CreateTeam
-            teamInfo={teamInfo}
-            setTeamInfo={setTeamInfo}
             shareLinkModal={shareLinkModal}
             setShareLinkModal={setShareLinkModal}
-            onContinuePressed={onContinuePressed} />
+          />
         </View>
       </View>
     )
@@ -102,11 +86,9 @@ const MyTeams = () => {
           <SelectTeam myTeams={myTeams} closeModal={closeModal} />
 
           <CreateTeam
-            teamInfo={teamInfo}
-            setTeamInfo={setTeamInfo}
             shareLinkModal={shareLinkModal}
             setShareLinkModal={setShareLinkModal}
-            onContinuePressed={onContinuePressed} />
+          />
         </View>
       </Modal>
     </View>
