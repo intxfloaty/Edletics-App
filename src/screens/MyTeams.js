@@ -21,11 +21,8 @@ const MyTeams = () => {
   })
   const { createTeam, fetchTeamDetails } = createAndFetchTeam(teamInfo, playerDetails)
   const [myTeams, setMyTeams] = useState([])
-  const [activeTab, setActiveTab] = useState('myTeams')
   const [modalVisible, setModalVisible] = useState(false)
   const navigation = useNavigation();
-
-
 
   const openModal = () => {
     setModalVisible(true)
@@ -50,6 +47,22 @@ const MyTeams = () => {
 
   const onChatIconPressed = () => {
     navigation.navigate("TeamChat")
+  }
+
+  if (myTeams?.length === 0) {
+    return (
+      <View style={styles.parent}>
+        <View style={styles.container}>
+          <Text style={styles.noTeamText}>You are not part of any team. Please Join a team or create a new team!</Text>
+          <CreateTeam
+            teamInfo={teamInfo}
+            setTeamInfo={setTeamInfo}
+            shareLinkModal={shareLinkModal}
+            setShareLinkModal={setShareLinkModal}
+            onContinuePressed={onContinuePressed} />
+        </View>
+      </View>
+    )
   }
 
   return (
@@ -79,10 +92,6 @@ const MyTeams = () => {
 
       <SelectOpponent />
 
-
-
-
-
       {/* Add a Modal component */}
       <Modal
         animationType="slide"
@@ -111,6 +120,20 @@ const styles = StyleSheet.create({
     minHeight: "100%",
     backgroundColor: "#101112",
   },
+  container: {
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: "#101112",
+  },
+  noTeamText: {
+    color: "white",
+    fontSize: 20,
+    textAlign: "center",
+    alignItems: "center",
+    justifyContent: "center",
+    marginTop: 20,
+  },
   currentTeamBox: {
     display: "flex",
     flexDirection: "row",
@@ -124,31 +147,10 @@ const styles = StyleSheet.create({
     color: "white",
     fontSize: 22,
   },
-
   modalView: {
     flex: 1,
     height: "100%",
     backgroundColor: "#101112",
     padding: 10,
   },
-  // tabContainer: {
-  //   flexDirection: 'row',
-  //   justifyContent: 'space-around',
-  //   marginVertical: 30,
-  // },
-  // tabText: {
-  //   color: "white",
-  //   fontSize: 20,
-  // },
-  // activeTab: {
-  //   paddingHorizontal: 20,
-  //   height: 40,
-  //   justifyContent: 'center',
-  //   alignItems: 'center',
-  //   borderRadius: 10,
-  //   backgroundColor: "blue",
-  // },
-  // inactiveTab: {
-  //   paddingHorizontal: 20,
-  // },
 })

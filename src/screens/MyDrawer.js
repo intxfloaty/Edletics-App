@@ -124,17 +124,6 @@ const MyDrawer = () => {
       <Drawer.Screen
         options={{
           drawerIcon: () => <Icon
-            name="stats-chart-outline"
-            size={25}
-            style={styles.chatIcon}
-            color={"white"} />
-        }}
-        name='Stats'
-        component={Stats} />
-
-      <Drawer.Screen
-        options={{
-          drawerIcon: () => <Icon
             name="football-outline"
             size={25}
             style={styles.chatIcon}

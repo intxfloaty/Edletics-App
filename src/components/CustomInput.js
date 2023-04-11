@@ -1,37 +1,75 @@
-import { StyleSheet, Text, TextInput, View } from 'react-native'
-import React from 'react'
+import { StyleSheet, TextInput, View, Animated } from 'react-native';
+import React, { useState, useEffect } from 'react';
 
-const CustomInput = ({ placeholder, value, setValue, onPressIn, showSoftInputOnFocus, type, multiline, numberOfLines }) => {
+const CustomInput = ({
+  placeholder,
+  value,
+  setValue,
+  onPressIn,
+  showSoftInputOnFocus,
+  type,
+  multiline,
+  numberOfLines,
+}) => {
+  const [isFocused, setIsFocused] = useState(false);
+  const [animatedIsFocused] = useState(new Animated.Value(value ? 1 : 0));
+
+  useEffect(() => {
+    Animated.timing(animatedIsFocused, {
+      toValue: isFocused || value ? 1 : 0,
+      duration: 150,
+      useNativeDriver: false,
+    }).start();
+  }, [isFocused, value]);
+
+  const borderColor = animatedIsFocused.interpolate({
+    inputRange: [0, 1],
+    outputRange: ['#ffffff', '#40E0D0'],
+  });
+
   return (
-    <View style={[styles.container, styles[`container_${type}`]]}>
+    <Animated.View
+      style={[
+        styles.container,
+        styles[`container_${type}`],
+        { borderColor: borderColor },
+      ]}>
       <TextInput
         style={styles.input}
         placeholder={placeholder}
+        placeholderTextColor="#aaa"
         value={value}
         onChangeText={setValue}
         onPressIn={onPressIn}
         showSoftInputOnFocus={showSoftInputOnFocus}
         multiline={multiline}
-        numberOfLines={numberOfLines} />
-    </View>
-  )
-}
+        numberOfLines={numberOfLines}
+        onFocus={() => setIsFocused(true)}
+        onBlur={() => setIsFocused(false)}
+      />
+    </Animated.View>
+  );
+};
 
-export default CustomInput
+export default CustomInput;
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: "#101112",
-    width: "100%",
-    borderColor: "white",
-    borderWidth: 1,
+    width: '100%',
+    borderWidth: 2,
     borderRadius: 5,
     marginVertical: 5,
   },
   input: {
-    color: "white",
-    backgroundColor: "#202224",
+    color: 'white',
+    backgroundColor: '#202224',
+    fontSize: 16,
+    paddingVertical: 10,
   },
-  container_activity: {
+  container_SIGNIN: {
+    width: '80%',
+    borderWidth: 2,
+    borderRadius: 5,
+    marginVertical: 5,
   },
-})
+});
