@@ -107,6 +107,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     backgroundColor: "#101112",
+    padding: 10,
   },
   noTeamText: {
     color: "white",

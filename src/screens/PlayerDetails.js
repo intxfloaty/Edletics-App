@@ -10,7 +10,7 @@ const PlayerDetails = () => {
   const [loading, setLoading] = useState(true);
   const { user } = userAuthState();
   const navigation = useNavigation()
-  const { playerDetails, isPlayerDetail } = usePlayerDetails(user?.phoneNumber)
+  const { playerDetails } = usePlayerDetails(user?.phoneNumber)
 
   // initially playerDetails is an empty object, as usePlayerDetails is an async func, it takes some time to fetch details
   useEffect(() => {

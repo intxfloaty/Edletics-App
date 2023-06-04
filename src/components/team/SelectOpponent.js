@@ -1,7 +1,6 @@
 import { StyleSheet, Text, TextInput, View, TouchableHighlight, Modal, } from 'react-native'
 import React, { useState, useEffect } from 'react'
 import Icon from 'react-native-vector-icons/Ionicons';
-import { Avatar } from 'react-native-paper';
 import { useSelector } from 'react-redux'
 import { useNavigation } from '@react-navigation/native';
 import { userAuthState, addAndFetchOpponent, useOpponentsChatList, useCheckSquad } from '../../firebase/firebase'
@@ -89,7 +88,6 @@ const SelectOpponent = () => {
                 navigation.navigate('OpponentChat', { opponentTeam: team })
               }}>
               <>
-                <Avatar.Text size={40} label="MT" style={styles.avatar} color="white" />
                 <View style={styles.textContainer}>
                   <Text style={styles.text}>{team.teamName} </Text>
                   <Text style={styles.subText}>Rating</Text>

@@ -5,7 +5,6 @@ import MyTeams from './MyTeams';
 import HomeScreen from './HomeScreen';
 import Tournament from './Tournament';
 import Leaderboard from './Leaderboard';
-import Stats from './Stats';
 import PlayerDetails from './PlayerDetails';
 import Inbox from './Inbox';
 import SignOut from './SignOut';
@@ -30,7 +29,7 @@ const MyDrawer = () => {
   function CustomDrawerContent(props) {
     return (
       <DrawerContentScrollView {...props}>
-        <View>
+         <View style={styles.drawerHeader}>
           <Text style={styles.name}>{playerDetails?.fullName}</Text>
           <Text style={styles.phoneNumber}>{playerDetails?.phoneNumber}</Text>
         </View>
@@ -150,6 +149,10 @@ const MyDrawer = () => {
 export default MyDrawer
 
 const styles = StyleSheet.create({
+   drawerHeader: {
+    height: 100,
+    backgroundColor: "#101112",
+  },
   name: {
     color: "white",
     fontSize: 20,
